@@ -218,12 +218,9 @@ function openDialog(id=null){editId=id;const t=id?tasks.find(x=>x.id===id):null;
 async function initializeSharedData(){
  try {
   const roleSnap=await firebase.database().ref("pontuak_fest_2026_access/"+currentUser.uid).once("value");
-  currentRole=roleSnap.val();
-  if(!["admin","pic","crew"].includes(currentRole)){
-   currentRole=null;setStatus("Akun belum diberi akses", "error");
-   showAuthMessage("Akun ini belum ditambahkan oleh Admin ke daftar akses PONTUAK FEST. Hubungi Admin.");
-   await firebase.auth().signOut();return;
-  }
+  // Default role: every authenticated account is a read-only crew unless explicitly promoted.
+  const savedRole=roleSnap.val();
+  currentRole=["admin","pic"].includes(savedRole)?savedRole:"crew";
   $("userLabel").textContent=(currentUser.displayName||currentUser.email||"Pengguna")+" · "+currentRole.toUpperCase();
   $("addBtn").hidden=!canEdit();
   if(tasksRef && unsubscribeTasks) tasksRef.off("value", unsubscribeTasks);
@@ -239,7 +236,7 @@ function authError(err){if(err.code==="auth/unauthorized-domain")return"Domain w
 
 $("googleSignInBtn").addEventListener("click",signInGoogle);
 $("authForm").addEventListener("submit",async e=>{e.preventDefault();showAuthMessage("");const email=$("authEmail").value.trim(),password=$("authPassword").value;try{await firebase.auth().signInWithEmailAndPassword(email,password)}catch(err){showAuthMessage(authError(err))}});
-$("createAccountBtn").addEventListener("click",async()=>{showAuthMessage("");const email=$("authEmail").value.trim(),password=$("authPassword").value;if(!email||password.length<6){showAuthMessage("Masukkan email dan password minimal 6 karakter.");return}try{await firebase.auth().createUserWithEmailAndPassword(email,password);showAuthMessage("Akun berhasil dibuat. Minta Admin menambahkan UID Anda ke daftar akses sebelum dapat membuka checklist.")}catch(err){showAuthMessage(authError(err))}});
+$("createAccountBtn").addEventListener("click",async()=>{showAuthMessage("");const email=$("authEmail").value.trim(),password=$("authPassword").value;if(!email||password.length<6){showAuthMessage("Masukkan email dan password minimal 6 karakter.");return}try{await firebase.auth().createUserWithEmailAndPassword(email,password);showAuthMessage("Akun berhasil dibuat. Anda otomatis mendapat akses Crew (hanya melihat daftar tugas). Admin dapat mengubah peran menjadi PIC bila diperlukan.")}catch(err){showAuthMessage(authError(err))}});
 $("signOutBtn").addEventListener("click",()=>firebase.auth().signOut());
 $("addBtn").addEventListener("click",()=>{if(!currentUser)return showAuth();if(!canEdit())return;openDialog()});
 $("cancelDialog").addEventListener("click",()=>$ ("taskDialog").close());
