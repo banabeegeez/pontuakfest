@@ -176,7 +176,7 @@ const initialTasks = [
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let tasks = [], activeDay = "all", editId = null, dbRoot = null, tasksRef = null, currentUser = null, dataReady = false;
+let tasks = [], activeDay = "all", editId = null, dbRoot = null, tasksRef = null, currentUser = null, currentRole = null, dataReady = false;
 let unsubscribeTasks = null;
 
 function setStatus(message, state="") { const el=$("connectionStatus"); el.textContent=message; el.dataset.state=state; }
@@ -187,6 +187,8 @@ function labelDay(d){return d==="persiapan"?"Persiapan produksi":d==="1"?"Hari p
 function statusLabel(s){return s==="done"?"Selesai":s==="tbc"?"Perlu konfirmasi":"Belum selesai"}
 function toTaskArray(raw){return Object.values(raw || {}).filter(Boolean).map(t=>({...t,id:Number(t.id)})).sort((a,b)=>a.id-b.id)}
 function taskMap(list){const out={};list.forEach(t=>out[String(t.id)]=t);return out}
+function canEdit(){return currentRole==="admin"||currentRole==="pic"}
+function canDelete(){return currentRole==="admin"}
 
 function render(){
  const query=$("search").value.toLowerCase().trim(), filter=$("statusFilter").value;
@@ -202,7 +204,7 @@ function render(){
   if(g.day!==lastDay){html+=`<div class="section-head"><div><h2>${esc(labelDay(g.day))}</h2><p>${g.day==="persiapan"?"Jadwal produksi dan kesiapan operasional":g.day==="1"?"Band, Fun Run, mural, pameran, dan opening ceremony":"Kompetisi, talkshow, dan hiburan utama"}</p></div></div>`;lastDay=g.day;html+='<div class="cards">';}
   const completed=g.items.filter(x=>x.status==="done").length;
   html+=`<section class="card"><div class="card-top"><div><h3>${esc(g.group)}</h3><div class="desc">${esc(labelDay(g.day))}</div></div><div class="count">${completed}/${g.items.length} selesai</div></div>`;
-  for(const t of g.items){html+=`<div class="task ${t.status==="done"?"done":""}"><input type="checkbox" aria-label="Tandai selesai: ${esc(t.name)}" data-check="${t.id}" ${t.status==="done"?"checked":""}><div class="task-body"><div class="task-title">${esc(t.name)}</div><div class="task-meta"><span class="pill ${t.status==="tbc"?"tbc":t.status==="pending"?"urgent":""}">${esc(statusLabel(t.status))}</span>${t.pic?`<span class="pill">PIC: ${esc(t.pic)}</span>`:""}${t.notes?`<span class="pill">${esc(t.notes)}</span>`:""}</div></div><div class="task-actions"><button class="mini" title="Edit kebutuhan" aria-label="Edit ${esc(t.name)}" data-edit="${t.id}">✎</button><button class="mini" title="Hapus kebutuhan" aria-label="Hapus ${esc(t.name)}" data-delete="${t.id}">×</button></div></div>`;}
+  for(const t of g.items){html+=`<div class="task ${t.status==="done"?"done":""}"><input type="checkbox" aria-label="Status: ${esc(t.name)}" data-check="${t.id}" ${t.status==="done"?"checked":""} ${canEdit()?"":"disabled"}><div class="task-body"><div class="task-title">${esc(t.name)}</div><div class="task-meta"><span class="pill ${t.status==="tbc"?"tbc":t.status==="pending"?"urgent":""}">${esc(statusLabel(t.status))}</span>${t.pic?`<span class="pill">PIC: ${esc(t.pic)}</span>`:""}${t.notes?`<span class="pill">${esc(t.notes)}</span>`:""}</div></div><div class="task-actions">${canEdit()?`<button class="mini" title="Edit kebutuhan" aria-label="Edit ${esc(t.name)}" data-edit="${t.id}">✎</button>`:""}${canDelete()?`<button class="mini" title="Hapus kebutuhan" aria-label="Hapus ${esc(t.name)}" data-delete="${t.id}">×</button>`:""}</div></div>`;}
   html+="</section>";
   const idx=filtered.indexOf(g.items[g.items.length-1]);const next=filtered[idx+1];if(!next||next.day!==g.day)html+="</div>";
  }
@@ -214,15 +216,21 @@ function render(){
 function openDialog(id=null){editId=id;const t=id?tasks.find(x=>x.id===id):null;$("dialogTitle").textContent=t?"Edit kebutuhan":"Tambah kebutuhan";$("taskName").value=t?.name||"";$("taskDay").value=t?.day||"persiapan";$("taskGroup").value=t?.group||"";$("taskPic").value=t?.pic||"";$("taskStatus").value=t?.status||"pending";$("taskNotes").value=t?.notes||"";$("taskDialog").showModal();}
 
 async function initializeSharedData(){
- const rootRef=dbRoot;
- const defaults={initialized:true,tasks:taskMap(initialTasks),createdAt:firebase.database.ServerValue.TIMESTAMP};
  try {
-  await rootRef.transaction(current=>current===null?defaults:current, undefined, false);
+  const roleSnap=await firebase.database().ref("pontuak_fest_2026_access/"+currentUser.uid).once("value");
+  currentRole=roleSnap.val();
+  if(!["admin","pic","crew"].includes(currentRole)){
+   currentRole=null;setStatus("Akun belum diberi akses", "error");
+   showAuthMessage("Akun ini belum ditambahkan oleh Admin ke daftar akses PONTUAK FEST. Hubungi Admin.");
+   await firebase.auth().signOut();return;
+  }
+  $("userLabel").textContent=(currentUser.displayName||currentUser.email||"Pengguna")+" · "+currentRole.toUpperCase();
+  $("addBtn").hidden=!canEdit();
   if(tasksRef && unsubscribeTasks) tasksRef.off("value", unsubscribeTasks);
-  tasksRef=rootRef.child("tasks");
+  tasksRef=dbRoot.child("tasks");
   const handler=snapshot=>{const val=snapshot.val();tasks=toTaskArray(val);dataReady=true;render();setStatus("Tersinkronisasi", "ok")};
   tasksRef.on("value",handler,error=>{setStatus("Gagal memuat data", "error");console.error(error);alert("Tidak dapat membaca checklist Firebase. Periksa Rules dan koneksi internet.\n"+error.message)});
-  unsubscribeTasks=handler;
+  unsubscribeTasks=handler;render();
  } catch(err){setStatus("Koneksi gagal", "error");console.error(err);alert("Gagal menyiapkan database: "+err.message)}
 }
 
@@ -231,11 +239,11 @@ function authError(err){if(err.code==="auth/unauthorized-domain")return"Domain w
 
 $("googleSignInBtn").addEventListener("click",signInGoogle);
 $("authForm").addEventListener("submit",async e=>{e.preventDefault();showAuthMessage("");const email=$("authEmail").value.trim(),password=$("authPassword").value;try{await firebase.auth().signInWithEmailAndPassword(email,password)}catch(err){showAuthMessage(authError(err))}});
-$("createAccountBtn").addEventListener("click",async()=>{showAuthMessage("");const email=$("authEmail").value.trim(),password=$("authPassword").value;if(!email||password.length<6){showAuthMessage("Masukkan email dan password minimal 6 karakter.");return}try{await firebase.auth().createUserWithEmailAndPassword(email,password)}catch(err){showAuthMessage(authError(err))}});
+$("createAccountBtn").addEventListener("click",async()=>{showAuthMessage("");const email=$("authEmail").value.trim(),password=$("authPassword").value;if(!email||password.length<6){showAuthMessage("Masukkan email dan password minimal 6 karakter.");return}try{await firebase.auth().createUserWithEmailAndPassword(email,password);showAuthMessage("Akun berhasil dibuat. Minta Admin menambahkan UID Anda ke daftar akses sebelum dapat membuka checklist.")}catch(err){showAuthMessage(authError(err))}});
 $("signOutBtn").addEventListener("click",()=>firebase.auth().signOut());
-$("addBtn").addEventListener("click",()=>{if(!currentUser)return showAuth();openDialog()});
+$("addBtn").addEventListener("click",()=>{if(!currentUser)return showAuth();if(!canEdit())return;openDialog()});
 $("cancelDialog").addEventListener("click",()=>$ ("taskDialog").close());
-$("taskForm").addEventListener("submit",async e=>{e.preventDefault();if(!currentUser||!tasksRef)return;const data={name:$("taskName").value.trim(),day:$("taskDay").value,group:$("taskGroup").value.trim(),pic:$("taskPic").value.trim(),status:$("taskStatus").value,notes:$("taskNotes").value.trim()};if(!data.name||!data.group)return;try{if(editId){const old=tasks.find(t=>t.id===editId);await tasksRef.child(String(editId)).update({...old,...data,updatedAt:firebase.database.ServerValue.TIMESTAMP,updatedBy:currentUser.uid})}else{data.id=Date.now();data.createdAt=firebase.database.ServerValue.TIMESTAMP;data.createdBy=currentUser.uid;await tasksRef.child(String(data.id)).set(data)}$("taskDialog").close()}catch(err){alert("Gagal menyimpan kebutuhan: "+err.message)}});
+$("taskForm").addEventListener("submit",async e=>{e.preventDefault();if(!currentUser||!tasksRef||!canEdit())return;const data={name:$("taskName").value.trim(),day:$("taskDay").value,group:$("taskGroup").value.trim(),pic:$("taskPic").value.trim(),status:$("taskStatus").value,notes:$("taskNotes").value.trim()};if(!data.name||!data.group)return;try{if(editId){const old=tasks.find(t=>t.id===editId);await tasksRef.child(String(editId)).update({...old,...data,updatedAt:firebase.database.ServerValue.TIMESTAMP,updatedBy:currentUser.uid})}else{data.id=Date.now();data.createdAt=firebase.database.ServerValue.TIMESTAMP;data.createdBy=currentUser.uid;await tasksRef.child(String(data.id)).set(data)}$("taskDialog").close()}catch(err){alert("Gagal menyimpan kebutuhan: "+err.message)}});
 $("search").addEventListener("input",render);$("statusFilter").addEventListener("change",render);
 $("tabs").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if(!b)return;activeDay=b.dataset.day;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));render()});
 $("printBtn").addEventListener("click",()=>window.print());
@@ -246,9 +254,9 @@ try {
  dbRoot=firebase.database().ref("pontuak_fest_2026");
  firebase.auth().onAuthStateChanged(async user=>{
   currentUser=user;
-  if(!user){if(tasksRef && unsubscribeTasks) tasksRef.off("value", unsubscribeTasks);tasksRef=null;unsubscribeTasks=null;dataReady=false;tasks=[];render();$("userLabel").hidden=true;$("signOutBtn").hidden=true;$("addBtn").disabled=true;setStatus("Login diperlukan");showAuth();return}
-  hideAuth();$("userLabel").textContent=user.displayName||user.email||"Crew";$("userLabel").hidden=false;$("signOutBtn").hidden=false;$("addBtn").disabled=false;setStatus("Menghubungkan database…");
-  if(!dataReady)await initializeSharedData();
+  if(!user){currentRole=null;if(tasksRef && unsubscribeTasks) tasksRef.off("value", unsubscribeTasks);tasksRef=null;unsubscribeTasks=null;dataReady=false;tasks=[];render();$("userLabel").hidden=true;$("signOutBtn").hidden=true;$("addBtn").disabled=true;setStatus("Login diperlukan");showAuth();return}
+  hideAuth();$("userLabel").textContent=user.displayName||user.email||"Pengguna";$("userLabel").hidden=false;$("signOutBtn").hidden=false;setStatus("Memeriksa peran…");
+  await initializeSharedData();
  });
 } catch(err){setStatus("Konfigurasi Firebase gagal", "error");showAuthMessage("Firebase gagal diinisialisasi: "+err.message);showAuth()}
 </script>
