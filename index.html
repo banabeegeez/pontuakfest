@@ -90,6 +90,11 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
       <section class="dashboard-subpanel"><div class="coord-head"><h3>Perlu perhatian</h3><span class="pill" id="attentionCount">0</span></div><div id="attentionList" class="attention-list"><div class="empty">Memuat tugas…</div></div></section>
     </div>
     <section class="dashboard-subpanel" style="margin-top:12px">
+      <div class="coord-head">    <section class="dashboard-subpanel" style="margin-top:12px">
+      <div class="coord-head"><h3>🔔 Tugas baru & perubahan</h3><span class="pill" id="taskNoticeCount">0</span></div>
+      <p class="coord-copy">Tugas yang baru ditambahkan atau diperbarui dalam 7 hari terakhir. Crew hanya melihat tugas yang ditugaskan ke email akunnya.</p>
+      <div id="taskNoticeList" class="deadline-list"><div class="empty">Memuat pemberitahuan…</div></div>
+    </section>
       <div class="coord-head"><h3>⏰ Pengingat deadline</h3><span class="pill" id="deadlineReminderCount">0</span></div>
       <p class="coord-copy">Menampilkan tugas belum selesai yang terlambat atau jatuh tempo dalam 3 hari ke depan.</p>
       <div id="deadlineReminderList" class="deadline-list"><div class="empty">Memuat pengingat…</div></div>
@@ -378,12 +383,39 @@ function renderCrewSummary(){
    return `<article class="crew-card"><div class="crew-card-top"><div><h3>${esc(c.email)}</h3><div class="crew-email">${categories}</div></div><span class="pill">${c.progress}% selesai</span></div><div class="crew-bar"><span style="width:${c.progress}%"></span></div><div class="crew-card-stats"><div class="crew-mini"><small>Total tugas</small><b>${c.tasks.length}</b></div><div class="crew-mini"><small>Selesai</small><b>${c.done}</b></div><div class="crew-mini"><small>Kendala aktif</small><b>${c.activeIssues}</b></div></div><div class="crew-categories">Belum selesai: <b>${c.pending}</b>${c.tasks.length?` · ${c.tasks.filter(t=>t.status==="tbc").length} perlu konfirmasi`:""}</div></article>`;
  }).join("");
 }
+
+function renderTaskChangeNotifications(scope){
+ const mount=$("taskNoticeList");
+ if(!mount)return;
+ const now=Date.now(), since=now-7*24*60*60*1000;
+ const recent=(scope||[]).filter(t=>{
+   const stamp=Number(t.updatedAt||t.createdAt||0);
+   return stamp>=since && stamp<=now+60000;
+ }).sort((a,b)=>Number(b.updatedAt||b.createdAt||0)-Number(a.updatedAt||a.createdAt||0)).slice(0,6);
+ $("taskNoticeCount").textContent=String(recent.length);
+ if(!recent.length){
+   mount.innerHTML='<div class="empty">Belum ada tugas baru atau perubahan dalam 7 hari terakhir.</div>';
+   return;
+ }
+ mount.innerHTML=recent.map(t=>{
+   const stamp=Number(t.updatedAt||t.createdAt||0);
+   const isNew=!!t.createdAt && (!t.updatedAt || Number(t.createdAt)>=Number(t.updatedAt));
+   const kind=isNew?"Tugas baru":"Tugas diperbarui";
+   return `<article class="deadline-item">
+     <div class="deadline-main"><strong>${esc(t.name||"Tugas tanpa nama")}</strong><span>${esc(kind)} · ${esc(t.group||"Tanpa bagian")}</span>
+     <small>${esc(t.pic?"PIC: "+t.pic:"PIC belum ditentukan")}${t.deadline?" · Deadline: "+esc(t.deadline):""}</small></div>
+     <div class="deadline-side"><span class="pill">${esc(statusLabel(t.status))}</span><small>${esc(fmtDate(stamp))}</small></div>
+   </article>`;
+ }).join("");
+}
+
 function renderDashboard(){
  const scope=(currentRole==="admin"||currentRole==="pic")?tasks:tasks.filter(isMyTask);
  const total=scope.length,done=scope.filter(t=>t.status==="done").length,pending=scope.filter(t=>t.status!=="done").length;
  const visibleReports=reports.filter(r=>currentRole==="admin"||currentRole==="pic"||r.uid===currentUser?.uid);
  renderCrewSummary();
  renderDeadlineReminders(scope);
+ renderTaskChangeNotifications(scope);
  const activeIssues=visibleReports.filter(r=>r.type==="kendala"&&r.status!=="selesai").length;
  $("dashTotal").textContent=total;$("dashDone").textContent=done;$("dashPending").textContent=pending;$("dashIssues").textContent=activeIssues;
  $("dashOverallProgress").textContent=(total?Math.round(done/total*100):0)+"% selesai";
