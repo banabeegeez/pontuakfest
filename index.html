@@ -73,6 +73,7 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
     <button class="tab" data-day="persiapan">Persiapan</button>
     <button class="tab" data-day="1">Hari pertama</button>
     <button class="tab" data-day="2">Hari kedua</button>
+    <button class="tab" data-day="3">Hari ketiga</button>
   </nav>
   <div id="checklist"></div>
   <div class="notes">
@@ -115,7 +116,7 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
   <form id="taskForm">
     <h2 id="dialogTitle">Tambah kebutuhan</h2>
     <label class="field" for="taskName">Nama kebutuhan *</label><input id="taskName" required placeholder="Contoh: Tambahan microphone">
-    <label class="field" for="taskDay">Agenda</label><select id="taskDay"><option value="persiapan">Persiapan produksi</option><option value="1">Hari pertama</option><option value="2">Hari kedua</option></select>
+    <label class="field" for="taskDay">Agenda</label><select id="taskDay"><option value="persiapan">Persiapan produksi</option><option value="1">Hari pertama</option><option value="2">Hari kedua</option><option value="3">Hari ketiga</option></select>
     <label class="field" for="taskGroup">Kategori / bagian</label><input id="taskGroup" required placeholder="Contoh: Talkshow Auditorium">
     <label class="field" for="taskPic">PIC / koordinator</label><input id="taskPic" placeholder="Nama PIC (opsional)">
     <label class="field" for="taskStatus">Status</label><select id="taskStatus"><option value="pending">Belum selesai</option><option value="tbc">Perlu konfirmasi (TBC)</option><option value="done">Selesai</option></select>
@@ -174,6 +175,26 @@ const initialTasks = [
  {id:33,day:"2",group:"Guest Star",name:"Mitha Idol",status:"pending",pic:"",notes:"Konfirmasi rundown dan technical rider."}
 ];
 
+// Checklist tambahan dari update produksi 21 Oktober. ID khusus menjaga data lama tetap utuh.
+const updateTasks = [
+ {id:3401,day:"1",group:"Fun Run",name:"Panggung kecil di posisi start untuk WR mengangkat bendera",status:"pending",pic:"",notes:"Konfirmasi ukuran panggung kecil, posisi start, dan koordinasi WR."},
+ {id:3402,day:"1",group:"UMKM / Booth Mitra",name:"Update jumlah UMKM UNDANA: 15 UMKM, ajukan menjadi 20",status:"tbc",pic:"UNDANA / Panitia",notes:"Jumlah saat ini 15 UMKM; minta konfirmasi apakah dapat menjadi 20."},
+ {id:3403,day:"1",group:"UMKM / Booth Mitra",name:"Siapkan 10 booth mitra untuk Bank BNI dan Bank NTT",status:"tbc",pic:"Panitia / Bank BNI / Bank NTT",notes:"Rencana pembagian masing-masing 5 booth untuk Bank BNI dan Bank NTT; konfirmasi final."},
+ {id:3404,day:"1",group:"Closing Hari Pertama",name:"Closing hari pertama — Toton Karibo",status:"tbc",pic:"Panitia / Talent",notes:"Konfirmasi jadwal tampil, rundown, dan technical rider."},
+ {id:3405,day:"2",group:"Operasional Hari Kedua",name:"Open gate hari kedua pukul 10.00",status:"pending",pic:"Panitia / Crew gate",notes:"Pastikan akses masuk, personel gate, dan kesiapan area sebelum dibuka."},
+ {id:3406,day:"2",group:"Talkshow Auditorium",name:"Open gate talkshow auditorium pukul 14.00",status:"pending",pic:"Panitia / Usher",notes:"Koordinasikan kesiapan auditorium, akses peserta, dan usher sebelum pukul 14.00."},
+ {id:3407,day:"2",group:"Voucher Mahasiswa",name:"Voucher Rp20.000 untuk 1.500 mahasiswa oleh Media Kita",status:"tbc",pic:"Media Kita",notes:"Menunggu konfirmasi. Pastikan jumlah voucher, mekanisme distribusi, dan persetujuan panitia."},
+ {id:3408,day:"2",group:"Closing Hari Kedua",name:"Closing hari kedua — IGO",status:"tbc",pic:"Panitia / Talent",notes:"Konfirmasi jadwal tampil, rundown, dan technical rider."},
+ {id:3409,day:"3",group:"Konten Visual",name:"Bumper Napak Tilas",status:"tbc",pic:"Media Kita",notes:"Koordinasikan kebutuhan bumper, materi, format, dan tenggat final."},
+ {id:3410,day:"3",group:"Perizinan",name:"Tindak lanjut izin keramaian untuk Fun Run",status:"tbc",pic:"Panitia",notes:"Periksa status izin, dokumen pendukung, dan tindak lanjut yang diperlukan."},
+ {id:3411,day:"3",group:"Closing Hari Ketiga",name:"Closing hari ketiga — Andmesh",status:"tbc",pic:"Panitia / Talent",notes:"Konfirmasi jadwal tampil, rundown, dan technical rider."},
+ {id:3412,day:"3",group:"Layout Area",name:"Update layout dari Media Kita",status:"tbc",pic:"Media Kita",notes:"Perbarui layout terbaru dan bagikan kepada panitia serta crew terkait."},
+ {id:3413,day:"3",group:"Materi Promosi",name:"Siapkan kebutuhan visual promosi: logo, flyer, dan poster",status:"pending",pic:"Media Kita / Panitia",notes:"Pastikan materi dan logo yang digunakan sudah benar serta siap dipublikasikan."},
+ {id:3414,day:"3",group:"Publikasi dan Kerja Sama",name:"Koordinasi publikasi Media Kita dengan panitia dan NTT Update",status:"tbc",pic:"Media Kita / Panitia / NTT Update",notes:"Panitia bertemu NTT Update untuk membicarakan kerja sama promosi dan konten; konfirmasi jadwal dan hasil koordinasi."},
+ {id:3415,day:"3",group:"Backdrop Promosi",name:"Update desain backdrop depan ukuran 6 × 4 meter",status:"pending",pic:"Media Kita",notes:"Desain bernuansa hijau, memuat seluruh kegiatan dan logo; backdrop juga digunakan untuk kebutuhan promosi."},
+ {id:3416,day:"3",group:"Publikasi dan Media Sosial",name:"Koordinasikan Media Kita untuk mengunggah Instagram Story",status:"tbc",pic:"Media Kita",notes:"Konfirmasi materi, jadwal unggah, akun, dan persetujuan konten."}
+];
+
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let tasks = [], activeDay = "all", editId = null, dbRoot = null, tasksRef = null, currentUser = null, currentRole = null, dataReady = false;
@@ -183,7 +204,7 @@ function setStatus(message, state="") { const el=$("connectionStatus"); el.textC
 function showAuthMessage(message="") { $("authMessage").textContent=message; }
 function showAuth() { document.body.classList.add("auth-required"); if (!$ ("authDialog").open) $("authDialog").showModal(); }
 function hideAuth() { document.body.classList.remove("auth-required"); if ($("authDialog").open) $("authDialog").close(); }
-function labelDay(d){return d==="persiapan"?"Persiapan produksi":d==="1"?"Hari pertama":"Hari kedua"}
+function labelDay(d){return d==="persiapan"?"Persiapan produksi":d==="1"?"Hari pertama":d==="2"?"Hari kedua":d==="3"?"Hari ketiga":"Agenda lain"}
 function statusLabel(s){return s==="done"?"Selesai":s==="tbc"?"Perlu konfirmasi":"Belum selesai"}
 function toTaskArray(raw){return Object.values(raw || {}).filter(Boolean).map(t=>({...t,id:Number(t.id)})).sort((a,b)=>a.id-b.id)}
 function taskMap(list){const out={};list.forEach(t=>out[String(t.id)]=t);return out}
@@ -196,12 +217,12 @@ function render(){
  const total=tasks.length,done=tasks.filter(t=>t.status==="done").length,tbc=tasks.filter(t=>t.status==="tbc").length;
  $("totalMetric").textContent=total;$("doneMetric").textContent=(total?Math.round(done/total*100):0)+"%";$("doneSub").textContent=`${done} dari ${total} kebutuhan`;$("tbcMetric").textContent=tbc;$("pendingMetric").textContent=total-done;
  const groups=[];filtered.forEach(t=>{let g=groups.find(x=>x.day===t.day&&x.group===t.group);if(!g){g={day:t.day,group:t.group,items:[]};groups.push(g)}g.items.push(t)});
- const order={"persiapan":0,"1":1,"2":2};groups.sort((a,b)=>order[a.day]-order[b.day]);
+ const order={"persiapan":0,"1":1,"2":2,"3":3};groups.sort((a,b)=>(order[a.day]??99)-(order[b.day]??99));
  const root=$("checklist");
  if(!groups.length){root.innerHTML='<div class="empty">'+(dataReady?'Tidak ada kebutuhan yang cocok dengan filter.':'Memuat checklist dari Firebase…')+'</div>';return}
  let html="",lastDay="";
  for(const g of groups){
-  if(g.day!==lastDay){html+=`<div class="section-head"><div><h2>${esc(labelDay(g.day))}</h2><p>${g.day==="persiapan"?"Jadwal produksi dan kesiapan operasional":g.day==="1"?"Band, Fun Run, mural, pameran, dan opening ceremony":"Kompetisi, talkshow, dan hiburan utama"}</p></div></div>`;lastDay=g.day;html+='<div class="cards">';}
+  if(g.day!==lastDay){html+=`<div class="section-head"><div><h2>${esc(labelDay(g.day))}</h2><p>${g.day==="persiapan"?"Jadwal produksi dan kesiapan operasional":g.day==="1"?"Band, Fun Run, mural, pameran, dan opening ceremony":g.day==="2"?"Kompetisi, talkshow, dan hiburan utama":"Napak Tilas, promosi, publikasi, dan closing hari ketiga"}</p></div></div>`;lastDay=g.day;html+='<div class="cards">';}
   const completed=g.items.filter(x=>x.status==="done").length;
   html+=`<section class="card"><div class="card-top"><div><h3>${esc(g.group)}</h3><div class="desc">${esc(labelDay(g.day))}</div></div><div class="count">${completed}/${g.items.length} selesai</div></div>`;
   for(const t of g.items){html+=`<div class="task ${t.status==="done"?"done":""}"><input type="checkbox" aria-label="Status: ${esc(t.name)}" data-check="${t.id}" ${t.status==="done"?"checked":""} ${canEdit()?"":"disabled"}><div class="task-body"><div class="task-title">${esc(t.name)}</div><div class="task-meta"><span class="pill ${t.status==="tbc"?"tbc":t.status==="pending"?"urgent":""}">${esc(statusLabel(t.status))}</span>${t.pic?`<span class="pill">PIC: ${esc(t.pic)}</span>`:""}${t.notes?`<span class="pill">${esc(t.notes)}</span>`:""}</div></div><div class="task-actions">${canEdit()?`<button class="mini" title="Edit kebutuhan" aria-label="Edit ${esc(t.name)}" data-edit="${t.id}">✎</button>`:""}${canDelete()?`<button class="mini" title="Hapus kebutuhan" aria-label="Hapus ${esc(t.name)}" data-delete="${t.id}">×</button>`:""}</div></div>`;}
@@ -225,7 +246,19 @@ async function initializeSharedData(){
   $("addBtn").hidden=!canEdit();
   if(tasksRef && unsubscribeTasks) tasksRef.off("value", unsubscribeTasks);
   tasksRef=dbRoot.child("tasks");
-  const handler=snapshot=>{const val=snapshot.val();tasks=toTaskArray(val);dataReady=true;render();setStatus("Tersinkronisasi", "ok")};
+   // Tambahkan update hanya jika belum ada; checklist lama tidak diubah atau dihapus.
+   // Hanya Admin/PIC yang menulis. Crew tetap hanya membaca.
+   if(canEdit()){
+     const existingSnap=await tasksRef.once("value");
+     const existing=existingSnap.val()||{};
+     const missing=updateTasks.filter(t=>!existing[String(t.id)]);
+     if(missing.length){
+       const additions={};
+       missing.forEach(t=>{additions[String(t.id)]={...t,createdAt:firebase.database.ServerValue.TIMESTAMP,createdBy:currentUser.uid,source:"update-2026-10-21"}});
+       await tasksRef.update(additions);
+     }
+   }
+   const handler=snapshot=>{const val=snapshot.val();tasks=toTaskArray(val);dataReady=true;render();setStatus("Tersinkronisasi", "ok")};
   tasksRef.on("value",handler,error=>{setStatus("Gagal memuat data", "error");console.error(error);alert("Tidak dapat membaca checklist Firebase. Periksa Rules dan koneksi internet.\n"+error.message)});
   unsubscribeTasks=handler;render();
  } catch(err){setStatus("Koneksi gagal", "error");console.error(err);alert("Gagal menyiapkan database: "+err.message)}
