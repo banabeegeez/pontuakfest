@@ -467,17 +467,23 @@ function render(){
 
  root.querySelectorAll("[data-copy-task]").forEach(el=>el.addEventListener("click",async()=>{
    const t=tasks.find(x=>String(x.id)===String(el.dataset.copyTask));if(!t)return;
+   const agenda=t.day==="persiapan"?"Persiapan produksi":t.day==="1"?"Hari pertama":t.day==="2"?"Hari kedua":(t.day||"Belum ditentukan");
    const detail=[
-     "PONTUAK FEST 2026 — DETAIL TUGAS",
-     "Nama tugas: "+(t.name||"-"),
-     "Agenda: "+(t.day==="persiapan"?"Persiapan produksi":t.day==="1"?"Hari pertama":t.day==="2"?"Hari kedua":t.day||"-"),
-     "Bagian: "+(t.group||"-"),
-     "PIC: "+(t.pic||"Belum ditentukan"),
-     "Ditugaskan kepada: "+(t.assignedTo||"-"),
-     "Lokasi: "+(t.location||"-"),
-     "Deadline: "+(t.deadline||"Belum ditentukan"),
-     "Status: "+statusLabel(t.status),
-     "Catatan: "+(t.notes||"-")
+     "📋 *PONTUAK FEST 2026 — DETAIL TUGAS*",
+     "",
+     "📌 *Nama Tugas:* "+(t.name||"Belum ditentukan"),
+     "🗓️ *Agenda:* "+agenda,
+     "🏷️ *Bagian:* "+(t.group||"Belum ditentukan"),
+     "👤 *PIC:* "+(t.pic||"Belum ditentukan"),
+     "👥 *Ditugaskan Kepada:* "+(t.assignedTo||"Belum ditentukan"),
+     "📍 *Lokasi:* "+(t.location||"Belum ditentukan"),
+     "⏰ *Deadline:* "+(t.deadline||"Belum ditentukan"),
+     "🔄 *Status:* "+statusLabel(t.status),
+     "",
+     "📝 *Catatan:*",
+     (t.notes||"Belum ada catatan"),
+     "",
+     "_PONTUAK FEST 2026 — Koordinasi Produksi_"
    ].join("\\n");
    try{
      if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(detail);}
