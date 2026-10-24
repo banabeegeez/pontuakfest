@@ -1,1892 +1,293 @@
 <!doctype html>
 <html lang="id">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#10110f" />
-    <title>PONTUAK FEST 2026 — Production Checklist</title>
-    <style>
-      :root {
-        --bg: #0b0d0c;
-        --panel: #141816;
-        --panel2: #1a201c;
-        --line: #2a342d;
-        --text: #f4f5ef;
-        --muted: #a1aaa2;
-        --accent: #d6ff3f;
-        --orange: #ff9d45;
-        --red: #ff786e;
-        --blue: #8ccfff;
-        --radius: 18px;
-      }
-      * {
-        box-sizing: border-box;
-      }
-      body {
-        margin: 0;
-        background:
-          radial-gradient(ellipse at 90% 0%, #26321d 0, transparent 36%),
-          var(--bg);
-        color: var(--text);
-        font:
-          15px/1.5 Inter,
-          ui-sans-serif,
-          system-ui,
-          -apple-system,
-          "Segoe UI",
-          sans-serif;
-      }
-      button,
-      input,
-      select,
-      textarea {
-        font: inherit;
-      }
-      button {
-        cursor: pointer;
-      }
-      .wrap {
-        max-width: 1180px;
-        margin: auto;
-        padding: 24px;
-      }
-      .topbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        margin-bottom: 30px;
-      }
-      .brand-lockup {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        min-width: 0;
-      }
-      .event-logo {
-        display: block;
-        width: clamp(100px, 13vw, 168px);
-        height: auto;
-        max-height: 94px;
-        object-fit: contain;
-        flex: 0 0 auto;
-      }
-      .brand {
-        font-weight: 900;
-        letter-spacing: 0.12em;
-        font-size: 13px;
-      }
-      .brand span {
-        color: var(--accent);
-      }
-      .top-actions {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-      .btn {
-        border: 1px solid var(--line);
-        border-radius: 11px;
-        padding: 10px 14px;
-        background: var(--panel2);
-        color: var(--text);
-        font-weight: 700;
-      }
-      .btn.primary {
-        background: var(--accent);
-        color: #11150b;
-        border-color: var(--accent);
-      }
-      .btn:hover {
-        filter: brightness(1.1);
-      }
-      .hero {
-        display: grid;
-        grid-template-columns: 1.4fr 0.6fr;
-        gap: 20px;
-        align-items: stretch;
-        margin-bottom: 22px;
-      }
-      .hero-main {
-        padding: clamp(24px, 5vw, 54px);
-        border: 1px solid #3b4931;
-        border-radius: 24px;
-        background: linear-gradient(125deg, #202b1b, #111512 68%);
-        position: relative;
-        overflow: hidden;
-      }
-      .eyebrow {
-        color: var(--accent);
-        font-size: 11px;
-        font-weight: 900;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-      }
-      .hero h1 {
-        font-size: clamp(38px, 7vw, 76px);
-        line-height: 0.95;
-        letter-spacing: -0.055em;
-        margin: 16px 0;
-      }
-      .hero h1 em {
-        color: var(--accent);
-        font-style: normal;
-      }
-      .hero p {
-        color: #b9c1b8;
-        max-width: 540px;
-      }
-      .hero-side {
-        display: grid;
-        gap: 12px;
-      }
-      .metric {
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        padding: 20px;
-      }
-      .metric small {
-        color: var(--muted);
-        display: block;
-        margin-bottom: 8px;
-      }
-      .metric strong {
-        font-size: 28px;
-        letter-spacing: -0.04em;
-      }
-      .metric .sub {
-        color: var(--muted);
-        font-size: 12px;
-        margin-top: 4px;
-      }
-      .timeline {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-        margin: 20px 0 30px;
-      }
-      .phase {
-        background: var(--panel);
-        border: 1px solid var(--line);
-        padding: 16px;
-        border-radius: 14px;
-      }
-      .phase b {
-        display: block;
-        font-size: 17px;
-      }
-      .phase small {
-        color: var(--muted);
-      }
-      .toolbar {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        align-items: center;
-        margin: 18px 0;
-      }
-      .search {
-        flex: 1;
-        min-width: 190px;
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 11px;
-        color: var(--text);
-        padding: 11px 13px;
-      }
-      .filter {
-        background: var(--panel);
-        color: var(--text);
-        border: 1px solid var(--line);
-        border-radius: 11px;
-        padding: 11px;
-      }
-      .tabs {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin: 20px 0;
-      }
-      .tab {
-        border: 1px solid var(--line);
-        border-radius: 999px;
-        background: transparent;
-        color: var(--muted);
-        padding: 9px 15px;
-        font-weight: 800;
-      }
-      .tab.active {
-        background: var(--accent);
-        color: #11150b;
-        border-color: var(--accent);
-      }
-      .section-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: end;
-        gap: 12px;
-        margin: 28px 0 14px;
-      }
-      .section-head h2 {
-        font-size: 24px;
-        letter-spacing: -0.04em;
-        margin: 0;
-      }
-      .section-head p {
-        margin: 4px 0 0;
-        color: var(--muted);
-        font-size: 13px;
-      }
-      .cards {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 14px;
-      }
-      .card {
-        background: linear-gradient(145deg, #171c19, #111412);
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        padding: 18px;
-        min-width: 0;
-      }
-      .card-top {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 10px;
-        margin-bottom: 14px;
-      }
-      .card h3 {
-        font-size: 18px;
-        margin: 0 0 4px;
-        letter-spacing: -0.025em;
-      }
-      .card .desc {
-        font-size: 12px;
-        color: var(--muted);
-      }
-      .count {
-        font-size: 12px;
-        color: var(--muted);
-        white-space: nowrap;
-      }
-      .task {
-        display: flex;
-        gap: 10px;
-        align-items: flex-start;
-        border-top: 1px solid #252d28;
-        padding: 11px 0;
-      }
-      .task input[type="checkbox"] {
-        appearance: none;
-        flex: 0 0 19px;
-        width: 19px;
-        height: 19px;
-        margin: 2px 0 0;
-        border: 1px solid #566354;
-        border-radius: 6px;
-        background: #0f120f;
-        cursor: pointer;
-      }
-      .task input:checked {
-        background: var(--accent);
-        border-color: var(--accent);
-      }
-      .task input:checked:after {
-        content: "✓";
-        display: block;
-        color: #10140a;
-        text-align: center;
-        font-weight: 900;
-        line-height: 17px;
-      }
-      .task-body {
-        flex: 1;
-        min-width: 0;
-      }
-      .task-title {
-        font-weight: 650;
-        overflow-wrap: anywhere;
-      }
-      .task.done .task-title {
-        text-decoration: line-through;
-        color: #788078;
-      }
-      .task-meta {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-        margin-top: 6px;
-      }
-      .pill {
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        font-weight: 900;
-        padding: 3px 7px;
-        border-radius: 5px;
-        background: #283127;
-        color: #c6d0c3;
-      }
-      .pill.tbc {
-        background: #332a1e;
-        color: #ffc477;
-      }
-      .pill.urgent {
-        background: #382320;
-        color: #ff9d91;
-      }
-      .task-actions {
-        display: flex;
-        gap: 5px;
-      }
-      .mini {
-        border: 0;
-        background: transparent;
-        color: #879188;
-        padding: 2px 5px;
-        font-size: 17px;
-      }
-      .mini:hover {
-        color: white;
-      }
-      .empty {
-        color: var(--muted);
-        padding: 25px;
-        text-align: center;
-      }
-      .notes {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        margin-top: 26px;
-      }
-      .coord-panel {
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        padding: 18px;
-        margin: 18px 0;
-      }
-      .coord-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-      .coord-head h2 {
-        font-size: 21px;
-        margin: 0;
-      }
-      .coord-copy {
-        font-size: 12px;
-        color: var(--muted);
-        margin: 5px 0 14px;
-      }
-      .announcement-list {
-        display: grid;
-        gap: 10px;
-      }
-      .announcement {
-        border: 1px solid var(--line);
-        background: #101411;
-        border-radius: 12px;
-        padding: 13px;
-      }
-      .announcement strong {
-        display: block;
-      }
-      .announcement p {
-        margin: 6px 0;
-        color: #c6cec6;
-        white-space: pre-wrap;
-        overflow-wrap: anywhere;
-      }
-      .announcement small {
-        color: var(--muted);
-        font-size: 11px;
-      }
-      .task-detail {
-        display: grid;
-        gap: 4px;
-        margin-top: 8px;
-        color: #c6cec6;
-        font-size: 12px;
-      }
-      .task-detail span {
-        overflow-wrap: anywhere;
-      }
-      .task-detail b {
-        color: var(--muted);
-        font-weight: 700;
-      }
-      .my-task-btn {
-        display: block;
-        width: 100%;
-        margin: 12px 0 8px;
-        padding: 13px;
-        border: 1px solid #52663a;
-        border-radius: 12px;
-        background: #202b1b;
-        color: var(--accent);
-        font-weight: 900;
-        text-align: left;
-      }
-      .my-task-btn.active {
-        background: var(--accent);
-        color: #11150b;
-      }
-      .due-soon {
-        color: #ffd08b;
-      }
-      .overdue {
-        color: #ff9188;
-      }
-      .announcement-form {
-        margin-top: 12px;
-        border-top: 1px solid var(--line);
-        padding-top: 10px;
-      }
-      .announcement-form input,
-      .announcement-form textarea {
-        width: 100%;
-        background: #0d100e;
-        color: var(--text);
-        border: 1px solid var(--line);
-        border-radius: 9px;
-        padding: 11px;
-        margin: 5px 0 8px;
-      }
-      .announcement-form textarea {
-        min-height: 75px;
-      }
-      .note {
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        padding: 18px;
-      }
-      .note h3 {
-        margin: 0 0 12px;
-        font-size: 16px;
-      }
-      .note-row {
-        display: flex;
-        gap: 9px;
-        align-items: flex-start;
-        color: #c6cec6;
-        margin: 9px 0;
-        font-size: 13px;
-      }
-      .dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: var(--orange);
-        margin-top: 7px;
-        flex-shrink: 0;
-      }
-      footer {
-        color: #737d74;
-        font-size: 12px;
-        text-align: center;
-        padding: 32px 0 10px;
-      }
-      dialog {
-        background: #171d19;
-        color: var(--text);
-        border: 1px solid #39443b;
-        border-radius: 18px;
-        padding: 24px;
-        width: min(520px, calc(100% - 28px));
-        box-shadow: 0 30px 100px #0009;
-      }
-      dialog::backdrop {
-        background: #000b;
-      }
-      dialog h2 {
-        margin-top: 0;
-      }
-      label.field {
-        display: block;
-        font-size: 12px;
-        color: var(--muted);
-        margin: 13px 0 5px;
-      }
-      dialog input,
-      dialog select,
-      dialog textarea {
-        width: 100%;
-        background: #0d100e;
-        color: var(--text);
-        border: 1px solid var(--line);
-        border-radius: 9px;
-        padding: 11px;
-      }
-      dialog textarea {
-        min-height: 75px;
-        resize: vertical;
-      }
-      .dialog-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 8px;
-        margin-top: 18px;
-      }
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10110f">
+<title>PONTUAK FEST 2026 — Production Checklist</title>
+<style>
+:root{--bg:#0b0d0c;--panel:#141816;--panel2:#1a201c;--line:#2a342d;--text:#f4f5ef;--muted:#a1aaa2;--accent:#d6ff3f;--orange:#ff9d45;--red:#ff786e;--blue:#8ccfff;--radius:18px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 90% 0%,#26321d 0,transparent 36%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.wrap{max-width:1180px;margin:auto;padding:24px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:30px}.brand-lockup{display:flex;align-items:center;gap:14px;min-width:0}.event-logo{display:block;width:clamp(100px,13vw,168px);height:auto;max-height:94px;object-fit:contain;flex:0 0 auto}.brand{font-weight:900;letter-spacing:.12em;font-size:13px}.brand span{color:var(--accent)}.top-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);border-radius:11px;padding:10px 14px;background:var(--panel2);color:var(--text);font-weight:700}.btn.primary{background:var(--accent);color:#11150b;border-color:var(--accent)}.btn:hover{filter:brightness(1.1)}
+.hero{display:grid;grid-template-columns:1.4fr .6fr;gap:20px;align-items:stretch;margin-bottom:22px}.hero-main{padding:clamp(24px,5vw,54px);border:1px solid #3b4931;border-radius:24px;background:linear-gradient(125deg,#202b1b,#111512 68%);position:relative;overflow:hidden}.eyebrow{color:var(--accent);font-size:11px;font-weight:900;letter-spacing:.2em;text-transform:uppercase}.hero h1{font-size:clamp(38px,7vw,76px);line-height:.95;letter-spacing:-.055em;margin:16px 0}.hero h1 em{color:var(--accent);font-style:normal}.hero p{color:#b9c1b8;max-width:540px}.hero-side{display:grid;gap:12px}.metric{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px}.metric small{color:var(--muted);display:block;margin-bottom:8px}.metric strong{font-size:28px;letter-spacing:-.04em}.metric .sub{color:var(--muted);font-size:12px;margin-top:4px}
+.timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0 30px}.phase{background:var(--panel);border:1px solid var(--line);padding:16px;border-radius:14px}.phase b{display:block;font-size:17px}.phase small{color:var(--muted)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:18px 0}.search{flex:1;min-width:190px;background:var(--panel);border:1px solid var(--line);border-radius:11px;color:var(--text);padding:11px 13px}.filter{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:11px;padding:11px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.tab{border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--muted);padding:9px 15px;font-weight:800}.tab.active{background:var(--accent);color:#11150b;border-color:var(--accent)}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:28px 0 14px}.section-head h2{font-size:24px;letter-spacing:-.04em;margin:0}.section-head p{margin:4px 0 0;color:var(--muted);font-size:13px}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:linear-gradient(145deg,#171c19,#111412);border:1px solid var(--line);border-radius:var(--radius);padding:18px;min-width:0}.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px}.card h3{font-size:18px;margin:0 0 4px;letter-spacing:-.025em}.card .desc{font-size:12px;color:var(--muted)}.count{font-size:12px;color:var(--muted);white-space:nowrap}.task{display:flex;gap:10px;align-items:flex-start;border-top:1px solid #252d28;padding:11px 0}.task input[type=checkbox]{appearance:none;flex:0 0 19px;width:19px;height:19px;margin:2px 0 0;border:1px solid #566354;border-radius:6px;background:#0f120f;cursor:pointer}.task input:checked{background:var(--accent);border-color:var(--accent)}.task input:checked:after{content:"✓";display:block;color:#10140a;text-align:center;font-weight:900;line-height:17px}.task-body{flex:1;min-width:0}.task-title{font-weight:650;overflow-wrap:anywhere}.task.done .task-title{text-decoration:line-through;color:#788078}.task-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.pill{font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:900;padding:3px 7px;border-radius:5px;background:#283127;color:#c6d0c3}.pill.tbc{background:#332a1e;color:#ffc477}.pill.urgent{background:#382320;color:#ff9d91}.task-actions{display:flex;gap:5px}.mini{border:0;background:transparent;color:#879188;padding:2px 5px;font-size:17px}.mini:hover{color:white}.empty{color:var(--muted);padding:25px;text-align:center}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}.coord-panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin:18px 0}.coord-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.coord-head h2{font-size:21px;margin:0}.coord-copy{font-size:12px;color:var(--muted);margin:5px 0 14px}.announcement-list{display:grid;gap:10px}.announcement{border:1px solid var(--line);background:#101411;border-radius:12px;padding:13px}.announcement strong{display:block}.announcement p{margin:6px 0;color:#c6cec6;white-space:pre-wrap;overflow-wrap:anywhere}.announcement small{color:var(--muted);font-size:11px}.task-detail{display:grid;gap:4px;margin-top:8px;color:#c6cec6;font-size:12px}.task-detail span{overflow-wrap:anywhere}.task-detail b{color:var(--muted);font-weight:700}.my-task-btn{display:block;width:100%;margin:12px 0 8px;padding:13px;border:1px solid #52663a;border-radius:12px;background:#202b1b;color:var(--accent);font-weight:900;text-align:left}.my-task-btn.active{background:var(--accent);color:#11150b}.due-soon{color:#ffd08b}.overdue{color:#ff9188}.announcement-form{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}.announcement-form input,.announcement-form textarea{width:100%;background:#0d100e;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:11px;margin:5px 0 8px}.announcement-form textarea{min-height:75px}.note{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}.note h3{margin:0 0 12px;font-size:16px}.note-row{display:flex;gap:9px;align-items:flex-start;color:#c6cec6;margin:9px 0;font-size:13px}.dot{width:7px;height:7px;border-radius:50%;background:var(--orange);margin-top:7px;flex-shrink:0}
+footer{color:#737d74;font-size:12px;text-align:center;padding:32px 0 10px}
+dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radius:18px;padding:24px;width:min(520px,calc(100% - 28px));box-shadow:0 30px 100px #0009}dialog::backdrop{background:#000b}dialog h2{margin-top:0}label.field{display:block;font-size:12px;color:var(--muted);margin:13px 0 5px}dialog input,dialog select,dialog textarea{width:100%;background:#0d100e;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:11px}dialog textarea{min-height:75px;resize:vertical}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
 
-      .connection-status {
-        display: inline-flex;
-        align-items: center;
-        max-width: 230px;
-        font-size: 11px;
-        font-weight: 800;
-        color: #c6cec6;
-        border: 1px solid var(--line);
-        border-radius: 999px;
-        padding: 7px 10px;
-      }
-      .connection-status[data-state="ok"] {
-        color: #c8ffb0;
-        border-color: #405b35;
-      }
-      .connection-status[data-state="error"] {
-        color: #ffaaa1;
-        border-color: #75413b;
-      }
-      .user-label {
-        font-size: 12px;
-        color: var(--muted);
-        max-width: 190px;
-        overflow-wrap: anywhere;
-      }
-      .auth-dialog {
-        width: min(460px, calc(100% - 28px));
-      }
-      .auth-dialog::backdrop {
-        background: #000d;
-        backdrop-filter: blur(4px);
-      }
-      .auth-brand {
-        font-size: 11px;
-        font-weight: 900;
-        letter-spacing: 0.12em;
-        color: var(--text);
-      }
-      .auth-brand span {
-        color: var(--accent);
-      }
-      .auth-dialog h2 {
-        font-size: 26px;
-        margin: 18px 0 6px;
-      }
-      .auth-copy,
-      .auth-footnote {
-        font-size: 13px;
-        color: var(--muted);
-      }
-      .google-btn {
-        width: 100%;
-        margin: 12px 0 4px;
-        background: #f4f5ef;
-        color: #111;
-        border-color: #f4f5ef;
-      }
-      .auth-divider {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        color: var(--muted);
-        font-size: 11px;
-        margin: 12px 0;
-      }
-      .auth-divider:before,
-      .auth-divider:after {
-        content: "";
-        height: 1px;
-        background: var(--line);
-        flex: 1;
-      }
-      .auth-actions {
-        justify-content: space-between;
-      }
-      .auth-message {
-        font-size: 13px;
-        color: #ffaaa1;
-        min-height: 18px;
-        margin: 12px 0 0;
-      }
-      .auth-footnote {
-        font-size: 11px;
-        margin-bottom: 0;
-      }
-      body.auth-required .wrap {
-        filter: blur(2px);
-        pointer-events: none;
-        user-select: none;
-      }
-      @media (max-width: 760px) {
-        .connection-status {
-          max-width: 100%;
-          order: 3;
-        }
-        .user-label {
-          max-width: 100%;
-        }
-        .top-actions {
-          width: 100%;
-        }
-        .topbar {
-          flex-direction: column;
-        }
-        .brand-lockup {
-          width: 100%;
-        }
-        .event-logo {
-          width: 112px;
-          max-height: 70px;
-        }
-        .auth-dialog {
-          padding: 20px;
-        }
-      }
+.connection-status{display:inline-flex;align-items:center;max-width:230px;font-size:11px;font-weight:800;color:#c6cec6;border:1px solid var(--line);border-radius:999px;padding:7px 10px}.connection-status[data-state="ok"]{color:#c8ffb0;border-color:#405b35}.connection-status[data-state="error"]{color:#ffaaa1;border-color:#75413b}.user-label{font-size:12px;color:var(--muted);max-width:190px;overflow-wrap:anywhere}.auth-dialog{width:min(460px,calc(100% - 28px))}.auth-dialog::backdrop{background:#000d;backdrop-filter:blur(4px)}.auth-brand{font-size:11px;font-weight:900;letter-spacing:.12em;color:var(--text)}.auth-brand span{color:var(--accent)}.auth-dialog h2{font-size:26px;margin:18px 0 6px}.auth-copy,.auth-footnote{font-size:13px;color:var(--muted)}.google-btn{width:100%;margin:12px 0 4px;background:#f4f5ef;color:#111;border-color:#f4f5ef}.auth-divider{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:11px;margin:12px 0}.auth-divider:before,.auth-divider:after{content:"";height:1px;background:var(--line);flex:1}.auth-actions{justify-content:space-between}.auth-message{font-size:13px;color:#ffaaa1;min-height:18px;margin:12px 0 0}.auth-footnote{font-size:11px;margin-bottom:0}body.auth-required .wrap{filter:blur(2px);pointer-events:none;user-select:none}
+@media(max-width:760px){.connection-status{max-width:100%;order:3}.user-label{max-width:100%}.top-actions{width:100%}.topbar{flex-direction:column}.brand-lockup{width:100%}.event-logo{width:112px;max-height:70px}.auth-dialog{padding:20px}}
 
-      @media (max-width: 760px) {
-        .wrap {
-          padding: 15px;
-        }
-        .hero {
-          grid-template-columns: 1fr;
-        }
-        .hero-side {
-          grid-template-columns: repeat(2, 1fr);
-        }
-        .timeline {
-          grid-template-columns: 1fr;
-        }
-        .cards {
-          grid-template-columns: 1fr;
-        }
-        .notes {
-          grid-template-columns: 1fr;
-        }
-        .topbar {
-          align-items: flex-start;
-        }
-        .hero h1 {
-          font-size: 48px;
-        }
-        .section-head {
-          align-items: flex-start;
-          flex-direction: column;
-        }
-      }
-      @media print {
-        body {
-          background: white;
-          color: #111;
-        }
-        .wrap {
-          max-width: none;
-          padding: 0;
-        }
-        .topbar,
-        .toolbar,
-        .tabs,
-        .top-actions,
-        .task-actions,
-        .btn,
-        .notes {
-          display: none !important;
-        }
-        .hero-main,
-        .metric,
-        .phase,
-        .card {
-          background: white;
-          color: #111;
-          border: 1px solid #bbb;
-          break-inside: avoid;
-        }
-        .hero p,
-        .metric small,
-        .metric .sub,
-        .phase small,
-        .card .desc,
-        .count {
-          color: #444;
-        }
-        .cards {
-          grid-template-columns: 1fr 1fr;
-        }
-        .task {
-          border-color: #ddd;
-        }
-        .task-title {
-          color: #111 !important;
-        }
-        .pill {
-          border: 1px solid #aaa;
-          background: white;
-          color: #222;
-        }
-        .hero h1 em,
-        .eyebrow {
-          color: #333;
-        }
-        .section-head {
-          margin-top: 18px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="wrap">
-      <header class="topbar">
-        <div class="brand-lockup">
-          <img
-            class="event-logo"
-            src="pontuak-02.png"
-            alt="Logo Pontuak Festival"
-          />
-          <div class="brand">MEDIA KITA <span> / PONTUAK FEST</span></div>
-        </div>
-        <div class="top-actions">
-          <span id="connectionStatus" class="connection-status" role="status"
-            >Menghubungkan…</span
-          >
-          <span id="userLabel" class="user-label" hidden></span>
-          <button class="btn" id="signOutBtn" hidden>Keluar</button>
-          <button class="btn" id="exportBtn">Export CSV</button>
-          <button class="btn" id="printBtn">Cetak / PDF</button>
-          <button class="btn primary" id="addBtn">＋ Tambah kebutuhan</button>
-        </div>
-      </header>
-      <section class="hero">
-        <div class="hero-main">
-          <div class="eyebrow">Production checklist · 2026</div>
-          <h1>PONTUAK<br /><em>FEST.</em></h1>
-          <p>
-            Dashboard kebutuhan produksi dan koordinasi crew. Pantau checklist
-            setiap divisi, cari kebutuhan, dan tandai item yang sudah selesai.
-          </p>
-        </div>
-        <div class="hero-side">
-          <div class="metric">
-            <small>Total kebutuhan</small><strong id="totalMetric">0</strong>
-            <div class="sub">Semua agenda</div>
-          </div>
-          <div class="metric">
-            <small>Selesai</small><strong id="doneMetric">0%</strong>
-            <div class="sub" id="doneSub">0 dari 0 kebutuhan</div>
-          </div>
-          <div class="metric">
-            <small>Perlu konfirmasi</small><strong id="tbcMetric">0</strong>
-            <div class="sub">TBC / koordinasi</div>
-          </div>
-          <div class="metric">
-            <small>Belum selesai</small><strong id="pendingMetric">0</strong>
-            <div class="sub">Perlu ditindaklanjuti</div>
-          </div>
-        </div>
-      </section>
-      <div class="timeline">
-        <div class="phase">
-          <small>TAHAP 01</small><b>Loading produksi</b><span>27–28</span>
-        </div>
-        <div class="phase">
-          <small>TAHAP 02</small><b>Gladi / rehearsal</b><span>Tanggal 4</span>
-        </div>
-        <div class="phase">
-          <small>TAHAP 03</small><b>H-1 · UMKM masuk</b
-          ><span>Koordinasi area dan akses</span>
-        </div>
-      </div>
-      <div class="section-head">
-        <div>
-          <h2>Daftar kebutuhan</h2>
-          <p>Checklist awal berdasarkan catatan produksi yang diberikan.</p>
-        </div>
-      </div>
-      <div class="toolbar">
-        <input
-          class="search"
-          id="search"
-          placeholder="Cari kebutuhan, agenda, atau PIC…"
-          aria-label="Cari kebutuhan"
-        />
-        <select class="filter" id="statusFilter" aria-label="Filter status">
-          <option value="all">Semua status</option>
-          <option value="pending">Belum selesai</option>
-          <option value="done">Selesai</option>
-          <option value="tbc">Perlu konfirmasi</option>
-        </select>
-      </div>
-      <nav class="tabs" id="tabs">
-        <button class="tab active" data-day="all">Semua agenda</button>
-        <button class="tab" data-day="persiapan">Persiapan</button>
-        <button class="tab" data-day="1">Hari pertama</button>
-        <button class="tab" data-day="2">Hari kedua</button>
-      </nav>
-      <button class="my-task-btn" id="myTasksBtn" type="button">
-        ☷ &nbsp; Tugas Saya <span id="myTaskCount"></span
-        ><small
-          style="
-            display: block;
-            font-weight: 500;
-            margin-top: 3px;
-            color: inherit;
-            opacity: 0.8;
-          "
-          >Tugas yang ditujukan ke email akun yang sedang masuk</small
-        >
-      </button>
-      <section class="coord-panel" id="announcementPanel">
-        <div class="coord-head">
-          <h2>📣 Pengumuman tim</h2>
-          <span class="pill" id="announcementCount">0 pengumuman</span>
-        </div>
-        <p class="coord-copy">
-          Perubahan jadwal, arahan lapangan, dan informasi penting untuk crew.
-        </p>
-        <div class="announcement-list" id="announcementList">
-          <div class="empty">Memuat pengumuman…</div>
-        </div>
-        <form class="announcement-form" id="announcementForm" hidden>
-          <label class="field" for="announcementTitle">Judul pengumuman</label
-          ><input
-            id="announcementTitle"
-            required
-            maxlength="100"
-            placeholder="Contoh: Perubahan waktu loading"
-          />
-          <label class="field" for="announcementBody">Isi / arahan</label
-          ><textarea
-            id="announcementBody"
-            required
-            maxlength="1200"
-            placeholder="Tulis informasi yang perlu diketahui crew"
-          ></textarea>
-          <button class="btn primary" type="submit">
-            ＋ Terbitkan pengumuman
-          </button>
-        </form>
-      </section>
-      <div id="checklist"></div>
-      <div class="notes">
-        <section class="note">
-          <h3>⚠ Perlu konfirmasi</h3>
-          <div class="note-row">
-            <span class="dot"></span><span>Update izin keramaian.</span>
-          </div>
-          <div class="note-row">
-            <span class="dot"></span
-            ><span
-              >Pastikan bulan dan tanggal lengkap untuk loading 27–28 serta
-              gladi tanggal 4.</span
-            >
-          </div>
-          <div class="note-row">
-            <span class="dot"></span
-            ><span>Video teaser talkshow masih TBC.</span>
-          </div>
-        </section>
-        <section class="note">
-          <h3>☑ Koordinasi lapangan</h3>
-          <div class="note-row">
-            <span class="dot"></span
-            ><span
-              >Pastikan PIC tiap kebutuhan dan kontak koordinasinya diumumkan
-              kepada crew.</span
-            >
-          </div>
-          <div class="note-row">
-            <span class="dot"></span
-            ><span
-              >Konfirmasi sofa 3 unit dengan Undana dan tenda sarnafil untuk
-              kebutuhan pijat.</span
-            >
-          </div>
-          <div class="note-row">
-            <span class="dot"></span
-            ><span>Periksa kebutuhan teknis tiap area sebelum gladi.</span>
-          </div>
-        </section>
-      </div>
-      <footer>
-        PONTUAK FEST 2026 · Production coordination dashboard<br />Status
-        checklist disimpan di Firebase dan disinkronkan antarperangkat.
-      </footer>
+@media(max-width:760px){.wrap{padding:15px}.hero{grid-template-columns:1fr}.hero-side{grid-template-columns:repeat(2,1fr)}.timeline{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.notes{grid-template-columns:1fr}.topbar{align-items:flex-start}.hero h1{font-size:48px}.section-head{align-items:flex-start;flex-direction:column}}
+@media print{body{background:white;color:#111}.wrap{max-width:none;padding:0}.topbar,.toolbar,.tabs,.top-actions,.task-actions,.btn,.notes{display:none!important}.hero-main,.metric,.phase,.card{background:white;color:#111;border:1px solid #bbb;break-inside:avoid}.hero p,.metric small,.metric .sub,.phase small,.card .desc,.count{color:#444}.cards{grid-template-columns:1fr 1fr}.task{border-color:#ddd}.task-title{color:#111!important}.pill{border:1px solid #aaa;background:white;color:#222}.hero h1 em,.eyebrow{color:#333}.section-head{margin-top:18px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand-lockup"><img class="event-logo" src="pontuak-02.png" alt="Logo Pontuak Festival"><div class="brand">MEDIA KITA <span> / PONTUAK FEST</span></div></div>
+    <div class="top-actions">
+      <span id="connectionStatus" class="connection-status" role="status">Menghubungkan…</span>
+      <span id="userLabel" class="user-label" hidden></span>
+      <button class="btn" id="signOutBtn" hidden>Keluar</button>
+      <button class="btn" id="exportBtn">Export CSV</button>
+      <button class="btn" id="printBtn">Cetak / PDF</button>
+      <button class="btn primary" id="addBtn">＋ Tambah kebutuhan</button>
     </div>
+  </header>
+  <section class="hero">
+    <div class="hero-main">
+      <div class="eyebrow">Production checklist · 2026</div>
+      <h1>PONTUAK<br><em>FEST.</em></h1>
+      <p>Dashboard kebutuhan produksi dan koordinasi crew. Pantau checklist setiap divisi, cari kebutuhan, dan tandai item yang sudah selesai.</p>
+    </div>
+    <div class="hero-side">
+      <div class="metric"><small>Total kebutuhan</small><strong id="totalMetric">0</strong><div class="sub">Semua agenda</div></div>
+      <div class="metric"><small>Selesai</small><strong id="doneMetric">0%</strong><div class="sub" id="doneSub">0 dari 0 kebutuhan</div></div>
+      <div class="metric"><small>Perlu konfirmasi</small><strong id="tbcMetric">0</strong><div class="sub">TBC / koordinasi</div></div>
+      <div class="metric"><small>Belum selesai</small><strong id="pendingMetric">0</strong><div class="sub">Perlu ditindaklanjuti</div></div>
+    </div>
+  </section>
+  <div class="timeline">
+    <div class="phase"><small>TAHAP 01</small><b>Loading produksi</b><span>27–28</span></div>
+    <div class="phase"><small>TAHAP 02</small><b>Gladi / rehearsal</b><span>Tanggal 4</span></div>
+    <div class="phase"><small>TAHAP 03</small><b>H-1 · UMKM masuk</b><span>Koordinasi area dan akses</span></div>
+  </div>
+  <div class="section-head">
+    <div><h2>Daftar kebutuhan</h2><p>Checklist awal berdasarkan catatan produksi yang diberikan.</p></div>
+  </div>
+  <div class="toolbar">
+    <input class="search" id="search" placeholder="Cari kebutuhan, agenda, atau PIC…" aria-label="Cari kebutuhan">
+    <select class="filter" id="statusFilter" aria-label="Filter status">
+      <option value="all">Semua status</option><option value="pending">Belum selesai</option><option value="done">Selesai</option><option value="tbc">Perlu konfirmasi</option>
+    </select>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-day="all">Semua agenda</button>
+    <button class="tab" data-day="persiapan">Persiapan</button>
+    <button class="tab" data-day="1">Hari pertama</button>
+    <button class="tab" data-day="2">Hari kedua</button>
+  </nav>
+  <button class="my-task-btn" id="myTasksBtn" type="button">☷ &nbsp; Tugas Saya <span id="myTaskCount"></span><small style="display:block;font-weight:500;margin-top:3px;color:inherit;opacity:.8">Tugas yang ditujukan ke email akun yang sedang masuk</small></button>
+  <section class="coord-panel" id="announcementPanel">
+    <div class="coord-head"><h2>📣 Pengumuman tim</h2><span class="pill" id="announcementCount">0 pengumuman</span></div>
+    <p class="coord-copy">Perubahan jadwal, arahan lapangan, dan informasi penting untuk crew.</p>
+    <div class="announcement-list" id="announcementList"><div class="empty">Memuat pengumuman…</div></div>
+    <form class="announcement-form" id="announcementForm" hidden>
+      <label class="field" for="announcementTitle">Judul pengumuman</label><input id="announcementTitle" required maxlength="100" placeholder="Contoh: Perubahan waktu loading">
+      <label class="field" for="announcementBody">Isi / arahan</label><textarea id="announcementBody" required maxlength="1200" placeholder="Tulis informasi yang perlu diketahui crew"></textarea>
+      <button class="btn primary" type="submit">＋ Terbitkan pengumuman</button>
+    </form>
+  </section>
+  <div id="checklist"></div>
+  <div class="notes">
+    <section class="note"><h3>⚠ Perlu konfirmasi</h3>
+      <div class="note-row"><span class="dot"></span><span>Update izin keramaian.</span></div>
+      <div class="note-row"><span class="dot"></span><span>Pastikan bulan dan tanggal lengkap untuk loading 27–28 serta gladi tanggal 4.</span></div>
+      <div class="note-row"><span class="dot"></span><span>Video teaser talkshow masih TBC.</span></div>
+    </section>
+    <section class="note"><h3>☑ Koordinasi lapangan</h3>
+      <div class="note-row"><span class="dot"></span><span>Pastikan PIC tiap kebutuhan dan kontak koordinasinya diumumkan kepada crew.</span></div>
+      <div class="note-row"><span class="dot"></span><span>Konfirmasi sofa 3 unit dengan Undana dan tenda sarnafil untuk kebutuhan pijat.</span></div>
+      <div class="note-row"><span class="dot"></span><span>Periksa kebutuhan teknis tiap area sebelum gladi.</span></div>
+    </section>
+  </div>
+  <footer>PONTUAK FEST 2026 · Production coordination dashboard<br>Status checklist disimpan di Firebase dan disinkronkan antarperangkat.</footer>
+</div>
 
-    <dialog id="authDialog" class="auth-dialog">
-      <div class="auth-brand">MEDIA KITA <span>/ PONTUAK FEST</span></div>
-      <h2>Masuk ke checklist crew</h2>
-      <p class="auth-copy">
-        Login diperlukan agar checklist PONTUAK FEST 2026 dapat disinkronkan
-        antarperangkat.
-      </p>
-      <button class="btn google-btn" id="googleSignInBtn" type="button">
-        Masuk dengan Google
-      </button>
-      <div class="auth-divider"><span>atau gunakan email</span></div>
-      <form id="authForm">
-        <label class="field" for="authEmail">Email</label>
-        <input
-          id="authEmail"
-          type="email"
-          required
-          autocomplete="username"
-          placeholder="nama@email.com"
-        />
-        <label class="field" for="authPassword">Password</label>
-        <input
-          id="authPassword"
-          type="password"
-          required
-          minlength="6"
-          autocomplete="current-password"
-          placeholder="Minimal 6 karakter"
-        />
-        <div class="dialog-actions auth-actions">
-          <button class="btn" id="createAccountBtn" type="button">
-            Buat akun
-          </button>
-          <button class="btn primary" type="submit">Masuk</button>
-        </div>
-      </form>
-      <p id="authMessage" class="auth-message" role="alert"></p>
-      <p class="auth-footnote">
-        Gunakan akun yang memang diizinkan untuk tim PONTUAK FEST.
-      </p>
-    </dialog>
 
-    <dialog id="taskDialog">
-      <form id="taskForm">
-        <h2 id="dialogTitle">Tambah kebutuhan</h2>
-        <label class="field" for="taskName">Nama kebutuhan *</label
-        ><input
-          id="taskName"
-          required
-          placeholder="Contoh: Tambahan microphone"
-        />
-        <label class="field" for="taskDay">Agenda</label
-        ><select id="taskDay">
-          <option value="persiapan">Persiapan produksi</option>
-          <option value="1">Hari pertama</option>
-          <option value="2">Hari kedua</option>
-        </select>
-        <label class="field" for="taskGroup">Kategori / bagian</label
-        ><input
-          id="taskGroup"
-          required
-          placeholder="Contoh: Talkshow Auditorium"
-        />
-        <label class="field" for="taskPic">PIC / koordinator</label
-        ><input id="taskPic" placeholder="Nama PIC (opsional)" />
-        <label class="field" for="taskAssignedTo"
-          >Ditugaskan kepada (email akun crew)</label
-        ><input id="taskAssignedTo" type="email" placeholder="crew@email.com" />
-        <small style="color: var(--muted); font-size: 11px"
-          >Gunakan email yang sama dengan email login crew agar tugas muncul di
-          menu Tugas Saya.</small
-        >
-        <label class="field" for="taskLocation">Lokasi / titik koordinasi</label
-        ><input
-          id="taskLocation"
-          placeholder="Contoh: Panggung utama, gate timur"
-        />
-        <label class="field" for="taskDeadline">Deadline</label
-        ><input id="taskDeadline" type="datetime-local" />
-        <label class="field" for="taskStatus">Status</label
-        ><select id="taskStatus">
-          <option value="pending">Belum selesai</option>
-          <option value="tbc">Perlu konfirmasi (TBC)</option>
-          <option value="done">Selesai</option>
-        </select>
-        <label class="field" for="taskNotes">Catatan</label
-        ><textarea
-          id="taskNotes"
-          placeholder="Detail lokasi, jumlah, atau arahan koordinasi"
-        ></textarea>
-        <div class="dialog-actions">
-          <button type="button" class="btn" id="cancelDialog">Batal</button
-          ><button class="btn primary" type="submit">Simpan kebutuhan</button>
-        </div>
-      </form>
-    </dialog>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-    <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyCWT5IWPcqDkgmOUX3Gp0VvVKmGHIWYYxU",
-        authDomain: "pontuak-fest-2026.firebaseapp.com",
-        databaseURL:
-          "https://pontuak-fest-2026-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "pontuak-fest-2026",
-        storageBucket: "pontuak-fest-2026.firebasestorage.app",
-        messagingSenderId: "867114061732",
-        appId: "1:867114061732:web:1de5e19ee22517a5f87b31",
-        measurementId: "G-1EBQRKG03K",
-      };
+<dialog id="authDialog" class="auth-dialog">
+  <div class="auth-brand">MEDIA KITA <span>/ PONTUAK FEST</span></div>
+  <h2>Masuk ke checklist crew</h2>
+  <p class="auth-copy">Login diperlukan agar checklist PONTUAK FEST 2026 dapat disinkronkan antarperangkat.</p>
+  <button class="btn google-btn" id="googleSignInBtn" type="button">Masuk dengan Google</button>
+  <div class="auth-divider"><span>atau gunakan email</span></div>
+  <form id="authForm">
+    <label class="field" for="authEmail">Email</label>
+    <input id="authEmail" type="email" required autocomplete="username" placeholder="nama@email.com">
+    <label class="field" for="authPassword">Password</label>
+    <input id="authPassword" type="password" required minlength="6" autocomplete="current-password" placeholder="Minimal 6 karakter">
+    <div class="dialog-actions auth-actions">
+      <button class="btn" id="createAccountBtn" type="button">Buat akun</button>
+      <button class="btn primary" type="submit">Masuk</button>
+    </div>
+  </form>
+  <p id="authMessage" class="auth-message" role="alert"></p>
+  <p class="auth-footnote">Gunakan akun yang memang diizinkan untuk tim PONTUAK FEST.</p>
+</dialog>
 
-      const initialTasks = [
-        {
-          id: 1,
-          day: "persiapan",
-          group: "Persiapan Produksi",
-          name: "Loading produksi tanggal 27–28",
-          status: "tbc",
-          pic: "",
-          notes: "Konfirmasi bulan, jam, akses loading, dan pembagian crew.",
-        },
-        {
-          id: 2,
-          day: "persiapan",
-          group: "Persiapan Produksi",
-          name: "Gladi / rehearsal tanggal 4",
-          status: "tbc",
-          pic: "",
-          notes: "Konfirmasi bulan, rundown, dan kesiapan teknis.",
-        },
-        {
-          id: 3,
-          day: "persiapan",
-          group: "Persiapan Produksi",
-          name: "Koordinasi UMKM masuk pada H-1",
-          status: "pending",
-          pic: "",
-          notes: "Atur akses masuk, area booth, dan waktu loading UMKM.",
-        },
-        {
-          id: 4,
-          day: "persiapan",
-          group: "Perizinan",
-          name: "Update izin keramaian",
-          status: "tbc",
-          pic: "",
-          notes: "Periksa status dan tindak lanjut perizinan.",
-        },
-        {
-          id: 5,
-          day: "1",
-          group: "Penampilan Band",
-          name: "MKP Band",
-          status: "pending",
-          pic: "",
-          notes: "Konfirmasi kebutuhan teknis dan jadwal tampil.",
-        },
-        {
-          id: 6,
-          day: "1",
-          group: "Penampilan Band",
-          name: "Samaria",
-          status: "pending",
-          pic: "",
-          notes: "Konfirmasi kebutuhan teknis dan jadwal tampil.",
-        },
-        {
-          id: 7,
-          day: "1",
-          group: "Fun Run",
-          name: "Water station",
-          status: "pending",
-          pic: "",
-          notes: "Tentukan titik penempatan dan penanggung jawab.",
-        },
-        {
-          id: 8,
-          day: "1",
-          group: "Fun Run",
-          name: "Pagar pembatas (barricade)",
-          status: "pending",
-          pic: "",
-          notes: "Tentukan jumlah dan titik pembatas.",
-        },
-        {
-          id: 9,
-          day: "1",
-          group: "Fun Run",
-          name: "Level / podium pengibaran bendera",
-          status: "pending",
-          pic: "",
-          notes: "Konfirmasi ukuran, lokasi, dan keamanan.",
-        },
-        {
-          id: 10,
-          day: "1",
-          group: "Fun Run",
-          name: "Band / live music",
-          status: "pending",
-          pic: "",
-          notes: "Konfirmasi pengisi acara dan kebutuhan audio.",
-        },
-        {
-          id: 11,
-          day: "1",
-          group: "Fun Run",
-          name: "Dokumentasi saat peserta naik podium",
-          status: "pending",
-          pic: "",
-          notes: "Pastikan fotografer/videografer berada di posisi podium.",
-        },
-        {
-          id: 12,
-          day: "1",
-          group: "Live Mural",
-          name: "Space / area mural",
-          status: "pending",
-          pic: "",
-          notes: "Siapkan area kerja dan koordinasi dengan seniman.",
-        },
-        {
-          id: 13,
-          day: "1",
-          group: "Live Mural",
-          name: "Lighting area mural",
-          status: "pending",
-          pic: "",
-          notes: "Konfirmasi titik dan kebutuhan pencahayaan.",
-        },
-        {
-          id: 14,
-          day: "1",
-          group: "Pameran Fotografi",
-          name: "2 tenda tertutup",
-          status: "pending",
-          pic: "",
-          notes: "Konfirmasi ukuran, penempatan, dan waktu pemasangan.",
-        },
-        {
-          id: 15,
-          day: "1",
-          group: "Opening Ceremony",
-          name: "Mimbar",
-          status: "pending",
-          pic: "",
-          notes: "Untuk kebutuhan opening malam.",
-        },
-        {
-          id: 16,
-          day: "1",
-          group: "Opening Ceremony",
-          name: "Digital opening dan efek visual",
-          status: "pending",
-          pic: "",
-          notes: "Koordinasikan cue, playback, dan operator.",
-        },
-        {
-          id: 17,
-          day: "1",
-          group: "Opening Ceremony",
-          name: "Video bumper opening",
-          status: "pending",
-          pic: "",
-          notes: "Pastikan file final dan format playback.",
-        },
-        {
-          id: 18,
-          day: "1",
-          group: "Opening Ceremony",
-          name: "Stand microphone",
-          status: "pending",
-          pic: "",
-          notes: "Konfirmasi jumlah dan posisi di panggung.",
-        },
-        {
-          id: 19,
-          day: "1",
-          group: "Opening Ceremony",
-          name: "Musik rekaman (minus one)",
-          status: "pending",
-          pic: "",
-          notes: "Siapkan file audio dan backup playback.",
-        },
-        {
-          id: 20,
-          day: "2",
-          group: "Mobile Legends",
-          name: "Penyerahan piala di panggung utama",
-          status: "pending",
-          pic: "",
-          notes: "Koordinasikan urutan penyerahan dengan MC dan stage manager.",
-        },
-        {
-          id: 21,
-          day: "2",
-          group: "Mobile Legends",
-          name: "Booth permainan tradisional",
-          status: "pending",
-          pic: "",
-          notes: "Konfirmasi area, perlengkapan, dan PIC permainan.",
-        },
-        {
-          id: 22,
-          day: "2",
-          group: "Mobile Legends",
-          name: "Tenda sarnafil untuk kebutuhan pijat",
-          status: "pending",
-          pic: "",
-          notes: "Konfirmasi ukuran, lokasi, dan fasilitas pendukung.",
-        },
-        {
-          id: 23,
-          day: "2",
-          group: "Mobile Legends",
-          name: "Publikasi kegiatan",
-          status: "pending",
-          pic: "",
-          notes: "Koordinasikan materi dan jadwal publikasi.",
-        },
-        {
-          id: 24,
-          day: "2",
-          group: "Talkshow Auditorium",
-          name: "3 microphone",
-          status: "pending",
-          pic: "",
-          notes: "Pastikan unit, baterai, dan channel audio.",
-        },
-        {
-          id: 25,
-          day: "2",
-          group: "Talkshow Auditorium",
-          name: "Matador",
-          status: "pending",
-          pic: "",
-          notes: "Konfirmasi spesifikasi dan kebutuhan teknis.",
-        },
-        {
-          id: 26,
-          day: "2",
-          group: "Talkshow Auditorium",
-          name: "Usher",
-          status: "pending",
-          pic: "",
-          notes: "Tentukan jumlah personel, briefing, dan posisi.",
-        },
-        {
-          id: 27,
-          day: "2",
-          group: "Talkshow Auditorium",
-          name: "Alat musik (kajo)",
-          status: "pending",
-          pic: "",
-          notes: "Konfirmasi alat dan pemain.",
-        },
-        {
-          id: 28,
-          day: "2",
-          group: "Talkshow Auditorium",
-          name: "Video teaser",
-          status: "tbc",
-          pic: "",
-          notes:
-            "Status TBC — konfirmasi apakah video diperlukan dan siapa PIC-nya.",
-        },
-        {
-          id: 29,
-          day: "2",
-          group: "Talkshow Auditorium",
-          name: "Dokumentasi talkshow",
-          status: "pending",
-          pic: "",
-          notes: "Tentukan fotografer/videografer dan momen penting.",
-        },
-        {
-          id: 30,
-          day: "2",
-          group: "Talkshow Auditorium",
-          name: "Mimbar",
-          status: "pending",
-          pic: "",
-          notes: "Koordinasikan penempatan di auditorium.",
-        },
-        {
-          id: 31,
-          day: "2",
-          group: "Talkshow Auditorium",
-          name: "3 sofa dari Undana",
-          status: "pending",
-          pic: "Undana",
-          notes: "Konfirmasi ketersediaan, pengiriman, dan pengembalian.",
-        },
-        {
-          id: 32,
-          day: "2",
-          group: "Guest Star",
-          name: "Cepupus Band",
-          status: "pending",
-          pic: "",
-          notes: "Konfirmasi rundown dan technical rider.",
-        },
-        {
-          id: 33,
-          day: "2",
-          group: "Guest Star",
-          name: "Mitha Idol",
-          status: "pending",
-          pic: "",
-          notes: "Konfirmasi rundown dan technical rider.",
-        },
-      ];
+<dialog id="taskDialog">
+  <form id="taskForm">
+    <h2 id="dialogTitle">Tambah kebutuhan</h2>
+    <label class="field" for="taskName">Nama kebutuhan *</label><input id="taskName" required placeholder="Contoh: Tambahan microphone">
+    <label class="field" for="taskDay">Agenda</label><select id="taskDay"><option value="persiapan">Persiapan produksi</option><option value="1">Hari pertama</option><option value="2">Hari kedua</option></select>
+    <label class="field" for="taskGroup">Kategori / bagian</label><input id="taskGroup" required placeholder="Contoh: Talkshow Auditorium">
+    <label class="field" for="taskPic">PIC / koordinator</label><input id="taskPic" placeholder="Nama PIC (opsional)">
+    <label class="field" for="taskAssignedTo">Ditugaskan kepada (email akun crew)</label><input id="taskAssignedTo" type="email" placeholder="crew@email.com">
+    <small style="color:var(--muted);font-size:11px">Gunakan email yang sama dengan email login crew agar tugas muncul di menu Tugas Saya.</small>
+    <label class="field" for="taskLocation">Lokasi / titik koordinasi</label><input id="taskLocation" placeholder="Contoh: Panggung utama, gate timur">
+    <label class="field" for="taskDeadline">Deadline</label><input id="taskDeadline" type="datetime-local">
+    <label class="field" for="taskStatus">Status</label><select id="taskStatus"><option value="pending">Belum selesai</option><option value="tbc">Perlu konfirmasi (TBC)</option><option value="done">Selesai</option></select>
+    <label class="field" for="taskNotes">Catatan</label><textarea id="taskNotes" placeholder="Detail lokasi, jumlah, atau arahan koordinasi"></textarea>
+    <div class="dialog-actions"><button type="button" class="btn" id="cancelDialog">Batal</button><button class="btn primary" type="submit">Simpan kebutuhan</button></div>
+  </form>
+</dialog>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCWT5IWPcqDkgmOUX3Gp0VvVKmGHIWYYxU",
+  authDomain: "pontuak-fest-2026.firebaseapp.com",
+  databaseURL: "https://pontuak-fest-2026-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "pontuak-fest-2026",
+  storageBucket: "pontuak-fest-2026.firebasestorage.app",
+  messagingSenderId: "867114061732",
+  appId: "1:867114061732:web:1de5e19ee22517a5f87b31",
+  measurementId: "G-1EBQRKG03K"
+};
 
-      const $ = (id) => document.getElementById(id);
-      const esc = (s) =>
-        String(s ?? "").replace(
-          /[&<>"']/g,
-          (c) =>
-            ({
-              "&": "&amp;",
-              "<": "&lt;",
-              ">": "&gt;",
-              '"': "&quot;",
-              "'": "&#39;",
-            })[c],
-        );
-      let tasks = [],
-        activeDay = "all",
-        editId = null,
-        dbRoot = null,
-        tasksRef = null,
-        announcementsRef = null,
-        currentUser = null,
-        currentRole = null,
-        dataReady = false,
-        myTasksOnly = false;
-      let unsubscribeTasks = null,
-        unsubscribeAnnouncements = null,
-        announcements = [];
+const initialTasks = [
+ {id:1,day:"persiapan",group:"Persiapan Produksi",name:"Loading produksi tanggal 27–28",status:"tbc",pic:"",notes:"Konfirmasi bulan, jam, akses loading, dan pembagian crew."},
+ {id:2,day:"persiapan",group:"Persiapan Produksi",name:"Gladi / rehearsal tanggal 4",status:"tbc",pic:"",notes:"Konfirmasi bulan, rundown, dan kesiapan teknis."},
+ {id:3,day:"persiapan",group:"Persiapan Produksi",name:"Koordinasi UMKM masuk pada H-1",status:"pending",pic:"",notes:"Atur akses masuk, area booth, dan waktu loading UMKM."},
+ {id:4,day:"persiapan",group:"Perizinan",name:"Update izin keramaian",status:"tbc",pic:"",notes:"Periksa status dan tindak lanjut perizinan."},
+ {id:5,day:"1",group:"Penampilan Band",name:"MKP Band",status:"pending",pic:"",notes:"Konfirmasi kebutuhan teknis dan jadwal tampil."},
+ {id:6,day:"1",group:"Penampilan Band",name:"Samaria",status:"pending",pic:"",notes:"Konfirmasi kebutuhan teknis dan jadwal tampil."},
+ {id:7,day:"1",group:"Fun Run",name:"Water station",status:"pending",pic:"",notes:"Tentukan titik penempatan dan penanggung jawab."},
+ {id:8,day:"1",group:"Fun Run",name:"Pagar pembatas (barricade)",status:"pending",pic:"",notes:"Tentukan jumlah dan titik pembatas."},
+ {id:9,day:"1",group:"Fun Run",name:"Level / podium pengibaran bendera",status:"pending",pic:"",notes:"Konfirmasi ukuran, lokasi, dan keamanan."},
+ {id:10,day:"1",group:"Fun Run",name:"Band / live music",status:"pending",pic:"",notes:"Konfirmasi pengisi acara dan kebutuhan audio."},
+ {id:11,day:"1",group:"Fun Run",name:"Dokumentasi saat peserta naik podium",status:"pending",pic:"",notes:"Pastikan fotografer/videografer berada di posisi podium."},
+ {id:12,day:"1",group:"Live Mural",name:"Space / area mural",status:"pending",pic:"",notes:"Siapkan area kerja dan koordinasi dengan seniman."},
+ {id:13,day:"1",group:"Live Mural",name:"Lighting area mural",status:"pending",pic:"",notes:"Konfirmasi titik dan kebutuhan pencahayaan."},
+ {id:14,day:"1",group:"Pameran Fotografi",name:"2 tenda tertutup",status:"pending",pic:"",notes:"Konfirmasi ukuran, penempatan, dan waktu pemasangan."},
+ {id:15,day:"1",group:"Opening Ceremony",name:"Mimbar",status:"pending",pic:"",notes:"Untuk kebutuhan opening malam."},
+ {id:16,day:"1",group:"Opening Ceremony",name:"Digital opening dan efek visual",status:"pending",pic:"",notes:"Koordinasikan cue, playback, dan operator."},
+ {id:17,day:"1",group:"Opening Ceremony",name:"Video bumper opening",status:"pending",pic:"",notes:"Pastikan file final dan format playback."},
+ {id:18,day:"1",group:"Opening Ceremony",name:"Stand microphone",status:"pending",pic:"",notes:"Konfirmasi jumlah dan posisi di panggung."},
+ {id:19,day:"1",group:"Opening Ceremony",name:"Musik rekaman (minus one)",status:"pending",pic:"",notes:"Siapkan file audio dan backup playback."},
+ {id:20,day:"2",group:"Mobile Legends",name:"Penyerahan piala di panggung utama",status:"pending",pic:"",notes:"Koordinasikan urutan penyerahan dengan MC dan stage manager."},
+ {id:21,day:"2",group:"Mobile Legends",name:"Booth permainan tradisional",status:"pending",pic:"",notes:"Konfirmasi area, perlengkapan, dan PIC permainan."},
+ {id:22,day:"2",group:"Mobile Legends",name:"Tenda sarnafil untuk kebutuhan pijat",status:"pending",pic:"",notes:"Konfirmasi ukuran, lokasi, dan fasilitas pendukung."},
+ {id:23,day:"2",group:"Mobile Legends",name:"Publikasi kegiatan",status:"pending",pic:"",notes:"Koordinasikan materi dan jadwal publikasi."},
+ {id:24,day:"2",group:"Talkshow Auditorium",name:"3 microphone",status:"pending",pic:"",notes:"Pastikan unit, baterai, dan channel audio."},
+ {id:25,day:"2",group:"Talkshow Auditorium",name:"Matador",status:"pending",pic:"",notes:"Konfirmasi spesifikasi dan kebutuhan teknis."},
+ {id:26,day:"2",group:"Talkshow Auditorium",name:"Usher",status:"pending",pic:"",notes:"Tentukan jumlah personel, briefing, dan posisi."},
+ {id:27,day:"2",group:"Talkshow Auditorium",name:"Alat musik (kajo)",status:"pending",pic:"",notes:"Konfirmasi alat dan pemain."},
+ {id:28,day:"2",group:"Talkshow Auditorium",name:"Video teaser",status:"tbc",pic:"",notes:"Status TBC — konfirmasi apakah video diperlukan dan siapa PIC-nya."},
+ {id:29,day:"2",group:"Talkshow Auditorium",name:"Dokumentasi talkshow",status:"pending",pic:"",notes:"Tentukan fotografer/videografer dan momen penting."},
+ {id:30,day:"2",group:"Talkshow Auditorium",name:"Mimbar",status:"pending",pic:"",notes:"Koordinasikan penempatan di auditorium."},
+ {id:31,day:"2",group:"Talkshow Auditorium",name:"3 sofa dari Undana",status:"pending",pic:"Undana",notes:"Konfirmasi ketersediaan, pengiriman, dan pengembalian."},
+ {id:32,day:"2",group:"Guest Star",name:"Cepupus Band",status:"pending",pic:"",notes:"Konfirmasi rundown dan technical rider."},
+ {id:33,day:"2",group:"Guest Star",name:"Mitha Idol",status:"pending",pic:"",notes:"Konfirmasi rundown dan technical rider."}
+];
 
-      function setStatus(message, state = "") {
-        const el = $("connectionStatus");
-        el.textContent = message;
-        el.dataset.state = state;
-      }
-      function showAuthMessage(message = "") {
-        $("authMessage").textContent = message;
-      }
-      function showAuth() {
-        document.body.classList.add("auth-required");
-        if (!$("authDialog").open) $("authDialog").showModal();
-      }
-      function hideAuth() {
-        document.body.classList.remove("auth-required");
-        if ($("authDialog").open) $("authDialog").close();
-      }
-      function labelDay(d) {
-        return d === "persiapan"
-          ? "Persiapan produksi"
-          : d === "1"
-            ? "Hari pertama"
-            : "Hari kedua";
-      }
-      function statusLabel(s) {
-        return s === "done"
-          ? "Selesai"
-          : s === "tbc"
-            ? "Perlu konfirmasi"
-            : "Belum selesai";
-      }
-      function toTaskArray(raw) {
-        return Object.values(raw || {})
-          .filter(Boolean)
-          .map((t) => ({ ...t, id: Number(t.id) }))
-          .sort((a, b) => a.id - b.id);
-      }
-      function taskMap(list) {
-        const out = {};
-        list.forEach((t) => (out[String(t.id)] = t));
-        return out;
-      }
-      function canEdit() {
-        return currentRole === "admin" || currentRole === "pic";
-      }
-      function canDelete() {
-        return currentRole === "admin";
-      }
-      function isMyTask(t) {
-        const email = (currentUser?.email || "").trim().toLowerCase();
-        return (
-          !!email &&
-          String(t.assignedTo || "")
-            .trim()
-            .toLowerCase() === email
-        );
-      }
-      function fmtDate(value) {
-        if (!value) return "Belum ditentukan";
-        const d = new Date(value);
-        return Number.isNaN(d.getTime())
-          ? String(value)
-          : d.toLocaleString("id-ID", {
-              dateStyle: "medium",
-              timeStyle: "short",
-            });
-      }
-      function dueClass(value) {
-        if (!value) return "";
-        const d = new Date(value);
-        if (Number.isNaN(d.getTime())) return "";
-        return d.getTime() < Date.now() ? "overdue" : "due-soon";
-      }
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let tasks = [], activeDay = "all", editId = null, dbRoot = null, tasksRef = null, announcementsRef = null, currentUser = null, currentRole = null, dataReady = false, myTasksOnly = false;
+let unsubscribeTasks = null, unsubscribeAnnouncements = null, announcements = [];
 
-      function render() {
-        const query = $("search").value.toLowerCase().trim(),
-          filter = $("statusFilter").value;
-        const filtered = tasks.filter(
-          (t) =>
-            (!myTasksOnly ||
-              (currentRole !== "admin" && currentRole !== "pic"
-                ? isMyTask(t)
-                : isMyTask(t))) &&
-            (activeDay === "all" || t.day === activeDay) &&
-            (!query ||
-              [t.name, t.group, t.pic, t.notes, t.location, t.assignedTo]
-                .join(" ")
-                .toLowerCase()
-                .includes(query)) &&
-            (filter === "all" ||
-              (filter === "pending" && t.status !== "done") ||
-              t.status === filter),
-        );
-        const myCount = tasks
-          .filter(isMyTask)
-          .filter((t) => t.status !== "done").length;
-        $("myTaskCount").textContent = `· ${myCount} belum selesai`;
-        $("myTasksBtn").classList.toggle("active", myTasksOnly);
-        const total = tasks.length,
-          done = tasks.filter((t) => t.status === "done").length,
-          tbc = tasks.filter((t) => t.status === "tbc").length;
-        $("totalMetric").textContent = total;
-        $("doneMetric").textContent =
-          (total ? Math.round((done / total) * 100) : 0) + "%";
-        $("doneSub").textContent = `${done} dari ${total} kebutuhan`;
-        $("tbcMetric").textContent = tbc;
-        $("pendingMetric").textContent = total - done;
-        const groups = [];
-        filtered.forEach((t) => {
-          let g = groups.find((x) => x.day === t.day && x.group === t.group);
-          if (!g) {
-            g = { day: t.day, group: t.group, items: [] };
-            groups.push(g);
-          }
-          g.items.push(t);
-        });
-        const order = { persiapan: 0, 1: 1, 2: 2 };
-        groups.sort((a, b) => order[a.day] - order[b.day]);
-        const root = $("checklist");
-        if (!groups.length) {
-          root.innerHTML =
-            '<div class="empty">' +
-            (dataReady
-              ? "Tidak ada kebutuhan yang cocok dengan filter."
-              : "Memuat checklist dari Firebase…") +
-            "</div>";
-          return;
-        }
-        let html = "",
-          lastDay = "";
-        for (const g of groups) {
-          if (g.day !== lastDay) {
-            html += `<div class="section-head"><div><h2>${esc(labelDay(g.day))}</h2><p>${g.day === "persiapan" ? "Jadwal produksi dan kesiapan operasional" : g.day === "1" ? "Band, Fun Run, mural, pameran, dan opening ceremony" : "Kompetisi, talkshow, dan hiburan utama"}</p></div></div>`;
-            lastDay = g.day;
-            html += '<div class="cards">';
-          }
-          const completed = g.items.filter((x) => x.status === "done").length;
-          html += `<section class="card"><div class="card-top"><div><h3>${esc(g.group)}</h3><div class="desc">${esc(labelDay(g.day))}</div></div><div class="count">${completed}/${g.items.length} selesai</div></div>`;
-          for (const t of g.items) {
-            html += `<div class="task ${t.status === "done" ? "done" : ""}"><input type="checkbox" aria-label="Status: ${esc(t.name)}" data-check="${t.id}" ${t.status === "done" ? "checked" : ""} ${canEdit() ? "" : "disabled"}><div class="task-body"><div class="task-title">${esc(t.name)}</div><div class="task-meta"><span class="pill ${t.status === "tbc" ? "tbc" : t.status === "pending" ? "urgent" : ""}">${esc(statusLabel(t.status))}</span>${t.pic ? `<span class="pill">PIC: ${esc(t.pic)}</span>` : ""}${t.notes ? `<span class="pill">${esc(t.notes)}</span>` : ""}</div><div class="task-detail">${t.location ? `<span>📍 <b>Lokasi:</b> ${esc(t.location)}</span>` : ""}${t.assignedTo ? `<span>👤 <b>Ditugaskan:</b> ${esc(t.assignedTo)}</span>` : ""}${t.deadline ? `<span class="${dueClass(t.deadline)}">⏱ <b>Deadline:</b> ${esc(fmtDate(t.deadline))}</span>` : ""}</div></div><div class="task-actions">${canEdit() ? `<button class="mini" title="Edit kebutuhan" aria-label="Edit ${esc(t.name)}" data-edit="${t.id}">✎</button>` : ""}${canDelete() ? `<button class="mini" title="Hapus kebutuhan" aria-label="Hapus ${esc(t.name)}" data-delete="${t.id}">×</button>` : ""}</div></div>`;
-          }
-          html += "</section>";
-          const idx = filtered.indexOf(g.items[g.items.length - 1]);
-          const next = filtered[idx + 1];
-          if (!next || next.day !== g.day) html += "</div>";
-        }
-        root.innerHTML = html;
-        root.querySelectorAll("[data-check]").forEach((el) =>
-          el.addEventListener("change", async () => {
-            const id = Number(el.dataset.check);
-            const t = tasks.find((x) => x.id === id);
-            if (!t) return;
-            el.disabled = true;
-            try {
-              await tasksRef
-                .child(String(id))
-                .update({
-                  status: el.checked ? "done" : "pending",
-                  updatedAt: firebase.database.ServerValue.TIMESTAMP,
-                  updatedBy: currentUser.uid,
-                });
-            } catch (err) {
-              alert("Gagal menyimpan status: " + err.message);
-              render();
-            } finally {
-              el.disabled = false;
-            }
-          }),
-        );
-        root
-          .querySelectorAll("[data-edit]")
-          .forEach((el) =>
-            el.addEventListener("click", () =>
-              openDialog(Number(el.dataset.edit)),
-            ),
-          );
-        root.querySelectorAll("[data-delete]").forEach((el) =>
-          el.addEventListener("click", async () => {
-            const t = tasks.find((x) => x.id === Number(el.dataset.delete));
-            if (
-              t &&
-              confirm(`Hapus kebutuhan "${t.name}" dari checklist bersama?`)
-            ) {
-              try {
-                await tasksRef.child(String(t.id)).remove();
-              } catch (err) {
-                alert("Gagal menghapus: " + err.message);
-              }
-            }
-          }),
-        );
-      }
-      function openDialog(id = null) {
-        editId = id;
-        const t = id ? tasks.find((x) => x.id === id) : null;
-        $("dialogTitle").textContent = t
-          ? "Edit kebutuhan"
-          : "Tambah kebutuhan";
-        $("taskName").value = t?.name || "";
-        $("taskDay").value = t?.day || "persiapan";
-        $("taskGroup").value = t?.group || "";
-        $("taskPic").value = t?.pic || "";
-        $("taskAssignedTo").value = t?.assignedTo || "";
-        $("taskLocation").value = t?.location || "";
-        $("taskDeadline").value = t?.deadline || "";
-        $("taskStatus").value = t?.status || "pending";
-        $("taskNotes").value = t?.notes || "";
-        $("taskDialog").showModal();
-      }
+function setStatus(message, state="") { const el=$("connectionStatus"); el.textContent=message; el.dataset.state=state; }
+function showAuthMessage(message="") { $("authMessage").textContent=message; }
+function showAuth() { document.body.classList.add("auth-required"); if (!$ ("authDialog").open) $("authDialog").showModal(); }
+function hideAuth() { document.body.classList.remove("auth-required"); if ($("authDialog").open) $("authDialog").close(); }
+function labelDay(d){return d==="persiapan"?"Persiapan produksi":d==="1"?"Hari pertama":"Hari kedua"}
+function statusLabel(s){return s==="done"?"Selesai":s==="tbc"?"Perlu konfirmasi":"Belum selesai"}
+function toTaskArray(raw){return Object.values(raw || {}).filter(Boolean).map(t=>({...t,id:Number(t.id)})).sort((a,b)=>a.id-b.id)}
+function taskMap(list){const out={};list.forEach(t=>out[String(t.id)]=t);return out}
+function canEdit(){return currentRole==="admin"||currentRole==="pic"}
+function canDelete(){return currentRole==="admin"}
+function isMyTask(t){const email=(currentUser?.email||"").trim().toLowerCase();return !!email && String(t.assignedTo||"").trim().toLowerCase()===email}
+function fmtDate(value){if(!value)return "Belum ditentukan";const d=new Date(value);return Number.isNaN(d.getTime())?String(value):d.toLocaleString("id-ID",{dateStyle:"medium",timeStyle:"short"})}
+function dueClass(value){if(!value)return "";const d=new Date(value);if(Number.isNaN(d.getTime()))return "";return d.getTime()<Date.now()?"overdue":"due-soon"}
 
-      function renderAnnouncements() {
-        const list = $("announcementList");
-        $("announcementCount").textContent =
-          `${announcements.length} pengumuman`;
-        if (!announcements.length) {
-          list.innerHTML =
-            '<div class="empty">Belum ada pengumuman dari admin/PIC.</div>';
-          return;
-        }
-        list.innerHTML = announcements
-          .map(
-            (a) =>
-              `<article class="announcement"><strong>${esc(a.title || "Pengumuman")}</strong><p>${esc(a.body || "")}</p><small>${esc(a.authorName || "Tim PONTUAK FEST")} · ${esc(a.createdAt ? fmtDate(a.createdAt) : "Baru saja")}</small></article>`,
-          )
-          .join("");
-      }
-      async function publishAnnouncement(e) {
-        e.preventDefault();
-        if (!currentUser || !canEdit() || !announcementsRef) return;
-        const title = $("announcementTitle").value.trim(),
-          body = $("announcementBody").value.trim();
-        if (!title || !body) return;
-        const id = String(Date.now());
-        try {
-          await announcementsRef
-            .child(id)
-            .set({
-              id,
-              title,
-              body,
-              authorName:
-                currentUser.displayName || currentUser.email || "Admin/PIC",
-              authorUid: currentUser.uid,
-              createdAt: firebase.database.ServerValue.TIMESTAMP,
-            });
-          $("announcementForm").reset();
-        } catch (err) {
-          alert(
-            "Pengumuman gagal diterbitkan. Periksa Firebase Rules untuk jalur announcements.\n" +
-              err.message,
-          );
-        }
-      }
+function render(){
+ const query=$("search").value.toLowerCase().trim(), filter=$("statusFilter").value;
+ const filtered=tasks.filter(t=>(!myTasksOnly||(currentRole!=="admin"&&currentRole!=="pic"?isMyTask(t):isMyTask(t)))&&(activeDay==="all"||t.day===activeDay)&&(!query||[t.name,t.group,t.pic,t.notes,t.location,t.assignedTo].join(" ").toLowerCase().includes(query))&&(filter==="all"||(filter==="pending"&&t.status!=="done")||t.status===filter));
+ const myCount=tasks.filter(isMyTask).filter(t=>t.status!=="done").length;$ ("myTaskCount").textContent=`· ${myCount} belum selesai`;$("myTasksBtn").classList.toggle("active",myTasksOnly);
+ const total=tasks.length,done=tasks.filter(t=>t.status==="done").length,tbc=tasks.filter(t=>t.status==="tbc").length;
+ $("totalMetric").textContent=total;$("doneMetric").textContent=(total?Math.round(done/total*100):0)+"%";$("doneSub").textContent=`${done} dari ${total} kebutuhan`;$("tbcMetric").textContent=tbc;$("pendingMetric").textContent=total-done;
+ const groups=[];filtered.forEach(t=>{let g=groups.find(x=>x.day===t.day&&x.group===t.group);if(!g){g={day:t.day,group:t.group,items:[]};groups.push(g)}g.items.push(t)});
+ const order={"persiapan":0,"1":1,"2":2};groups.sort((a,b)=>order[a.day]-order[b.day]);
+ const root=$("checklist");
+ if(!groups.length){root.innerHTML='<div class="empty">'+(dataReady?'Tidak ada kebutuhan yang cocok dengan filter.':'Memuat checklist dari Firebase…')+'</div>';return}
+ let html="",lastDay="";
+ for(const g of groups){
+  if(g.day!==lastDay){html+=`<div class="section-head"><div><h2>${esc(labelDay(g.day))}</h2><p>${g.day==="persiapan"?"Jadwal produksi dan kesiapan operasional":g.day==="1"?"Band, Fun Run, mural, pameran, dan opening ceremony":"Kompetisi, talkshow, dan hiburan utama"}</p></div></div>`;lastDay=g.day;html+='<div class="cards">';}
+  const completed=g.items.filter(x=>x.status==="done").length;
+  html+=`<section class="card"><div class="card-top"><div><h3>${esc(g.group)}</h3><div class="desc">${esc(labelDay(g.day))}</div></div><div class="count">${completed}/${g.items.length} selesai</div></div>`;
+  for(const t of g.items){html+=`<div class="task ${t.status==="done"?"done":""}"><input type="checkbox" aria-label="Status: ${esc(t.name)}" data-check="${t.id}" ${t.status==="done"?"checked":""} ${canEdit()?"":"disabled"}><div class="task-body"><div class="task-title">${esc(t.name)}</div><div class="task-meta"><span class="pill ${t.status==="tbc"?"tbc":t.status==="pending"?"urgent":""}">${esc(statusLabel(t.status))}</span>${t.pic?`<span class="pill">PIC: ${esc(t.pic)}</span>`:""}${t.notes?`<span class="pill">${esc(t.notes)}</span>`:""}</div><div class="task-detail">${t.location?`<span>📍 <b>Lokasi:</b> ${esc(t.location)}</span>`:""}${t.assignedTo?`<span>👤 <b>Ditugaskan:</b> ${esc(t.assignedTo)}</span>`:""}${t.deadline?`<span class="${dueClass(t.deadline)}">⏱ <b>Deadline:</b> ${esc(fmtDate(t.deadline))}</span>`:""}</div></div><div class="task-actions">${canEdit()?`<button class="mini" title="Edit kebutuhan" aria-label="Edit ${esc(t.name)}" data-edit="${t.id}">✎</button>`:""}${canDelete()?`<button class="mini" title="Hapus kebutuhan" aria-label="Hapus ${esc(t.name)}" data-delete="${t.id}">×</button>`:""}</div></div>`;}
+  html+="</section>";
+  const idx=filtered.indexOf(g.items[g.items.length-1]);const next=filtered[idx+1];if(!next||next.day!==g.day)html+="</div>";
+ }
+ root.innerHTML=html;
+ root.querySelectorAll("[data-check]").forEach(el=>el.addEventListener("change",async()=>{const id=Number(el.dataset.check);const t=tasks.find(x=>x.id===id);if(!t)return;el.disabled=true;try{await tasksRef.child(String(id)).update({status:el.checked?"done":"pending",updatedAt:firebase.database.ServerValue.TIMESTAMP,updatedBy:currentUser.uid});}catch(err){alert("Gagal menyimpan status: "+err.message);render()}finally{el.disabled=false}}));
+ root.querySelectorAll("[data-edit]").forEach(el=>el.addEventListener("click",()=>openDialog(Number(el.dataset.edit))));
+ root.querySelectorAll("[data-delete]").forEach(el=>el.addEventListener("click",async()=>{const t=tasks.find(x=>x.id===Number(el.dataset.delete));if(t&&confirm(`Hapus kebutuhan "${t.name}" dari checklist bersama?`)){try{await tasksRef.child(String(t.id)).remove()}catch(err){alert("Gagal menghapus: "+err.message)}}}));
+}
+function openDialog(id=null){editId=id;const t=id?tasks.find(x=>x.id===id):null;$("dialogTitle").textContent=t?"Edit kebutuhan":"Tambah kebutuhan";$("taskName").value=t?.name||"";$("taskDay").value=t?.day||"persiapan";$("taskGroup").value=t?.group||"";$("taskPic").value=t?.pic||"";$("taskAssignedTo").value=t?.assignedTo||"";$("taskLocation").value=t?.location||"";$("taskDeadline").value=t?.deadline||"";$("taskStatus").value=t?.status||"pending";$("taskNotes").value=t?.notes||"";$("taskDialog").showModal();}
 
-      async function initializeSharedData() {
-        try {
-          const roleSnap = await firebase
-            .database()
-            .ref("pontuak_fest_2026_access/" + currentUser.uid)
-            .once("value");
-          // Default role: every authenticated account is a read-only crew unless explicitly promoted.
-          const savedRole = roleSnap.val();
-          currentRole = ["admin", "pic"].includes(savedRole)
-            ? savedRole
-            : "crew";
-          $("userLabel").textContent =
-            (currentUser.displayName || currentUser.email || "Pengguna") +
-            " · " +
-            currentRole.toUpperCase();
-          $("addBtn").hidden = !canEdit();
-          $("announcementForm").hidden = !canEdit();
-          if (tasksRef && unsubscribeTasks)
-            tasksRef.off("value", unsubscribeTasks);
-          tasksRef = dbRoot.child("tasks");
-          const handler = (snapshot) => {
-            const val = snapshot.val();
-            tasks = toTaskArray(val);
-            dataReady = true;
-            render();
-            setStatus("Tersinkronisasi", "ok");
-          };
-          tasksRef.on("value", handler, (error) => {
-            setStatus("Gagal memuat data", "error");
-            console.error(error);
-            alert(
-              "Tidak dapat membaca checklist Firebase. Periksa Rules dan koneksi internet.\n" +
-                error.message,
-            );
-          });
-          unsubscribeTasks = handler;
-          announcementsRef = dbRoot.child("announcements");
-          if (unsubscribeAnnouncements)
-            announcementsRef.off("value", unsubscribeAnnouncements);
-          const announcementHandler = (snapshot) => {
-            announcements = Object.values(snapshot.val() || {})
-              .filter(Boolean)
-              .sort(
-                (a, b) =>
-                  (Number(b.createdAt) || 0) - (Number(a.createdAt) || 0),
-              );
-            renderAnnouncements();
-          };
-          announcementsRef.on("value", announcementHandler, (error) => {
-            console.warn("Pengumuman belum dapat dimuat:", error);
-            $("announcementList").innerHTML =
-              '<div class="empty">Pengumuman belum dapat dimuat. Admin perlu memeriksa Firebase Rules.</div>';
-          });
-          unsubscribeAnnouncements = announcementHandler;
-          renderAnnouncements();
-          render();
-        } catch (err) {
-          setStatus("Koneksi gagal", "error");
-          console.error(err);
-          alert("Gagal menyiapkan database: " + err.message);
-        }
-      }
+function renderAnnouncements(){
+ const list=$("announcementList");$("announcementCount").textContent=`${announcements.length} pengumuman`;
+ if(!announcements.length){list.innerHTML='<div class="empty">Belum ada pengumuman dari admin/PIC.</div>';return}
+ list.innerHTML=announcements.map(a=>`<article class="announcement"><strong>${esc(a.title||"Pengumuman")}</strong><p>${esc(a.body||"")}</p><small>${esc(a.authorName||"Tim PONTUAK FEST")} · ${esc(a.createdAt?fmtDate(a.createdAt):"Baru saja")}</small></article>`).join("");
+}
+async function publishAnnouncement(e){e.preventDefault();if(!currentUser||!canEdit()||!announcementsRef)return;const title=$("announcementTitle").value.trim(),body=$("announcementBody").value.trim();if(!title||!body)return;const id=String(Date.now());try{await announcementsRef.child(id).set({id,title,body,authorName:currentUser.displayName||currentUser.email||"Admin/PIC",authorUid:currentUser.uid,createdAt:firebase.database.ServerValue.TIMESTAMP});$("announcementForm").reset();}catch(err){alert("Pengumuman gagal diterbitkan. Periksa Firebase Rules untuk jalur announcements.\n"+err.message)}}
 
-      function signInGoogle() {
-        showAuthMessage("");
-        const provider = new firebase.auth.GoogleAuthProvider();
-        firebase
-          .auth()
-          .signInWithPopup(provider)
-          .catch((err) => showAuthMessage(authError(err)));
-      }
-      function authError(err) {
-        if (err.code === "auth/unauthorized-domain")
-          return "Domain website belum diizinkan di Firebase Authentication → Settings → Authorized domains.";
-        if (err.code === "auth/operation-not-allowed")
-          return "Metode login belum aktif di Firebase Authentication → Sign-in method.";
-        if (err.code === "auth/email-already-in-use")
-          return "Email sudah terdaftar. Silakan masuk.";
-        if (err.code === "auth/weak-password")
-          return "Password terlalu lemah. Gunakan minimal 6 karakter.";
-        if (
-          err.code === "auth/invalid-credential" ||
-          err.code === "auth/wrong-password" ||
-          err.code === "auth/user-not-found"
-        )
-          return "Email atau password tidak cocok.";
-        return err.message || "Login gagal. Coba lagi.";
-      }
+async function initializeSharedData(){
+ try {
+  const roleSnap=await firebase.database().ref("pontuak_fest_2026_access/"+currentUser.uid).once("value");
+  // Default role: every authenticated account is a read-only crew unless explicitly promoted.
+  const savedRole=roleSnap.val();
+  currentRole=["admin","pic"].includes(savedRole)?savedRole:"crew";
+  $("userLabel").textContent=(currentUser.displayName||currentUser.email||"Pengguna")+" · "+currentRole.toUpperCase();
+  $("addBtn").hidden=!canEdit();
+  $("announcementForm").hidden=!canEdit();
+  if(tasksRef && unsubscribeTasks) tasksRef.off("value", unsubscribeTasks);
+  tasksRef=dbRoot.child("tasks");
+  const handler=snapshot=>{const val=snapshot.val();tasks=toTaskArray(val);dataReady=true;render();setStatus("Tersinkronisasi", "ok")};
+  tasksRef.on("value",handler,error=>{setStatus("Gagal memuat data", "error");console.error(error);alert("Tidak dapat membaca checklist Firebase. Periksa Rules dan koneksi internet.\n"+error.message)});
+  unsubscribeTasks=handler;
+  announcementsRef=dbRoot.child("announcements");
+  if(unsubscribeAnnouncements) announcementsRef.off("value",unsubscribeAnnouncements);
+  const announcementHandler=snapshot=>{announcements=Object.values(snapshot.val()||{}).filter(Boolean).sort((a,b)=>(Number(b.createdAt)||0)-(Number(a.createdAt)||0));renderAnnouncements()};
+  announcementsRef.on("value",announcementHandler,error=>{console.warn("Pengumuman belum dapat dimuat:",error);$("announcementList").innerHTML='<div class="empty">Pengumuman belum dapat dimuat. Admin perlu memeriksa Firebase Rules.</div>'});
+  unsubscribeAnnouncements=announcementHandler;renderAnnouncements();render();
+ } catch(err){setStatus("Koneksi gagal", "error");console.error(err);alert("Gagal menyiapkan database: "+err.message)}
+}
 
-      $("googleSignInBtn").addEventListener("click", signInGoogle);
-      $("authForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        showAuthMessage("");
-        const email = $("authEmail").value.trim(),
-          password = $("authPassword").value;
-        try {
-          await firebase.auth().signInWithEmailAndPassword(email, password);
-        } catch (err) {
-          showAuthMessage(authError(err));
-        }
-      });
-      $("createAccountBtn").addEventListener("click", async () => {
-        showAuthMessage("");
-        const email = $("authEmail").value.trim(),
-          password = $("authPassword").value;
-        if (!email || password.length < 6) {
-          showAuthMessage("Masukkan email dan password minimal 6 karakter.");
-          return;
-        }
-        try {
-          await firebase.auth().createUserWithEmailAndPassword(email, password);
-          showAuthMessage(
-            "Akun berhasil dibuat. Anda otomatis mendapat akses Crew (hanya melihat daftar tugas). Admin dapat mengubah peran menjadi PIC bila diperlukan.",
-          );
-        } catch (err) {
-          showAuthMessage(authError(err));
-        }
-      });
-      $("signOutBtn").addEventListener("click", () =>
-        firebase.auth().signOut(),
-      );
-      $("addBtn").addEventListener("click", () => {
-        if (!currentUser) return showAuth();
-        if (!canEdit()) return;
-        openDialog();
-      });
-      $("cancelDialog").addEventListener("click", () =>
-        $("taskDialog").close(),
-      );
-      $("taskForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        if (!currentUser || !tasksRef || !canEdit()) return;
-        const data = {
-          name: $("taskName").value.trim(),
-          day: $("taskDay").value,
-          group: $("taskGroup").value.trim(),
-          pic: $("taskPic").value.trim(),
-          assignedTo: $("taskAssignedTo").value.trim().toLowerCase(),
-          location: $("taskLocation").value.trim(),
-          deadline: $("taskDeadline").value,
-          status: $("taskStatus").value,
-          notes: $("taskNotes").value.trim(),
-        };
-        if (!data.name || !data.group) return;
-        try {
-          if (editId) {
-            const old = tasks.find((t) => t.id === editId);
-            await tasksRef
-              .child(String(editId))
-              .update({
-                ...old,
-                ...data,
-                updatedAt: firebase.database.ServerValue.TIMESTAMP,
-                updatedBy: currentUser.uid,
-              });
-          } else {
-            data.id = Date.now();
-            data.createdAt = firebase.database.ServerValue.TIMESTAMP;
-            data.createdBy = currentUser.uid;
-            await tasksRef.child(String(data.id)).set(data);
-          }
-          $("taskDialog").close();
-        } catch (err) {
-          alert("Gagal menyimpan kebutuhan: " + err.message);
-        }
-      });
-      $("search").addEventListener("input", render);
-      $("statusFilter").addEventListener("change", render);
-      $("myTasksBtn").addEventListener("click", () => {
-        myTasksOnly = !myTasksOnly;
-        activeDay = "all";
-        document
-          .querySelectorAll(".tab")
-          .forEach((x) =>
-            x.classList.toggle("active", x.dataset.day === "all"),
-          );
-        render();
-        if (myTasksOnly)
-          $("checklist").scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-      $("announcementForm").addEventListener("submit", publishAnnouncement);
-      $("tabs").addEventListener("click", (e) => {
-        const b = e.target.closest("[data-day]");
-        if (!b) return;
-        activeDay = b.dataset.day;
-        document
-          .querySelectorAll(".tab")
-          .forEach((x) => x.classList.toggle("active", x === b));
-        render();
-      });
-      $("printBtn").addEventListener("click", () => window.print());
-      $("exportBtn").addEventListener("click", () => {
-        const rows = [
-          [
-            "Agenda",
-            "Kategori",
-            "Kebutuhan",
-            "Status",
-            "PIC",
-            "Ditugaskan kepada",
-            "Lokasi",
-            "Deadline",
-            "Catatan",
-          ],
-          ...tasks.map((t) => [
-            labelDay(t.day),
-            t.group,
-            t.name,
-            statusLabel(t.status),
-            t.pic,
-            t.assignedTo,
-            t.location,
-            t.deadline,
-            t.notes,
-          ]),
-        ];
-        const csv = rows
-          .map((r) =>
-            r
-              .map((v) => '"' + String(v ?? "").replace(/"/g, '""') + '"')
-              .join(","),
-          )
-          .join("\r\n");
-        const blob = new Blob(["\ufeff" + csv], {
-          type: "text/csv;charset=utf-8;",
-        });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = "PONTUAK_FEST_2026_checklist.csv";
-        a.click();
-        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-      });
+function signInGoogle(){showAuthMessage("");const provider=new firebase.auth.GoogleAuthProvider();firebase.auth().signInWithPopup(provider).catch(err=>showAuthMessage(authError(err)));}
+function authError(err){if(err.code==="auth/unauthorized-domain")return"Domain website belum diizinkan di Firebase Authentication → Settings → Authorized domains.";if(err.code==="auth/operation-not-allowed")return"Metode login belum aktif di Firebase Authentication → Sign-in method.";if(err.code==="auth/email-already-in-use")return"Email sudah terdaftar. Silakan masuk.";if(err.code==="auth/weak-password")return"Password terlalu lemah. Gunakan minimal 6 karakter.";if(err.code==="auth/invalid-credential"||err.code==="auth/wrong-password"||err.code==="auth/user-not-found")return"Email atau password tidak cocok.";return err.message||"Login gagal. Coba lagi."}
 
-      try {
-        firebase.initializeApp(firebaseConfig);
-        dbRoot = firebase.database().ref("pontuak_fest_2026");
-        firebase.auth().onAuthStateChanged(async (user) => {
-          currentUser = user;
-          if (!user) {
-            currentRole = null;
-            if (tasksRef && unsubscribeTasks)
-              tasksRef.off("value", unsubscribeTasks);
-            if (announcementsRef && unsubscribeAnnouncements)
-              announcementsRef.off("value", unsubscribeAnnouncements);
-            announcementsRef = null;
-            unsubscribeAnnouncements = null;
-            announcements = [];
-            renderAnnouncements();
-            myTasksOnly = false;
-            tasksRef = null;
-            unsubscribeTasks = null;
-            dataReady = false;
-            tasks = [];
-            render();
-            $("userLabel").hidden = true;
-            $("signOutBtn").hidden = true;
-            $("addBtn").disabled = true;
-            setStatus("Login diperlukan");
-            showAuth();
-            return;
-          }
-          hideAuth();
-          $("userLabel").textContent =
-            user.displayName || user.email || "Pengguna";
-          $("userLabel").hidden = false;
-          $("signOutBtn").hidden = false;
-          setStatus("Memeriksa peran…");
-          await initializeSharedData();
-        });
-      } catch (err) {
-        setStatus("Konfigurasi Firebase gagal", "error");
-        showAuthMessage("Firebase gagal diinisialisasi: " + err.message);
-        showAuth();
-      }
-    </script>
-  </body>
+$("googleSignInBtn").addEventListener("click",signInGoogle);
+$("authForm").addEventListener("submit",async e=>{e.preventDefault();showAuthMessage("");const email=$("authEmail").value.trim(),password=$("authPassword").value;try{await firebase.auth().signInWithEmailAndPassword(email,password)}catch(err){showAuthMessage(authError(err))}});
+$("createAccountBtn").addEventListener("click",async()=>{showAuthMessage("");const email=$("authEmail").value.trim(),password=$("authPassword").value;if(!email||password.length<6){showAuthMessage("Masukkan email dan password minimal 6 karakter.");return}try{await firebase.auth().createUserWithEmailAndPassword(email,password);showAuthMessage("Akun berhasil dibuat. Anda otomatis mendapat akses Crew (hanya melihat daftar tugas). Admin dapat mengubah peran menjadi PIC bila diperlukan.")}catch(err){showAuthMessage(authError(err))}});
+$("signOutBtn").addEventListener("click",()=>firebase.auth().signOut());
+$("addBtn").addEventListener("click",()=>{if(!currentUser)return showAuth();if(!canEdit())return;openDialog()});
+$("cancelDialog").addEventListener("click",()=>$ ("taskDialog").close());
+$("taskForm").addEventListener("submit",async e=>{e.preventDefault();if(!currentUser||!tasksRef||!canEdit())return;const data={name:$("taskName").value.trim(),day:$("taskDay").value,group:$("taskGroup").value.trim(),pic:$("taskPic").value.trim(),assignedTo:$("taskAssignedTo").value.trim().toLowerCase(),location:$("taskLocation").value.trim(),deadline:$("taskDeadline").value,status:$("taskStatus").value,notes:$("taskNotes").value.trim()};if(!data.name||!data.group)return;try{if(editId){const old=tasks.find(t=>t.id===editId);await tasksRef.child(String(editId)).update({...old,...data,updatedAt:firebase.database.ServerValue.TIMESTAMP,updatedBy:currentUser.uid})}else{data.id=Date.now();data.createdAt=firebase.database.ServerValue.TIMESTAMP;data.createdBy=currentUser.uid;await tasksRef.child(String(data.id)).set(data)}$("taskDialog").close()}catch(err){alert("Gagal menyimpan kebutuhan: "+err.message)}});
+$("search").addEventListener("input",render);$("statusFilter").addEventListener("change",render);$("myTasksBtn").addEventListener("click",()=>{myTasksOnly=!myTasksOnly;activeDay="all";document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.day==="all"));render();if(myTasksOnly)$ ("checklist").scrollIntoView({behavior:"smooth",block:"start"})});$("announcementForm").addEventListener("submit",publishAnnouncement);
+$("tabs").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if(!b)return;activeDay=b.dataset.day;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));render()});
+$("printBtn").addEventListener("click",()=>window.print());
+$("exportBtn").addEventListener("click",()=>{const rows=[["Agenda","Kategori","Kebutuhan","Status","PIC","Ditugaskan kepada","Lokasi","Deadline","Catatan"],...tasks.map(t=>[labelDay(t.day),t.group,t.name,statusLabel(t.status),t.pic,t.assignedTo,t.location,t.deadline,t.notes])];const csv=rows.map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="PONTUAK_FEST_2026_checklist.csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
+
+try {
+ firebase.initializeApp(firebaseConfig);
+ dbRoot=firebase.database().ref("pontuak_fest_2026");
+ firebase.auth().onAuthStateChanged(async user=>{
+  currentUser=user;
+  if(!user){currentRole=null;if(tasksRef && unsubscribeTasks) tasksRef.off("value", unsubscribeTasks);if(announcementsRef&&unsubscribeAnnouncements)announcementsRef.off("value",unsubscribeAnnouncements);announcementsRef=null;unsubscribeAnnouncements=null;announcements=[];renderAnnouncements();myTasksOnly=false;tasksRef=null;unsubscribeTasks=null;dataReady=false;tasks=[];render();$("userLabel").hidden=true;$("signOutBtn").hidden=true;$("addBtn").disabled=true;setStatus("Login diperlukan");showAuth();return}
+  hideAuth();$("userLabel").textContent=user.displayName||user.email||"Pengguna";$("userLabel").hidden=false;$("signOutBtn").hidden=false;setStatus("Memeriksa peran…");
+  await initializeSharedData();
+ });
+} catch(err){setStatus("Konfigurasi Firebase gagal", "error");showAuthMessage("Firebase gagal diinisialisasi: "+err.message);showAuth()}
+</script>
+</body>
 </html>
