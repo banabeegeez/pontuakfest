@@ -27,6 +27,9 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
 
 @media(max-width:760px){.wrap{padding:15px}.hero{grid-template-columns:1fr}.hero-side{grid-template-columns:repeat(2,1fr)}.timeline{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.notes{grid-template-columns:1fr}.topbar{align-items:flex-start}.hero h1{font-size:48px}.section-head{align-items:flex-start;flex-direction:column}}
 @media print{body{background:white;color:#111}.wrap{max-width:none;padding:0}.topbar,.toolbar,.tabs,.top-actions,.task-actions,.btn,.notes{display:none!important}.hero-main,.metric,.phase,.card{background:white;color:#111;border:1px solid #bbb;break-inside:avoid}.hero p,.metric small,.metric .sub,.phase small,.card .desc,.count{color:#444}.cards{grid-template-columns:1fr 1fr}.task{border-color:#ddd}.task-title{color:#111!important}.pill{border:1px solid #aaa;background:white;color:#222}.hero h1 em,.eyebrow{color:#333}.section-head{margin-top:18px}}
+.app-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 24px;position:sticky;top:8px;z-index:20;padding:7px;background:#101411eF;border:1px solid var(--line);border-radius:15px;backdrop-filter:blur(12px)}
+.app-nav-btn{display:flex;justify-content:center;align-items:center;gap:8px;min-width:0;border:1px solid transparent;border-radius:10px;padding:11px 10px;background:transparent;color:var(--muted);font-weight:800}.app-nav-btn b{font-size:10px;background:#283127;color:#d7e2d3;border-radius:6px;padding:2px 6px}.app-nav-btn.active{background:var(--accent);color:#11150b}.app-nav-btn.active b{background:#11150b;color:var(--accent)}.app-page{display:none;min-height:45vh}.app-page.active{display:block}.app-page[hidden]{display:none!important}.page-intro{margin:0 0 18px}.page-intro h2{margin:0;font-size:26px;letter-spacing:-.04em}.page-intro p{margin:5px 0 0;color:var(--muted);font-size:13px}
+@media(max-width:600px){.app-nav{grid-template-columns:repeat(2,minmax(0,1fr));top:4px}.app-nav-btn{justify-content:flex-start;padding:11px 12px}.app-nav-btn span{font-size:13px}}
 </style>
 </head>
 <body>
@@ -42,6 +45,13 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
       <button class="btn primary" id="addBtn">＋ Tambah kebutuhan</button>
     </div>
   </header>
+  <nav class="app-nav" id="appNav" aria-label="Menu utama">
+    <button class="app-nav-btn active" type="button" data-page="dashboard">⌂ <span>Dashboard</span></button>
+    <button class="app-nav-btn" type="button" data-page="tasks">☷ <span>Daftar Tugas</span></button>
+    <button class="app-nav-btn" type="button" data-page="announcements">📣 <span>Pengumuman</span><b id="navAnnouncementCount">0</b></button>
+    <button class="app-nav-btn" type="button" data-page="reports">📝 <span>Laporan</span><b id="navReportCount">0</b></button>
+  </nav>
+  <main id="page-dashboard" class="app-page active">
   <section class="hero">
     <div class="hero-main">
       <div class="eyebrow">Production checklist · 2026</div>
@@ -60,6 +70,13 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
     <div class="phase"><small>TAHAP 02</small><b>Gladi / rehearsal</b><span>Tanggal 4</span></div>
     <div class="phase"><small>TAHAP 03</small><b>H-1 · UMKM masuk</b><span>Koordinasi area dan akses</span></div>
   </div>
+  <div class="notes">
+    <section class="note"><h3>⚠ Perlu konfirmasi</h3><div class="note-row"><span class="dot"></span><span>Update izin keramaian.</span></div><div class="note-row"><span class="dot"></span><span>Pastikan bulan dan tanggal lengkap untuk loading 27–28 serta gladi tanggal 4.</span></div><div class="note-row"><span class="dot"></span><span>Video teaser talkshow masih TBC.</span></div></section>
+    <section class="note"><h3>☑ Koordinasi lapangan</h3><div class="note-row"><span class="dot"></span><span>Pastikan PIC tiap kebutuhan dan kontak koordinasinya diumumkan kepada crew.</span></div><div class="note-row"><span class="dot"></span><span>Konfirmasi sofa 3 unit dengan Undana dan tenda sarnafil untuk kebutuhan pijat.</span></div><div class="note-row"><span class="dot"></span><span>Periksa kebutuhan teknis tiap area sebelum gladi.</span></div></section>
+  </div>
+  </main>
+  <main id="page-tasks" class="app-page">
+  <div class="page-intro"><h2>Daftar Tugas</h2><p>Cari kebutuhan, filter agenda, dan pantau tugas crew.</p></div>
   <div class="section-head">
     <div><h2>Daftar kebutuhan</h2><p>Checklist awal berdasarkan catatan produksi yang diberikan.</p></div>
   </div>
@@ -76,6 +93,10 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
     <button class="tab" data-day="2">Hari kedua</button>
   </nav>
   <button class="my-task-btn" id="myTasksBtn" type="button">☷ &nbsp; Tugas Saya <span id="myTaskCount"></span><small style="display:block;font-weight:500;margin-top:3px;color:inherit;opacity:.8">Tugas yang ditujukan ke email akun yang sedang masuk</small></button>
+  <div id="checklist"></div>
+  </main>
+  <main id="page-announcements" class="app-page">
+  <div class="page-intro"><h2>Pengumuman Tim</h2><p>Informasi operasional dan arahan terbaru dari Admin/PIC.</p></div>
   <section class="coord-panel" id="announcementPanel">
     <div class="coord-head"><h2>📣 Pengumuman tim</h2><span class="pill" id="announcementCount">0 pengumuman</span></div>
     <p class="coord-copy">Perubahan jadwal, arahan lapangan, dan informasi penting untuk crew.</p>
@@ -86,6 +107,9 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
       <button class="btn primary" type="submit">＋ Terbitkan pengumuman</button>
     </form>
   </section>
+  </main>
+  <main id="page-reports" class="app-page">
+  <div class="page-intro"><h2>Laporan Crew</h2><p>Kirim progres atau kendala dan pantau tindak lanjutnya.</p></div>
   <section class="coord-panel" id="reportsPanel">
     <div class="coord-head"><h2>📝 Laporan Progres &amp; Kendala</h2><span class="pill" id="reportCount">0 laporan</span></div>
     <p class="coord-copy">Laporkan perkembangan pekerjaan atau kendala agar PIC/Admin dapat menindaklanjuti.</p>
@@ -97,19 +121,7 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
     </form>
     <div id="reportList" class="announcement-list" style="margin-top:14px"><div class="empty">Memuat laporan…</div></div>
   </section>
-  <div id="checklist"></div>
-  <div class="notes">
-    <section class="note"><h3>⚠ Perlu konfirmasi</h3>
-      <div class="note-row"><span class="dot"></span><span>Update izin keramaian.</span></div>
-      <div class="note-row"><span class="dot"></span><span>Pastikan bulan dan tanggal lengkap untuk loading 27–28 serta gladi tanggal 4.</span></div>
-      <div class="note-row"><span class="dot"></span><span>Video teaser talkshow masih TBC.</span></div>
-    </section>
-    <section class="note"><h3>☑ Koordinasi lapangan</h3>
-      <div class="note-row"><span class="dot"></span><span>Pastikan PIC tiap kebutuhan dan kontak koordinasinya diumumkan kepada crew.</span></div>
-      <div class="note-row"><span class="dot"></span><span>Konfirmasi sofa 3 unit dengan Undana dan tenda sarnafil untuk kebutuhan pijat.</span></div>
-      <div class="note-row"><span class="dot"></span><span>Periksa kebutuhan teknis tiap area sebelum gladi.</span></div>
-    </section>
-  </div>
+  </main>
   <footer>PONTUAK FEST 2026 · Production coordination dashboard<br>Status checklist disimpan di Firebase dan disinkronkan antarperangkat.</footer>
 </div>
 
@@ -204,7 +216,7 @@ const initialTasks = [
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let tasks = [], activeDay = "all", editId = null, dbRoot = null, tasksRef = null, announcementsRef = null, currentUser = null, currentRole = null, dataReady = false, myTasksOnly = false;
-let unsubscribeTasks = null, unsubscribeAnnouncements = null, unsubscribeReports = null, announcements = [], reports = [], reportsRef = null;
+let unsubscribeTasks = null, unsubscribeAnnouncements = null, unsubscribeReports = null, announcements = [], reports = [], reportsRef = null, reportsQueryRef = null;
 
 function setStatus(message, state="") { const el=$("connectionStatus"); el.textContent=message; el.dataset.state=state; }
 function showAuthMessage(message="") { $("authMessage").textContent=message; }
@@ -247,7 +259,7 @@ function render(){
 function openDialog(id=null){editId=id;const t=id?tasks.find(x=>x.id===id):null;$("dialogTitle").textContent=t?"Edit kebutuhan":"Tambah kebutuhan";$("taskName").value=t?.name||"";$("taskDay").value=t?.day||"persiapan";$("taskGroup").value=t?.group||"";$("taskPic").value=t?.pic||"";$("taskAssignedTo").value=t?.assignedTo||"";$("taskLocation").value=t?.location||"";$("taskDeadline").value=t?.deadline||"";$("taskStatus").value=t?.status||"pending";$("taskNotes").value=t?.notes||"";$("taskDialog").showModal();}
 
 function renderAnnouncements(){
- const list=$("announcementList");$("announcementCount").textContent=`${announcements.length} pengumuman`;
+ const list=$("announcementList");$("announcementCount").textContent=`${announcements.length} pengumuman`;$("navAnnouncementCount").textContent=announcements.length;
  if(!announcements.length){list.innerHTML='<div class="empty">Belum ada pengumuman dari admin/PIC.</div>';return}
  list.innerHTML=announcements.map(a=>`<article class="announcement"><div class="announcement-top"><strong>${esc(a.title||"Pengumuman")}</strong>${canDelete()?`<button class="mini announcement-delete" type="button" data-announcement-delete="${esc(a.id)}" title="Hapus pengumuman" aria-label="Hapus pengumuman ${esc(a.title||"Pengumuman")}">🗑 Hapus</button>`:""}</div><p>${esc(a.body||"")}</p><small>${esc(a.authorName||"Tim PONTUAK FEST")} · ${esc(a.createdAt?fmtDate(a.createdAt):"Baru saja")}</small></article>`).join("");
  list.querySelectorAll("[data-announcement-delete]").forEach(button=>button.addEventListener("click",async()=>{const id=button.dataset.announcementDelete;const a=announcements.find(item=>String(item.id)===String(id));if(!a||!canDelete()||!announcementsRef)return;if(!confirm(`Hapus pengumuman "${a.title||"Pengumuman"}"? Pengumuman ini akan dihapus dari Firebase dan tidak dapat dipulihkan melalui aplikasi.`))return;button.disabled=true;try{await announcementsRef.child(String(id)).remove()}catch(err){button.disabled=false;alert("Pengumuman gagal dihapus. Pastikan Firebase Rules mengizinkan Admin menghapus pengumuman.\n"+err.message)}}));
@@ -257,7 +269,7 @@ async function publishAnnouncement(e){e.preventDefault();if(!currentUser||!canEd
 function reportStatusLabel(status){return status==="selesai"?"Selesai":status==="ditindaklanjuti"?"Ditindaklanjuti":"Baru"}
 function refreshReportTaskOptions(){const select=$("reportTask"),old=select.value;select.innerHTML='<option value="">Pilih tugas</option>'+tasks.map(t=>`<option value="${esc(t.id)}">${esc(t.name)} — ${esc(t.group)}</option>`).join("");if(tasks.some(t=>String(t.id)===old))select.value=old}
 function renderReports(){
- const list=$("reportList");$("reportCount").textContent=`${reports.length} laporan`;
+ const list=$("reportList");$("reportCount").textContent=`${reports.length} laporan`;$("navReportCount").textContent=reports.length;
  const visible=reports.filter(r=>currentRole==="admin"||currentRole==="pic"||r.uid===currentUser?.uid).sort((a,b)=>(Number(b.createdAt)||0)-(Number(a.createdAt)||0));
  if(!visible.length){list.innerHTML='<div class="empty">Belum ada laporan crew.</div>';return}
  list.innerHTML=visible.map(r=>`<article class="report-item"><div class="announcement-top"><strong>${esc(r.taskName||"Tugas")}</strong><span class="report-kind ${r.type==="kendala"?"issue":""}">${r.type==="kendala"?"KENDALA":"PROGRES"}</span></div><p>${esc(r.body||"")}</p><div class="report-meta"><span>${esc(r.reporterName||r.email||"Crew")}</span><span>· ${esc(r.createdAt?fmtDate(r.createdAt):"Baru saja")}</span><span>· Status: <b>${esc(reportStatusLabel(r.status))}</b></span></div>${canEdit()?`<div class="report-actions"><label for="report-status-${esc(r.id)}">Tindak lanjut:</label><select id="report-status-${esc(r.id)}" data-report-status="${esc(r.id)}"><option value="baru" ${(!r.status||r.status==="baru")?"selected":""}>Baru</option><option value="ditindaklanjuti" ${r.status==="ditindaklanjuti"?"selected":""}>Ditindaklanjuti</option><option value="selesai" ${r.status==="selesai"?"selected":""}>Selesai</option></select></div>`:""}</article>`).join("");
@@ -284,9 +296,10 @@ async function initializeSharedData(){
   announcementsRef.on("value",announcementHandler,error=>{console.warn("Pengumuman belum dapat dimuat:",error);$("announcementList").innerHTML='<div class="empty">Pengumuman belum dapat dimuat. Admin perlu memeriksa Firebase Rules.</div>'});
   unsubscribeAnnouncements=announcementHandler;
   reportsRef=dbRoot.child("reports");
-  if(unsubscribeReports)reportsRef.off("value",unsubscribeReports);
+  if(unsubscribeReports && reportsQueryRef)reportsQueryRef.off("value",unsubscribeReports);
+  reportsQueryRef=(currentRole==="admin"||currentRole==="pic")?reportsRef:reportsRef.orderByChild("uid").equalTo(currentUser.uid);
   const reportHandler=snapshot=>{reports=Object.entries(snapshot.val()||{}).filter(([,v])=>v).map(([id,v])=>({...v,id}));renderReports()};
-  reportsRef.on("value",reportHandler,error=>{console.warn("Laporan belum dapat dimuat:",error);$("reportList").innerHTML='<div class="empty">Laporan belum dapat dimuat. Admin perlu memeriksa Firebase Rules.</div>'});
+  reportsQueryRef.on("value",reportHandler,error=>{console.warn("Laporan belum dapat dimuat:",error);$("reportList").innerHTML='<div class="empty">Laporan belum dapat dimuat. Periksa Firebase Rules dan query UID crew.</div>'});
   unsubscribeReports=reportHandler;refreshReportTaskOptions();renderReports();renderAnnouncements();render();
  } catch(err){setStatus("Koneksi gagal", "error");console.error(err);alert("Gagal menyiapkan database: "+err.message)}
 }
@@ -306,12 +319,19 @@ $("tabs").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if
 $("printBtn").addEventListener("click",()=>window.print());
 $("exportBtn").addEventListener("click",()=>{const rows=[["Agenda","Kategori","Kebutuhan","Status","PIC","Ditugaskan kepada","Lokasi","Deadline","Catatan"],...tasks.map(t=>[labelDay(t.day),t.group,t.name,statusLabel(t.status),t.pic,t.assignedTo,t.location,t.deadline,t.notes])];const csv=rows.map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="PONTUAK_FEST_2026_checklist.csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
 
+function showPage(page){
+ document.querySelectorAll(".app-page").forEach(el=>el.classList.toggle("active",el.id==="page-"+page));
+ document.querySelectorAll(".app-nav-btn").forEach(el=>el.classList.toggle("active",el.dataset.page===page));
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+$("appNav").addEventListener("click",e=>{const btn=e.target.closest("[data-page]");if(btn)showPage(btn.dataset.page)});
+
 try {
  firebase.initializeApp(firebaseConfig);
  dbRoot=firebase.database().ref("pontuak_fest_2026");
  firebase.auth().onAuthStateChanged(async user=>{
   currentUser=user;
-  if(!user){currentRole=null;if(tasksRef && unsubscribeTasks) tasksRef.off("value", unsubscribeTasks);if(announcementsRef&&unsubscribeAnnouncements)announcementsRef.off("value",unsubscribeAnnouncements);if(reportsRef&&unsubscribeReports)reportsRef.off("value",unsubscribeReports);reportsRef=null;unsubscribeReports=null;reports=[];renderReports();announcementsRef=null;unsubscribeAnnouncements=null;announcements=[];renderAnnouncements();myTasksOnly=false;tasksRef=null;unsubscribeTasks=null;dataReady=false;tasks=[];render();$("userLabel").hidden=true;$("signOutBtn").hidden=true;$("addBtn").disabled=true;setStatus("Login diperlukan");showAuth();return}
+  if(!user){currentRole=null;if(tasksRef && unsubscribeTasks) tasksRef.off("value", unsubscribeTasks);if(announcementsRef&&unsubscribeAnnouncements)announcementsRef.off("value",unsubscribeAnnouncements);if(reportsQueryRef&&unsubscribeReports)reportsQueryRef.off("value",unsubscribeReports);reportsRef=null;reportsQueryRef=null;unsubscribeReports=null;reports=[];renderReports();announcementsRef=null;unsubscribeAnnouncements=null;announcements=[];renderAnnouncements();myTasksOnly=false;tasksRef=null;unsubscribeTasks=null;dataReady=false;tasks=[];render();$("userLabel").hidden=true;$("signOutBtn").hidden=true;$("addBtn").disabled=true;setStatus("Login diperlukan");showAuth();return}
   hideAuth();$("userLabel").textContent=user.displayName||user.email||"Pengguna";$("userLabel").hidden=false;$("signOutBtn").hidden=false;setStatus("Memeriksa peran…");
   await initializeSharedData();
  });
