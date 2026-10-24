@@ -30,6 +30,10 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
 .app-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 24px;position:sticky;top:8px;z-index:20;padding:7px;background:#101411eF;border:1px solid var(--line);border-radius:15px;backdrop-filter:blur(12px)}
 .app-nav-btn{display:flex;justify-content:center;align-items:center;gap:8px;min-width:0;border:1px solid transparent;border-radius:10px;padding:11px 10px;background:transparent;color:var(--muted);font-weight:800}.app-nav-btn b{font-size:10px;background:#283127;color:#d7e2d3;border-radius:6px;padding:2px 6px}.app-nav-btn.active{background:var(--accent);color:#11150b}.app-nav-btn.active b{background:#11150b;color:var(--accent)}.app-page{display:none;min-height:45vh}.app-page.active{display:block}.app-page[hidden]{display:none!important}.page-intro{margin:0 0 18px}.page-intro h2{margin:0;font-size:26px;letter-spacing:-.04em}.page-intro p{margin:5px 0 0;color:var(--muted);font-size:13px}
 @media(max-width:600px){.app-nav{grid-template-columns:repeat(2,minmax(0,1fr));top:4px}.app-nav-btn{justify-content:flex-start;padding:11px 12px}.app-nav-btn span{font-size:13px}}
+
+.dashboard-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}.dashboard-stat{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left;background:#101411;border:1px solid var(--line);border-radius:13px;padding:14px;color:var(--text);min-width:0}.dashboard-stat small{font-size:11px;color:var(--muted)}.dashboard-stat strong{font-size:30px;line-height:1.15;letter-spacing:-.04em}.dashboard-stat span{font-size:10px;color:var(--accent)}.dashboard-stat:hover{border-color:#647d45}.alert-stat strong{color:#ff9d91}.dashboard-columns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.dashboard-subpanel{min-width:0;border:1px solid var(--line);border-radius:13px;padding:14px;background:#101411}.dashboard-subpanel h3{font-size:15px;margin:0}.division-progress{display:grid;gap:13px;margin-top:14px}.division-row{display:grid;gap:6px}.division-label{display:flex;justify-content:space-between;gap:10px;font-size:12px}.division-label span:last-child{color:var(--muted);white-space:nowrap}.progress-track{height:7px;background:#293129;border-radius:999px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:999px}.attention-list{display:grid;gap:8px;margin-top:12px}.attention-item{border:1px solid #303a31;border-radius:10px;padding:10px;background:#151a16}.attention-item strong{font-size:12px;display:block;overflow-wrap:anywhere}.attention-item small{display:block;font-size:11px;color:var(--muted);margin-top:4px}.attention-item .attention-flag{color:#ffc477}.dashboard-link{border:0;background:transparent;color:var(--accent);padding:0;font-weight:800;font-size:12px;text-align:left;margin-top:7px}
+@media(max-width:760px){.dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-columns{grid-template-columns:1fr}.dashboard-stat{padding:12px}.dashboard-stat strong{font-size:26px}}
+
 </style>
 </head>
 <body>
@@ -70,6 +74,22 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
     <div class="phase"><small>TAHAP 02</small><b>Gladi / rehearsal</b><span>Tanggal 4</span></div>
     <div class="phase"><small>TAHAP 03</small><b>H-1 · UMKM masuk</b><span>Koordinasi area dan akses</span></div>
   </div>
+
+  <section class="coord-panel" id="liveDashboard">
+    <div class="coord-head"><h2>📊 Ringkasan Progres</h2><span class="pill" id="dashboardUpdated">Menunggu data…</span></div>
+    <p class="coord-copy">Angka diperbarui otomatis saat checklist dan laporan tersinkronisasi dengan Firebase.</p>
+    <div class="dashboard-stats">
+      <button class="dashboard-stat" type="button" data-dashboard-filter="all"><small>Total tugas</small><strong id="dashTotal">0</strong><span>Lihat semua tugas →</span></button>
+      <button class="dashboard-stat" type="button" data-dashboard-filter="done"><small>Selesai</small><strong id="dashDone">0</strong><span>Lihat tugas selesai →</span></button>
+      <button class="dashboard-stat" type="button" data-dashboard-filter="pending"><small>Belum selesai</small><strong id="dashPending">0</strong><span>Perlu ditindaklanjuti →</span></button>
+      <button class="dashboard-stat alert-stat" type="button" data-dashboard-filter="reports"><small>Kendala aktif</small><strong id="dashIssues">0</strong><span>Buka laporan kendala →</span></button>
+    </div>
+    <div class="dashboard-columns">
+      <section class="dashboard-subpanel"><div class="coord-head"><h3>Progres per bagian</h3><span class="coord-copy" id="dashOverallProgress">0% selesai</span></div><div id="divisionProgress" class="division-progress"><div class="empty">Memuat progres…</div></div></section>
+      <section class="dashboard-subpanel"><div class="coord-head"><h3>Perlu perhatian</h3><span class="pill" id="attentionCount">0</span></div><div id="attentionList" class="attention-list"><div class="empty">Memuat tugas…</div></div></section>
+    </div>
+  </section>
+
   <div class="notes">
     <section class="note"><h3>⚠ Perlu konfirmasi</h3><div class="note-row"><span class="dot"></span><span>Update izin keramaian.</span></div><div class="note-row"><span class="dot"></span><span>Pastikan bulan dan tanggal lengkap untuk loading 27–28 serta gladi tanggal 4.</span></div><div class="note-row"><span class="dot"></span><span>Video teaser talkshow masih TBC.</span></div></section>
     <section class="note"><h3>☑ Koordinasi lapangan</h3><div class="note-row"><span class="dot"></span><span>Pastikan PIC tiap kebutuhan dan kontak koordinasinya diumumkan kepada crew.</span></div><div class="note-row"><span class="dot"></span><span>Konfirmasi sofa 3 unit dengan Undana dan tenda sarnafil untuk kebutuhan pijat.</span></div><div class="note-row"><span class="dot"></span><span>Periksa kebutuhan teknis tiap area sebelum gladi.</span></div></section>
@@ -166,6 +186,28 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script>
+/* Diagnostik aman: tampilkan pesan bila ada error JavaScript atau Firebase gagal dimuat. */
+(function () {
+  function showRuntimeError(message) {
+    try {
+      let panel = document.getElementById("runtimeErrorPanel");
+      if (!panel) {
+        panel = document.createElement("div");
+        panel.id = "runtimeErrorPanel";
+        panel.style.cssText = "position:fixed;z-index:99999;left:12px;right:12px;bottom:12px;background:#351816;color:#fff;padding:14px 16px;border:1px solid #ff786e;border-radius:12px;font:13px/1.5 system-ui;box-shadow:0 8px 30px #0008;max-height:40vh;overflow:auto";
+        document.body.appendChild(panel);
+      }
+      panel.textContent = "PONTUAK FEST mengalami kendala saat menjalankan aplikasi: " + String(message || "Kesalahan tidak diketahui") + " — coba muat ulang halaman. Jika terjadi di GitHub Pages, buka situs melalui URL GitHub Pages, bukan dengan membuka file lokal.";
+    } catch (_) {}
+  }
+  window.addEventListener("error", function (event) {
+    if (event && event.message) showRuntimeError(event.message);
+  });
+  window.addEventListener("unhandledrejection", function (event) {
+    const reason = event && event.reason;
+    showRuntimeError(reason && reason.message ? reason.message : reason);
+  });
+})();
 const firebaseConfig = {
   apiKey: "AIzaSyCWT5IWPcqDkgmOUX3Gp0VvVKmGHIWYYxU",
   authDomain: "pontuak-fest-2026.firebaseapp.com",
@@ -232,7 +274,27 @@ function isMyTask(t){const email=(currentUser?.email||"").trim().toLowerCase();r
 function fmtDate(value){if(!value)return "Belum ditentukan";const d=new Date(value);return Number.isNaN(d.getTime())?String(value):d.toLocaleString("id-ID",{dateStyle:"medium",timeStyle:"short"})}
 function dueClass(value){if(!value)return "";const d=new Date(value);if(Number.isNaN(d.getTime()))return "";return d.getTime()<Date.now()?"overdue":"due-soon"}
 
+
+function renderDashboard(){
+ const scope=(currentRole==="admin"||currentRole==="pic")?tasks:tasks.filter(isMyTask);
+ const total=scope.length,done=scope.filter(t=>t.status==="done").length,pending=scope.filter(t=>t.status!=="done").length;
+ const visibleReports=reports.filter(r=>currentRole==="admin"||currentRole==="pic"||r.uid===currentUser?.uid);
+ const activeIssues=visibleReports.filter(r=>r.type==="kendala"&&r.status!=="selesai").length;
+ $("dashTotal").textContent=total;$("dashDone").textContent=done;$("dashPending").textContent=pending;$("dashIssues").textContent=activeIssues;
+ $("dashOverallProgress").textContent=(total?Math.round(done/total*100):0)+"% selesai";
+ $("dashboardUpdated").textContent=dataReady?"Data tersinkronisasi":"Menunggu data…";
+ const groups={};scope.forEach(t=>{const key=t.group||"Tanpa kategori";if(!groups[key])groups[key]={total:0,done:0};groups[key].total++;if(t.status==="done")groups[key].done++});
+ const division=$ ("divisionProgress");const ordered=Object.entries(groups).sort((a,b)=>a[0].localeCompare(b[0],"id"));
+ division.innerHTML=ordered.length?ordered.map(([name,v])=>{const pct=Math.round(v.done/v.total*100);return `<div class="division-row"><div class="division-label"><span>${esc(name)}</span><span>${v.done}/${v.total} · ${pct}%</span></div><div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div></div>`}).join(""):'<div class="empty">Belum ada tugas yang dapat ditampilkan.</div>';
+ const now=Date.now();const attention=scope.filter(t=>t.status!=="done"&&(t.status==="tbc"||(t.deadline&&new Date(t.deadline).getTime()<now)||!t.pic)).sort((a,b)=>{const ao=a.deadline&&new Date(a.deadline).getTime()<now?0:1,bo=b.deadline&&new Date(b.deadline).getTime()<now?0:1;return ao-bo}).slice(0,5);
+ $("attentionCount").textContent=attention.length;
+ $("attentionList").innerHTML=attention.length?attention.map(t=>{const overdue=t.deadline&&new Date(t.deadline).getTime()<now;const reason=overdue?"Deadline terlewat":t.status==="tbc"?"Perlu konfirmasi":"PIC belum ditentukan";return `<article class="attention-item"><strong>${esc(t.name)}</strong><small>${esc(t.group||"")} · <span class="attention-flag">${reason}</span></small><button class="dashboard-link" type="button" data-open-task="${esc(t.id)}">Buka tugas →</button></article>`}).join(""):'<div class="empty">Tidak ada tugas yang perlu perhatian berdasarkan data saat ini.</div>';
+ division.querySelectorAll("[data-open-task]").forEach(()=>{});
+ $("attentionList").querySelectorAll("[data-open-task]").forEach(btn=>btn.addEventListener("click",()=>{showPage("tasks");$("search").value="";$("statusFilter").value="all";activeDay="all";myTasksOnly=false;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.day==="all"));render();const id=Number(btn.dataset.openTask);const target=[...document.querySelectorAll("[data-edit]")].find(x=>Number(x.dataset.edit)===id);if(target)target.scrollIntoView({behavior:"smooth",block:"center"})}));
+}
+
 function render(){
+ renderDashboard();
  const query=$("search").value.toLowerCase().trim(), filter=$("statusFilter").value;
  const filtered=tasks.filter(t=>(!myTasksOnly||(currentRole!=="admin"&&currentRole!=="pic"?isMyTask(t):isMyTask(t)))&&(activeDay==="all"||t.day===activeDay)&&(!query||[t.name,t.group,t.pic,t.notes,t.location,t.assignedTo].join(" ").toLowerCase().includes(query))&&(filter==="all"||(filter==="pending"&&t.status!=="done")||t.status===filter));
  const myCount=tasks.filter(isMyTask).filter(t=>t.status!=="done").length;$ ("myTaskCount").textContent=`· ${myCount} belum selesai`;$("myTasksBtn").classList.toggle("active",myTasksOnly);
@@ -269,6 +331,7 @@ async function publishAnnouncement(e){e.preventDefault();if(!currentUser||!canEd
 function reportStatusLabel(status){return status==="selesai"?"Selesai":status==="ditindaklanjuti"?"Ditindaklanjuti":"Baru"}
 function refreshReportTaskOptions(){const select=$("reportTask"),old=select.value;select.innerHTML='<option value="">Pilih tugas</option>'+tasks.map(t=>`<option value="${esc(t.id)}">${esc(t.name)} — ${esc(t.group)}</option>`).join("");if(tasks.some(t=>String(t.id)===old))select.value=old}
 function renderReports(){
+ renderDashboard();
  const list=$("reportList");$("reportCount").textContent=`${reports.length} laporan`;$("navReportCount").textContent=reports.length;
  const visible=reports.filter(r=>currentRole==="admin"||currentRole==="pic"||r.uid===currentUser?.uid).sort((a,b)=>(Number(b.createdAt)||0)-(Number(a.createdAt)||0));
  if(!visible.length){list.innerHTML='<div class="empty">Belum ada laporan crew.</div>';return}
@@ -319,6 +382,8 @@ $("tabs").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if
 $("printBtn").addEventListener("click",()=>window.print());
 $("exportBtn").addEventListener("click",()=>{const rows=[["Agenda","Kategori","Kebutuhan","Status","PIC","Ditugaskan kepada","Lokasi","Deadline","Catatan"],...tasks.map(t=>[labelDay(t.day),t.group,t.name,statusLabel(t.status),t.pic,t.assignedTo,t.location,t.deadline,t.notes])];const csv=rows.map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="PONTUAK_FEST_2026_checklist.csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
 
+document.querySelectorAll("[data-dashboard-filter]").forEach(btn=>btn.addEventListener("click",()=>{const filter=btn.dataset.dashboardFilter;if(filter==="reports"){showPage("reports");$("reportType").value="kendala";return}showPage("tasks");myTasksOnly=false;activeDay="all";$("search").value="";$("statusFilter").value=filter==="done"?"done":filter==="pending"?"pending":"all";document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.day==="all"));render()}));
+
 function showPage(page){
  document.querySelectorAll(".app-page").forEach(el=>el.classList.toggle("active",el.id==="page-"+page));
  document.querySelectorAll(".app-nav-btn").forEach(el=>el.classList.toggle("active",el.dataset.page===page));
@@ -327,6 +392,9 @@ function showPage(page){
 $("appNav").addEventListener("click",e=>{const btn=e.target.closest("[data-page]");if(btn)showPage(btn.dataset.page)});
 
 try {
+ if (!window.firebase || !firebase.initializeApp || !firebase.database || !firebase.auth) {
+   throw new Error("Library Firebase tidak berhasil dimuat. Pastikan internet aktif dan akses ke www.gstatic.com tidak diblokir; buka aplikasi dari GitHub Pages.");
+ }
  firebase.initializeApp(firebaseConfig);
  dbRoot=firebase.database().ref("pontuak_fest_2026");
  firebase.auth().onAuthStateChanged(async user=>{
