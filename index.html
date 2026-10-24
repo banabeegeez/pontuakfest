@@ -31,7 +31,7 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
 .app-nav-btn{display:flex;justify-content:center;align-items:center;gap:8px;min-width:0;border:1px solid transparent;border-radius:10px;padding:11px 10px;background:transparent;color:var(--muted);font-weight:800}.app-nav-btn b{font-size:10px;background:#283127;color:#d7e2d3;border-radius:6px;padding:2px 6px}.app-nav-btn.active{background:var(--accent);color:#11150b}.app-nav-btn.active b{background:#11150b;color:var(--accent)}.app-page{display:none;min-height:45vh}.app-page.active{display:block}.app-page[hidden]{display:none!important}.page-intro{margin:0 0 18px}.page-intro h2{margin:0;font-size:26px;letter-spacing:-.04em}.page-intro p{margin:5px 0 0;color:var(--muted);font-size:13px}
 @media(max-width:600px){.app-nav{grid-template-columns:repeat(2,minmax(0,1fr));top:4px}.app-nav-btn{justify-content:flex-start;padding:11px 12px}.app-nav-btn span{font-size:13px}}
 
-.dashboard-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}.dashboard-stat{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left;background:#101411;border:1px solid var(--line);border-radius:13px;padding:14px;color:var(--text);min-width:0}.dashboard-stat small{font-size:11px;color:var(--muted)}.dashboard-stat strong{font-size:30px;line-height:1.15;letter-spacing:-.04em}.dashboard-stat span{font-size:10px;color:var(--accent)}.dashboard-stat:hover{border-color:#647d45}.alert-stat strong{color:#ff9d91}.dashboard-columns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.dashboard-subpanel{min-width:0;border:1px solid var(--line);border-radius:13px;padding:14px;background:#101411}.dashboard-subpanel h3{font-size:15px;margin:0}.division-progress{display:grid;gap:13px;margin-top:14px}.division-row{display:grid;gap:6px}.division-label{display:flex;justify-content:space-between;gap:10px;font-size:12px}.division-label span:last-child{color:var(--muted);white-space:nowrap}.progress-track{height:7px;background:#293129;border-radius:999px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:999px}.attention-list{display:grid;gap:8px;margin-top:12px}.attention-item{border:1px solid #303a31;border-radius:10px;padding:10px;background:#151a16}.attention-item strong{font-size:12px;display:block;overflow-wrap:anywhere}.attention-item small{display:block;font-size:11px;color:var(--muted);margin-top:4px}.attention-item .attention-flag{color:#ffc477}.dashboard-link{border:0;background:transparent;color:var(--accent);padding:0;font-weight:800;font-size:12px;text-align:left;margin-top:7px}
+.dashboard-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}.dashboard-stat{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left;background:#101411;border:1px solid var(--line);border-radius:13px;padding:14px;color:var(--text);min-width:0}.dashboard-stat small{font-size:11px;color:var(--muted)}.dashboard-stat strong{font-size:30px;line-height:1.15;letter-spacing:-.04em}.dashboard-stat span{font-size:10px;color:var(--accent)}.dashboard-stat:hover{border-color:#647d45}.alert-stat strong{color:#ff9d91}.dashboard-columns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.dashboard-subpanel{min-width:0;border:1px solid var(--line);border-radius:13px;padding:14px;background:#101411}.dashboard-subpanel h3{font-size:15px;margin:0}.division-progress{display:grid;gap:13px;margin-top:14px}.division-row{display:grid;gap:6px}.division-label{display:flex;justify-content:space-between;gap:10px;font-size:12px}.division-label span:last-child{color:var(--muted);white-space:nowrap}.progress-track{height:7px;background:#293129;border-radius:999px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:999px}.deadline-list{display:grid;gap:8px;margin-top:12px}.deadline-item{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;border:1px solid #303a31;border-radius:10px;padding:10px;background:#151a16}.deadline-item strong{font-size:12px;display:block;overflow-wrap:anywhere}.deadline-item small{display:block;font-size:11px;color:var(--muted);margin-top:4px}.deadline-badge{flex:none;border-radius:6px;padding:4px 7px;font-size:10px;font-weight:900;background:#42311b;color:#ffd18a}.deadline-badge.overdue{background:#48211f;color:#ffaaa2}.deadline-badge.soon{background:#42311b;color:#ffd18a}.deadline-badge.normal{background:#26372a;color:#bde6b6}.attention-list{display:grid;gap:8px;margin-top:12px}.attention-item{border:1px solid #303a31;border-radius:10px;padding:10px;background:#151a16}.attention-item strong{font-size:12px;display:block;overflow-wrap:anywhere}.attention-item small{display:block;font-size:11px;color:var(--muted);margin-top:4px}.attention-item .attention-flag{color:#ffc477}.dashboard-link{border:0;background:transparent;color:var(--accent);padding:0;font-weight:800;font-size:12px;text-align:left;margin-top:7px}
 @media(max-width:760px){.dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-columns{grid-template-columns:1fr}.dashboard-stat{padding:12px}.dashboard-stat strong{font-size:26px}}
 
 </style>
@@ -88,6 +88,11 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
       <section class="dashboard-subpanel"><div class="coord-head"><h3>Progres per bagian</h3><span class="coord-copy" id="dashOverallProgress">0% selesai</span></div><div id="divisionProgress" class="division-progress"><div class="empty">Memuat progres…</div></div></section>
       <section class="dashboard-subpanel"><div class="coord-head"><h3>Perlu perhatian</h3><span class="pill" id="attentionCount">0</span></div><div id="attentionList" class="attention-list"><div class="empty">Memuat tugas…</div></div></section>
     </div>
+    <section class="dashboard-subpanel" style="margin-top:12px">
+      <div class="coord-head"><h3>⏰ Pengingat deadline</h3><span class="pill" id="deadlineReminderCount">0</span></div>
+      <p class="coord-copy">Menampilkan tugas belum selesai yang terlambat atau jatuh tempo dalam 3 hari ke depan.</p>
+      <div id="deadlineReminderList" class="deadline-list"><div class="empty">Memuat pengingat…</div></div>
+    </section>
   </section>
 
   <div class="notes">
@@ -276,10 +281,38 @@ function fmtDate(value){if(!value)return "Belum ditentukan";const d=new Date(val
 function dueClass(value){if(!value)return "";const d=new Date(value);if(Number.isNaN(d.getTime()))return "";return d.getTime()<Date.now()?"overdue":"due-soon"}
 
 
+function renderDeadlineReminders(scope){
+ const now=new Date();now.setHours(0,0,0,0);
+ const soonLimit=new Date(now);soonLimit.setDate(soonLimit.getDate()+3);
+ const items=scope.filter(t=>t.status!=="done"&&t.deadline).map(t=>{
+   const due=new Date(String(t.deadline)+"T00:00:00");
+   const delta=Math.round((due-now)/86400000);
+   return {...t,_due:due,_delta:delta};
+ }).filter(t=>t._delta<0||t._delta<=3)
+  .sort((a,b)=>a._delta-b._delta).slice(0,8);
+ const count=$("deadlineReminderCount"),list=$("deadlineReminderList");
+ if(!count||!list)return;
+ count.textContent=items.length;
+ list.innerHTML=items.length?items.map(t=>{
+   const overdue=t._delta<0;
+   const label=overdue?`TERLAMBAT ${Math.abs(t._delta)} HARI`:t._delta===0?"JATUH TEMPO HARI INI":`H-${t._delta}`;
+   const cls=overdue?"overdue":t._delta===0?"overdue":"soon";
+   return `<article class="deadline-item"><div><strong>${esc(t.name)}</strong><small>${esc(t.group||"Tanpa kategori")} · Deadline: ${esc(fmtDate(t.deadline))}${t.pic?" · PIC: "+esc(t.pic):""}</small><button class="dashboard-link" type="button" data-deadline-task="${esc(t.id)}">Buka tugas →</button></div><span class="deadline-badge ${cls}">${label}</span></article>`;
+ }).join(""):'<div class="empty">Tidak ada deadline mendesak dalam 3 hari ke depan.</div>';
+ list.querySelectorAll("[data-deadline-task]").forEach(btn=>btn.addEventListener("click",()=>{
+   showPage("tasks");$("search").value="";$("statusFilter").value="all";activeDay="all";myTasksOnly=false;
+   document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.day==="all"));
+   render();
+   const id=Number(btn.dataset.deadlineTask);
+   const target=[...document.querySelectorAll("[data-edit]")].find(x=>Number(x.dataset.edit)===id);
+   if(target)target.scrollIntoView({behavior:"smooth",block:"center"});
+ }));
+}
 function renderDashboard(){
  const scope=(currentRole==="admin"||currentRole==="pic")?tasks:tasks.filter(isMyTask);
  const total=scope.length,done=scope.filter(t=>t.status==="done").length,pending=scope.filter(t=>t.status!=="done").length;
  const visibleReports=reports.filter(r=>currentRole==="admin"||currentRole==="pic"||r.uid===currentUser?.uid);
+ renderDeadlineReminders(scope);
  const activeIssues=visibleReports.filter(r=>r.type==="kendala"&&r.status!=="selesai").length;
  $("dashTotal").textContent=total;$("dashDone").textContent=done;$("dashPending").textContent=pending;$("dashIssues").textContent=activeIssues;
  $("dashOverallProgress").textContent=(total?Math.round(done/total*100):0)+"% selesai";
