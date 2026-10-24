@@ -457,13 +457,38 @@ function render(){
   if(g.day!==lastDay){html+=`<div class="section-head"><div><h2>${esc(labelDay(g.day))}</h2><p>${g.day==="persiapan"?"Jadwal produksi dan kesiapan operasional":g.day==="1"?"Band, Fun Run, mural, pameran, dan opening ceremony":"Kompetisi, talkshow, dan hiburan utama"}</p></div></div>`;lastDay=g.day;html+='<div class="cards">';}
   const completed=g.items.filter(x=>x.status==="done").length;
   html+=`<section class="card"><div class="card-top"><div><h3>${esc(g.group)}</h3><div class="desc">${esc(labelDay(g.day))}</div></div><div class="count">${completed}/${g.items.length} selesai</div></div>`;
-  for(const t of g.items){html+=`<div class="task ${t.status==="done"?"done":""}"><input type="checkbox" aria-label="Status: ${esc(t.name)}" data-check="${t.id}" ${t.status==="done"?"checked":""} ${canEdit()?"":"disabled"}><div class="task-body"><div class="task-title">${esc(t.name)}</div><div class="task-meta"><span class="pill ${t.status==="tbc"?"tbc":t.status==="pending"?"urgent":""}">${esc(statusLabel(t.status))}</span>${t.pic?`<span class="pill">PIC: ${esc(t.pic)}</span>`:""}${t.notes?`<span class="pill">${esc(t.notes)}</span>`:""}</div><div class="task-detail">${t.location?`<span>📍 <b>Lokasi:</b> ${esc(t.location)}</span>`:""}${t.assignedTo?`<span>👤 <b>Ditugaskan:</b> ${esc(t.assignedTo)}</span>`:""}${t.deadline?`<span class="${dueClass(t.deadline)}">⏱ <b>Deadline:</b> ${esc(fmtDate(t.deadline))}</span>`:""}</div></div><div class="task-actions">${canEdit()?`<button class="mini" title="Edit kebutuhan" aria-label="Edit ${esc(t.name)}" data-edit="${t.id}">✎</button>`:""}${canDelete()?`<button class="mini" title="Hapus kebutuhan" aria-label="Hapus ${esc(t.name)}" data-delete="${t.id}">×</button>`:""}</div></div>`;}
+  for(const t of g.items){html+=`<div class="task ${t.status==="done"?"done":""}"><input type="checkbox" aria-label="Status: ${esc(t.name)}" data-check="${t.id}" ${t.status==="done"?"checked":""} ${canEdit()?"":"disabled"}><div class="task-body"><div class="task-title">${esc(t.name)}</div><div class="task-meta"><span class="pill ${t.status==="tbc"?"tbc":t.status==="pending"?"urgent":""}">${esc(statusLabel(t.status))}</span>${t.pic?`<span class="pill">PIC: ${esc(t.pic)}</span>`:""}${t.notes?`<span class="pill">${esc(t.notes)}</span>`:""}</div><div class="task-detail">${t.location?`<span>📍 <b>Lokasi:</b> ${esc(t.location)}</span>`:""}${t.assignedTo?`<span>👤 <b>Ditugaskan:</b> ${esc(t.assignedTo)}</span>`:""}${t.deadline?`<span class="${dueClass(t.deadline)}">⏱ <b>Deadline:</b> ${esc(fmtDate(t.deadline))}</span>`:""}</div></div><div class="task-actions"><button class="mini" type="button" title="Salin detail tugas" aria-label="Salin detail ${esc(t.name)}" data-copy-task="${t.id}">⧉</button>${canEdit()?`<button class="mini" title="Edit kebutuhan" aria-label="Edit ${esc(t.name)}" data-edit="${t.id}">✎</button>`:""}${canDelete()?`<button class="mini" title="Hapus kebutuhan" aria-label="Hapus ${esc(t.name)}" data-delete="${t.id}">×</button>`:""}</div></div>`;}
   html+="</section>";
   const idx=filtered.indexOf(g.items[g.items.length-1]);const next=filtered[idx+1];if(!next||next.day!==g.day)html+="</div>";
  }
  root.innerHTML=html;
  root.querySelectorAll("[data-check]").forEach(el=>el.addEventListener("change",async()=>{const id=Number(el.dataset.check);const t=tasks.find(x=>x.id===id);if(!t)return;el.disabled=true;try{await tasksRef.child(String(id)).update({status:el.checked?"done":"pending",updatedAt:firebase.database.ServerValue.TIMESTAMP,updatedBy:currentUser.uid});}catch(err){alert("Gagal menyimpan status: "+err.message);render()}finally{el.disabled=false}}));
  root.querySelectorAll("[data-edit]").forEach(el=>el.addEventListener("click",()=>openDialog(Number(el.dataset.edit))));
+
+ root.querySelectorAll("[data-copy-task]").forEach(el=>el.addEventListener("click",async()=>{
+   const t=tasks.find(x=>String(x.id)===String(el.dataset.copyTask));if(!t)return;
+   const detail=[
+     "PONTUAK FEST 2026 — DETAIL TUGAS",
+     "Nama tugas: "+(t.name||"-"),
+     "Agenda: "+(t.day==="persiapan"?"Persiapan produksi":t.day==="1"?"Hari pertama":t.day==="2"?"Hari kedua":t.day||"-"),
+     "Bagian: "+(t.group||"-"),
+     "PIC: "+(t.pic||"Belum ditentukan"),
+     "Ditugaskan kepada: "+(t.assignedTo||"-"),
+     "Lokasi: "+(t.location||"-"),
+     "Deadline: "+(t.deadline||"Belum ditentukan"),
+     "Status: "+statusLabel(t.status),
+     "Catatan: "+(t.notes||"-")
+   ].join("\\n");
+   try{
+     if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(detail);}
+     else{
+       const area=document.createElement("textarea");area.value=detail;area.style.position="fixed";area.style.opacity="0";document.body.appendChild(area);area.select();
+       const ok=document.execCommand("copy");area.remove();if(!ok)throw new Error("Browser tidak mengizinkan penyalinan otomatis.");
+     }
+     const oldText=el.textContent;el.textContent="✓";el.title="Detail berhasil disalin";setTimeout(()=>{el.textContent=oldText;el.title="Salin detail tugas"},1200);
+   }catch(err){prompt("Salin detail tugas berikut:",detail);}
+ }));
+
  root.querySelectorAll("[data-delete]").forEach(el=>el.addEventListener("click",async()=>{const t=tasks.find(x=>x.id===Number(el.dataset.delete));if(t&&confirm(`Hapus kebutuhan "${t.name}" dari checklist bersama?`)){try{await tasksRef.child(String(t.id)).remove()}catch(err){alert("Gagal menghapus: "+err.message)}}}));
 }
 function openDialog(id=null){editId=id;const t=id?tasks.find(x=>x.id===id):null;$("dialogTitle").textContent=t?"Edit kebutuhan":"Tambah kebutuhan";$("taskName").value=t?.name||"";$("taskDay").value=t?.day||"persiapan";$("taskGroup").value=t?.group||"";$("taskPic").value=t?.pic||"";$("taskAssignedTo").value=t?.assignedTo||"";$("taskLocation").value=t?.location||"";$("taskDeadline").value=t?.deadline||"";$("taskStatus").value=t?.status||"pending";$("taskNotes").value=t?.notes||"";$("taskDialog").showModal();}
