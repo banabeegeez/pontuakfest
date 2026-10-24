@@ -404,7 +404,7 @@ function renderTaskChangeNotifications(scope){
    return `<article class="deadline-item">
      <div class="deadline-main"><strong>${esc(t.name||"Tugas tanpa nama")}</strong><span>${esc(kind)} · ${esc(t.group||"Tanpa bagian")}</span>
      <small>${esc(t.pic?"PIC: "+t.pic:"PIC belum ditentukan")}${t.deadline?" · Deadline: "+esc(t.deadline):""}</small></div>
-     <div class="deadline-side"><span class="pill">${esc(statusLabel(t.status))}</span><small>${esc(fmtDate(stamp))}</small></div>
+     <div class="deadline-side"><span class="pill">${esc(statusLabel(t.status))}</span><small>${esc(fmtDate(stamp))}<br><button type="button" class="btn" data-notice-task="${esc(t.id)}" style="margin-top:6px;padding:6px 9px;font-size:11px">Lihat tugas</button></small></div>
    </article>`;
  }).join("");
 }
@@ -585,6 +585,24 @@ function showPage(page){
  window.scrollTo({top:0,behavior:"smooth"});
 }
 $("appNav").addEventListener("click",e=>{const btn=e.target.closest("[data-page]");if(btn)showPage(btn.dataset.page)});
+
+$("taskNoticeList")?.addEventListener("click",e=>{
+ const btn=e.target.closest("[data-notice-task]");
+ if(!btn)return;
+ const t=tasks.find(item=>String(item.id)===String(btn.dataset.noticeTask));
+ if(!t)return;
+ showPage("tasks");
+ $("search").value=t.name||"";
+ $("statusFilter").value="all";
+ activeDay="all";
+ render();
+ setTimeout(()=>{
+   const target=[...document.querySelectorAll("[data-edit]")].find(el=>String(el.dataset.edit)===String(t.id));
+   const card=target?.closest(".task")||target?.closest("article")||target?.parentElement;
+   (card||target)?.scrollIntoView({behavior:"smooth",block:"center"});
+ },80);
+});
+
 ["reportSearch","reportTypeFilter","reportStatusFilter"].forEach(id=>$(id)?.addEventListener(id==="reportSearch"?"input":"change",renderReports));
 $("exportReportsBtn")?.addEventListener("click",exportVisibleReports);
 $("crewSearch")?.addEventListener("input",renderCrewSummary);
