@@ -116,6 +116,9 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
     <select class="filter" id="statusFilter" aria-label="Filter status">
       <option value="all">Semua status</option><option value="pending">Belum selesai</option><option value="done">Selesai</option><option value="tbc">Perlu konfirmasi</option>
     </select>
+    <select class="filter" id="groupFilter" aria-label="Filter bagian">
+      <option value="all">Semua bagian</option>
+    </select>
   </div>
   <nav class="tabs" id="tabs">
     <button class="tab active" data-day="all">Semua agenda</button>
@@ -432,8 +435,16 @@ function renderDashboard(){
 
 function render(){
  renderDashboard();
- const query=$("search").value.toLowerCase().trim(), filter=$("statusFilter").value;
- const filtered=tasks.filter(t=>(!myTasksOnly||(currentRole!=="admin"&&currentRole!=="pic"?isMyTask(t):isMyTask(t)))&&(activeDay==="all"||t.day===activeDay)&&(!query||[t.name,t.group,t.pic,t.notes,t.location,t.assignedTo].join(" ").toLowerCase().includes(query))&&(filter==="all"||(filter==="pending"&&t.status!=="done")||t.status===filter));
+ const groupFilter=$("groupFilter");
+ if(groupFilter){
+   const selected=groupFilter.value||"all";
+   const groups=[...new Set(tasks.map(t=>String(t.group||"Tanpa kategori").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"id"));
+   const options='<option value="all">Semua bagian</option>'+groups.map(g=>`<option value="${esc(g)}">${esc(g)}</option>`).join("");
+   if(groupFilter.innerHTML!==options)groupFilter.innerHTML=options;
+   groupFilter.value=groups.includes(selected)?selected:"all";
+ }
+ const query=$("search").value.toLowerCase().trim(), filter=$("statusFilter").value, selectedGroup=$("groupFilter")?.value||"all";
+ const filtered=tasks.filter(t=>(!myTasksOnly||isMyTask(t))&&(activeDay==="all"||t.day===activeDay)&&(selectedGroup==="all"||String(t.group||"Tanpa kategori").trim()===selectedGroup)&&(!query||[t.name,t.group,t.pic,t.notes,t.location,t.assignedTo].join(" ").toLowerCase().includes(query))&&(filter==="all"||(filter==="pending"&&t.status!=="done")||t.status===filter));
  const myCount=tasks.filter(isMyTask).filter(t=>t.status!=="done").length;$ ("myTaskCount").textContent=`· ${myCount} belum selesai`;$("myTasksBtn").classList.toggle("active",myTasksOnly);
  const total=tasks.length,done=tasks.filter(t=>t.status==="done").length,tbc=tasks.filter(t=>t.status==="tbc").length;
  $("totalMetric").textContent=total;$("doneMetric").textContent=(total?Math.round(done/total*100):0)+"%";$("doneSub").textContent=`${done} dari ${total} kebutuhan`;$("tbcMetric").textContent=tbc;$("pendingMetric").textContent=total-done;
@@ -607,6 +618,7 @@ $("taskNoticeList")?.addEventListener("click",e=>{
 $("exportReportsBtn")?.addEventListener("click",exportVisibleReports);
 $("crewSearch")?.addEventListener("input",renderCrewSummary);
 $("crewGroupFilter")?.addEventListener("change",renderCrewSummary);
+$("groupFilter")?.addEventListener("change",render);
 
 try {
  if (!window.firebase || !firebase.initializeApp || !firebase.database || !firebase.auth) {
