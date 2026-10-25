@@ -27,6 +27,7 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
 
 @media(max-width:760px){.wrap{padding:15px}.hero{grid-template-columns:1fr}.hero-side{grid-template-columns:repeat(2,1fr)}.timeline{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.notes{grid-template-columns:1fr}.topbar{align-items:flex-start}.hero h1{font-size:48px}.section-head{align-items:flex-start;flex-direction:column}}
 @media print{body{background:white;color:#111}.wrap{max-width:none;padding:0}.topbar,.toolbar,.tabs,.top-actions,.task-actions,.btn,.notes{display:none!important}.hero-main,.metric,.phase,.card{background:white;color:#111;border:1px solid #bbb;break-inside:avoid}.hero p,.metric small,.metric .sub,.phase small,.card .desc,.count{color:#444}.cards{grid-template-columns:1fr 1fr}.task{border-color:#ddd}.task-title{color:#111!important}.pill{border:1px solid #aaa;background:white;color:#222}.hero h1 em,.eyebrow{color:#333}.section-head{margin-top:18px}}
+.equipment-row{border:1px solid var(--line);border-radius:12px;padding:13px;margin:9px 0;background:#121713}.equipment-row-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.equipment-row h3{margin:0 0 5px;font-size:16px}.equipment-meta{color:var(--muted);font-size:12px;line-height:1.6}.equipment-controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.equipment-controls select,.equipment-controls input{min-width:0;flex:1}.equipment-progress{height:7px;background:#283127;border-radius:9px;overflow:hidden;margin:10px 0}.equipment-progress span{display:block;height:100%;background:var(--accent);width:0}.equipment-controls .btn{padding:8px 11px;font-size:12px}
 .app-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 24px;position:sticky;top:8px;z-index:20;padding:7px;background:#101411eF;border:1px solid var(--line);border-radius:15px;backdrop-filter:blur(12px)}
 .app-nav-btn{display:flex;justify-content:center;align-items:center;gap:8px;min-width:0;border:1px solid transparent;border-radius:10px;padding:11px 10px;background:transparent;color:var(--muted);font-weight:800}.app-nav-btn b{font-size:10px;background:#283127;color:#d7e2d3;border-radius:6px;padding:2px 6px}.app-nav-btn.active{background:var(--accent);color:#11150b}.app-nav-btn.active b{background:#11150b;color:var(--accent)}.app-page{display:none;min-height:45vh}.app-page.active{display:block}.app-page[hidden]{display:none!important}.page-intro{margin:0 0 18px}.page-intro h2{margin:0;font-size:26px;letter-spacing:-.04em}.page-intro p{margin:5px 0 0;color:var(--muted);font-size:13px}
 @media(max-width:600px){.app-nav{grid-template-columns:repeat(2,minmax(0,1fr));top:4px}.app-nav-btn{justify-content:flex-start;padding:11px 12px}.app-nav-btn span{font-size:13px}}
@@ -52,6 +53,7 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
   <nav class="app-nav" id="appNav" aria-label="Menu utama">
     <button class="app-nav-btn active" type="button" data-page="dashboard">⌂ <span>Dashboard</span></button>
     <button class="app-nav-btn" type="button" data-page="tasks">☷ <span>Daftar Tugas</span></button>
+    <button class="app-nav-btn" type="button" data-page="equipment">🧰 <span>Checklist Peralatan</span></button>
     <button class="app-nav-btn" type="button" data-page="announcements">📣 <span>Pengumuman</span><b id="navAnnouncementCount">0</b></button>
     <button class="app-nav-btn" type="button" data-page="reports">📝 <span>Laporan</span><b id="navReportCount">0</b></button>
     <button class="app-nav-btn" type="button" data-page="crew">👥 <span>Rekap Crew</span></button>
@@ -128,6 +130,32 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
   </nav>
   <button class="my-task-btn" id="myTasksBtn" type="button">☷ &nbsp; Tugas Saya <span id="myTaskCount"></span><small style="display:block;font-weight:500;margin-top:3px;color:inherit;opacity:.8">Tugas yang ditujukan ke email akun yang sedang masuk</small></button>
   <div id="checklist"></div>
+  </main>
+  <main id="page-equipment" class="app-page">
+    <div class="page-intro"><h2>Checklist Peralatan</h2><p>Periksa kesiapan teknis berdasarkan kebutuhan setiap acara. Data disimpan terpisah dari checklist tugas produksi.</p></div>
+    <section class="coord-panel">
+      <div class="coord-head"><h2>🧰 Kesiapan teknis per acara</h2><span class="pill" id="equipmentProgress">0% siap</span></div>
+      <label class="field" for="equipmentEvent">Nama acara / agenda *</label>
+      <input id="equipmentEvent" maxlength="120" placeholder="Contoh: Pontuak Fest — Panggung Utama">
+      <p class="coord-copy">Masukkan nama acara yang ingin diperiksa. Checklist untuk setiap nama acara disimpan terpisah.</p>
+      <div class="toolbar" style="margin-top:12px">
+        <input class="search" id="equipmentName" maxlength="160" placeholder="Nama peralatan, contoh: Mixer audio">
+        <select class="filter" id="equipmentDivision" aria-label="Divisi peralatan">
+          <option value="Sound System">Sound System</option><option value="Lighting">Lighting</option><option value="LED Videotron">LED Videotron</option><option value="Multimedia">Multimedia</option><option value="Foto & Video">Foto & Video</option><option value="Listrik / Umum">Listrik / Umum</option><option value="Lainnya">Lainnya</option>
+        </select>
+      </div>
+      <div class="toolbar">
+        <input class="search" id="equipmentQty" type="number" min="1" step="1" value="1" placeholder="Jumlah">
+        <input class="search" id="equipmentPIC" maxlength="100" placeholder="PIC pemeriksa">
+        <button class="btn primary" type="button" id="addEquipmentBtn">＋ Tambah peralatan</button>
+      </div>
+      <div class="toolbar">
+        <select class="filter" id="equipmentStatusFilter"><option value="all">Semua status</option><option value="unchecked">Belum dicek</option><option value="ready">Siap</option><option value="issue">Bermasalah</option><option value="missing">Tidak tersedia</option></select>
+        <button class="btn" type="button" id="exportEquipmentBtn">Ekspor CSV</button>
+      </div>
+      <div id="equipmentList" class="announcement-list"><div class="empty">Masukkan nama acara untuk melihat checklist peralatan.</div></div>
+      <p class="coord-copy" id="equipmentAccessNote">Crew dapat melihat checklist. Admin/PIC dapat menambah dan memperbarui data peralatan.</p>
+    </section>
   </main>
   <main id="page-announcements" class="app-page">
   <div class="page-intro"><h2>Pengumuman Tim</h2><p>Informasi operasional dan arahan terbaru dari Admin/PIC.</p></div>
@@ -297,6 +325,45 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let tasks = [], activeDay = "all", editId = null, dbRoot = null, tasksRef = null, announcementsRef = null, currentUser = null, currentRole = null, dataReady = false, myTasksOnly = false;
 let unsubscribeTasks = null, unsubscribeAnnouncements = null, unsubscribeReports = null, announcements = [], reports = [], reportsRef = null, reportsQueryRef = null;
+
+let equipmentRef = null, equipmentListener = null, equipmentItems = [], equipmentEventKey = "";
+function equipmentKey(name){return String(name||"").trim().toLowerCase().replace(/[.#$\[\]\/]/g,"_").replace(/\s+/g,"_").slice(0,120)}
+function equipmentStatusLabel(s){return s==="ready"?"Siap":s==="issue"?"Bermasalah":s==="missing"?"Tidak tersedia":"Belum dicek"}
+function renderEquipment(){
+ const list=$("equipmentList");if(!list)return;
+ const eventName=$("equipmentEvent").value.trim();equipmentEventKey=equipmentKey(eventName);
+ if(!eventName){list.innerHTML='<div class="empty">Masukkan nama acara untuk melihat checklist peralatan.</div>';$("equipmentProgress").textContent="0% siap";return}
+ const filter=$("equipmentStatusFilter").value;
+ const items=equipmentItems.filter(x=>filter==="all"||((x.status||"unchecked")===filter));
+ const ready=equipmentItems.filter(x=>x.status==="ready").length;
+ const pct=equipmentItems.length?Math.round(ready/equipmentItems.length*100):0;
+ $("equipmentProgress").textContent=pct+"% siap · "+ready+"/"+equipmentItems.length+" item";
+ if(!items.length){list.innerHTML='<div class="empty">Belum ada peralatan untuk acara ini, atau tidak ada item sesuai filter.</div>';return}
+ list.innerHTML=items.map(x=>`<article class="equipment-row"><div class="equipment-row-top"><div><h3>${esc(x.name||"Peralatan")}</h3><div class="equipment-meta">${esc(x.division||"Lainnya")} · Jumlah: ${esc(x.qty||1)}<br>PIC: ${esc(x.pic||"Belum ditentukan")}${x.note?'<br>Catatan: '+esc(x.note):''}</div></div><span class="pill ${x.status==="issue"||x.status==="missing"?"urgent":x.status==="unchecked"||!x.status?"tbc":""}">${esc(equipmentStatusLabel(x.status))}</span></div><div class="equipment-controls"><select data-eq-status="${esc(x.id)}" aria-label="Status ${esc(x.name)}" ${canEdit()?"":"disabled"}><option value="unchecked" ${(x.status||"unchecked")==="unchecked"?"selected":""}>Belum dicek</option><option value="ready" ${x.status==="ready"?"selected":""}>Siap</option><option value="issue" ${x.status==="issue"?"selected":""}>Bermasalah</option><option value="missing" ${x.status==="missing"?"selected":""}>Tidak tersedia</option></select><input data-eq-note="${esc(x.id)}" value="${esc(x.note||"")}" placeholder="Catatan pemeriksaan / kendala" aria-label="Catatan ${esc(x.name)}" ${canEdit()?"":"disabled"}><button class="btn" type="button" data-eq-save="${esc(x.id)}" ${canEdit()?"":"hidden"}>Simpan</button>${canDelete()?`<button class="btn" type="button" data-eq-delete="${esc(x.id)}">Hapus</button>`:""}</div></article>`).join("");
+ list.querySelectorAll("[data-eq-save]").forEach(b=>b.addEventListener("click",async()=>{const id=b.dataset.eqSave,item=equipmentItems.find(x=>String(x.id)===String(id));if(!item||!equipmentRef||!canEdit())return;const row=b.closest(".equipment-row"),status=row.querySelector("[data-eq-status]").value,note=row.querySelector("[data-eq-note]").value.trim();b.disabled=true;try{await equipmentRef.child(String(id)).update({status,note,checkedBy:currentUser.uid,checkedByName:currentUser.displayName||currentUser.email||"Crew",checkedAt:firebase.database.ServerValue.TIMESTAMP,updatedAt:firebase.database.ServerValue.TIMESTAMP})}catch(err){alert("Gagal menyimpan pemeriksaan. Periksa Firebase Rules untuk equipment_checklists.\\n"+err.message)}finally{b.disabled=false}}));
+ list.querySelectorAll("[data-eq-delete]").forEach(b=>b.addEventListener("click",async()=>{if(!canDelete()||!equipmentRef)return;if(confirm("Hapus item peralatan ini?"))try{await equipmentRef.child(String(b.dataset.eqDelete)).remove()}catch(err){alert("Gagal menghapus: "+err.message)}}));
+}
+function watchEquipmentEvent(){
+ if(equipmentRef&&equipmentListener)equipmentRef.off("value",equipmentListener);
+ const name=$("equipmentEvent").value.trim();equipmentItems=[];equipmentRef=null;equipmentListener=null;
+ if(!name||!dbRoot||!currentUser){renderEquipment();return}
+ const key=equipmentKey(name);equipmentRef=dbRoot.child("equipment_checklists").child(key);
+ equipmentListener=snap=>{equipmentItems=Object.entries(snap.val()||{}).filter(([,v])=>v).map(([id,v])=>({...v,id}));renderEquipment()};
+ equipmentRef.on("value",equipmentListener,err=>{$("equipmentList").innerHTML='<div class="empty">Checklist peralatan belum dapat dimuat. Admin perlu memperbarui Firebase Rules.</div>';console.warn(err)});
+}
+async function addEquipment(){
+ const eventName=$("equipmentEvent").value.trim(),name=$("equipmentName").value.trim(),qty=Math.max(1,Number($("equipmentQty").value)||1);
+ if(!eventName||!name){alert("Isi nama acara dan nama peralatan terlebih dahulu.");return}
+ if(!canEdit()||!currentUser){alert("Hanya Admin/PIC yang dapat menambahkan peralatan.");return}
+ if(!equipmentRef||equipmentEventKey!==equipmentKey(eventName))watchEquipmentEvent();
+ if(!equipmentRef)return;
+ const id=String(Date.now());try{await equipmentRef.child(id).set({id,name,division:$("equipmentDivision").value,qty,pic:$("equipmentPIC").value.trim(),status:"unchecked",note:"",createdAt:firebase.database.ServerValue.TIMESTAMP,createdBy:currentUser.uid});$("equipmentName").value="";$("equipmentQty").value="1";}catch(err){alert("Gagal menambahkan peralatan. Periksa Firebase Rules untuk equipment_checklists.\\n"+err.message)}
+}
+function exportEquipment(){
+ const rows=[["Acara",$("equipmentEvent").value.trim(),"","",""],["Nama peralatan","Divisi","Jumlah","Status","PIC","Catatan"],...equipmentItems.map(x=>[x.name,x.division,x.qty,equipmentStatusLabel(x.status),x.pic,x.note])];
+ const csv=rows.map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\\r\\n");
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\\ufeff"+csv],{type:"text/csv;charset=utf-8;"}));a.download="PONTUAK_FEST_CHECKLIST_PERALATAN.csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
 
 function setStatus(message, state="") { const el=$("connectionStatus"); el.textContent=message; el.dataset.state=state; }
 function showAuthMessage(message="") { $("authMessage").textContent=message; }
@@ -590,6 +657,7 @@ async function initializeSharedData(){
   const handler=snapshot=>{const val=snapshot.val();tasks=toTaskArray(val);dataReady=true;refreshReportTaskOptions();render();setStatus("Tersinkronisasi", "ok")};
   tasksRef.on("value",handler,error=>{setStatus("Gagal memuat data", "error");console.error(error);alert("Tidak dapat membaca checklist Firebase. Periksa Rules dan koneksi internet.\n"+error.message)});
   unsubscribeTasks=handler;
+  watchEquipmentEvent();
   announcementsRef=dbRoot.child("announcements");
   if(unsubscribeAnnouncements) announcementsRef.off("value",unsubscribeAnnouncements);
   const announcementHandler=snapshot=>{announcements=Object.values(snapshot.val()||{}).filter(Boolean).sort((a,b)=>(Number(b.createdAt)||0)-(Number(a.createdAt)||0));renderAnnouncements()};
@@ -627,6 +695,12 @@ function showPage(page){
  window.scrollTo({top:0,behavior:"smooth"});
 }
 $("appNav").addEventListener("click",e=>{const btn=e.target.closest("[data-page]");if(btn)showPage(btn.dataset.page)});
+$("equipmentEvent")?.addEventListener("change",watchEquipmentEvent);
+$("equipmentEvent")?.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();watchEquipmentEvent()}});
+$("addEquipmentBtn")?.addEventListener("click",addEquipment);
+$("equipmentStatusFilter")?.addEventListener("change",renderEquipment);
+$("exportEquipmentBtn")?.addEventListener("click",exportEquipment);
+
 
 $("taskNoticeList")?.addEventListener("click",e=>{
  const btn=e.target.closest("[data-notice-task]");
