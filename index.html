@@ -135,9 +135,12 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
     <div class="page-intro"><h2>Checklist Peralatan</h2><p>Periksa kesiapan teknis berdasarkan kebutuhan setiap acara. Data disimpan terpisah dari checklist tugas produksi.</p></div>
     <section class="coord-panel">
       <div class="coord-head"><h2>🧰 Kesiapan teknis per acara</h2><span class="pill" id="equipmentProgress">0% siap</span></div>
+      <label class="field" for="equipmentEventSelect">Pilih acara yang sudah memiliki checklist</label>
+      <select id="equipmentEventSelect" class="filter" aria-label="Pilih acara checklist"><option value="">Memuat daftar acara…</option></select>
       <label class="field" for="equipmentEvent">Nama acara / agenda *</label>
       <input id="equipmentEvent" maxlength="120" placeholder="Contoh: Pontuak Fest — Panggung Utama">
       <p class="coord-copy">Masukkan nama acara yang ingin diperiksa. Checklist untuk setiap nama acara disimpan terpisah.</p>
+      <div id="equipmentEditorControls">
       <div class="toolbar" style="margin-top:12px">
         <input class="search" id="equipmentName" maxlength="160" placeholder="Nama peralatan, contoh: Mixer audio">
         <select class="filter" id="equipmentDivision" aria-label="Divisi peralatan">
@@ -148,6 +151,7 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
         <input class="search" id="equipmentQty" type="number" min="1" step="1" value="1" placeholder="Jumlah">
         <input class="search" id="equipmentPIC" maxlength="100" placeholder="PIC pemeriksa">
         <button class="btn primary" type="button" id="addEquipmentBtn">＋ Tambah peralatan</button>
+      </div>
       </div>
       <div class="toolbar">
         <select class="filter" id="equipmentStatusFilter"><option value="all">Semua status</option><option value="unchecked">Belum dicek</option><option value="ready">Siap</option><option value="issue">Bermasalah</option><option value="missing">Tidak tersedia</option></select>
@@ -327,10 +331,14 @@ let tasks = [], activeDay = "all", editId = null, dbRoot = null, tasksRef = null
 let unsubscribeTasks = null, unsubscribeAnnouncements = null, unsubscribeReports = null, announcements = [], reports = [], reportsRef = null, reportsQueryRef = null;
 
 let equipmentRef = null, equipmentListener = null, equipmentItems = [], equipmentEventKey = "";
+let equipmentIndexRef = null, equipmentIndexListener = null, equipmentEventsIndex = {};
 function equipmentKey(name){return String(name||"").trim().toLowerCase().replace(/[.#$\[\]\/]/g,"_").replace(/\s+/g,"_").slice(0,120)}
 function equipmentStatusLabel(s){return s==="ready"?"Siap":s==="issue"?"Bermasalah":s==="missing"?"Tidak tersedia":"Belum dicek"}
 function renderEquipment(){
  const list=$("equipmentList");if(!list)return;
+ const manager=canEdit();
+ $("equipmentEditorControls").hidden=!manager;
+ $("equipmentAccessNote").textContent=manager?"Admin/PIC dapat menambah, mengubah, dan menghapus item peralatan. Crew hanya dapat melihat checklist.":"Mode Crew: hanya melihat checklist peralatan. Hubungi Admin/PIC jika perlu perubahan.";
  const eventName=$("equipmentEvent").value.trim();equipmentEventKey=equipmentKey(eventName);
  if(!eventName){list.innerHTML='<div class="empty">Masukkan nama acara untuk melihat checklist peralatan.</div>';$("equipmentProgress").textContent="0% siap";return}
  const filter=$("equipmentStatusFilter").value;
@@ -343,6 +351,32 @@ function renderEquipment(){
  list.querySelectorAll("[data-eq-save]").forEach(b=>b.addEventListener("click",async()=>{const id=b.dataset.eqSave,item=equipmentItems.find(x=>String(x.id)===String(id));if(!item||!equipmentRef||!canEdit())return;const row=b.closest(".equipment-row"),status=row.querySelector("[data-eq-status]").value,note=row.querySelector("[data-eq-note]").value.trim();b.disabled=true;try{await equipmentRef.child(String(id)).update({status,note,checkedBy:currentUser.uid,checkedByName:currentUser.displayName||currentUser.email||"Crew",checkedAt:firebase.database.ServerValue.TIMESTAMP,updatedAt:firebase.database.ServerValue.TIMESTAMP})}catch(err){alert("Gagal menyimpan pemeriksaan. Periksa Firebase Rules untuk equipment_checklists.\\n"+err.message)}finally{b.disabled=false}}));
  list.querySelectorAll("[data-eq-delete]").forEach(b=>b.addEventListener("click",async()=>{if(!canDelete()||!equipmentRef)return;if(confirm("Hapus item peralatan ini?"))try{await equipmentRef.child(String(b.dataset.eqDelete)).remove()}catch(err){alert("Gagal menghapus: "+err.message)}}));
 }
+function readableEventName(key, items){
+ const found=(items||[]).find(x=>x&&x.eventName);
+ if(found)return found.eventName;
+ return String(key||"").replace(/_/g," ").replace(/\\b\\w/g,c=>c.toUpperCase());
+}
+function watchEquipmentIndex(){
+ if(equipmentIndexRef&&equipmentIndexListener)equipmentIndexRef.off("value",equipmentIndexListener);
+ if(!dbRoot||!currentUser)return;
+ equipmentIndexRef=dbRoot.child("equipment_checklists");
+ equipmentIndexListener=snap=>{
+   equipmentEventsIndex=snap.val()||{};
+   const select=$("equipmentEventSelect"), currentKey=equipmentKey($("equipmentEvent").value);
+   const entries=Object.entries(equipmentEventsIndex).filter(([,v])=>v&&typeof v==="object");
+   select.innerHTML='<option value="">Pilih acara…</option>'+entries.map(([key,val])=>{
+     const items=Object.values(val||{}).filter(Boolean);
+     const label=readableEventName(key,items);
+     return '<option value="'+esc(key)+'">'+esc(label)+'</option>';
+   }).join("");
+   if(currentKey&&equipmentEventsIndex[currentKey])select.value=currentKey;
+   if(!entries.length)select.innerHTML='<option value="">Belum ada checklist acara</option>';
+ };
+ equipmentIndexRef.on("value",equipmentIndexListener,err=>{
+   $("equipmentEventSelect").innerHTML='<option value="">Daftar acara belum dapat dimuat</option>';
+   console.warn("Checklist index read error",err);
+ });
+}
 function watchEquipmentEvent(){
  if(equipmentRef&&equipmentListener)equipmentRef.off("value",equipmentListener);
  const name=$("equipmentEvent").value.trim();equipmentItems=[];equipmentRef=null;equipmentListener=null;
@@ -352,12 +386,13 @@ function watchEquipmentEvent(){
  equipmentRef.on("value",equipmentListener,err=>{$("equipmentList").innerHTML='<div class="empty">Checklist peralatan belum dapat dimuat. Admin perlu memperbarui Firebase Rules.</div>';console.warn(err)});
 }
 async function addEquipment(){
+ if(!currentUser||!canEdit()){alert("Akses ditolak: hanya Admin/PIC yang dapat menambah peralatan.");return}
  const eventName=$("equipmentEvent").value.trim(),name=$("equipmentName").value.trim(),qty=Math.max(1,Number($("equipmentQty").value)||1);
  if(!eventName||!name){alert("Isi nama acara dan nama peralatan terlebih dahulu.");return}
  if(!canEdit()||!currentUser){alert("Hanya Admin/PIC yang dapat menambahkan peralatan.");return}
  if(!equipmentRef||equipmentEventKey!==equipmentKey(eventName))watchEquipmentEvent();
  if(!equipmentRef)return;
- const id=String(Date.now());try{await equipmentRef.child(id).set({id,name,division:$("equipmentDivision").value,qty,pic:$("equipmentPIC").value.trim(),status:"unchecked",note:"",createdAt:firebase.database.ServerValue.TIMESTAMP,createdBy:currentUser.uid});$("equipmentName").value="";$("equipmentQty").value="1";}catch(err){alert("Gagal menambahkan peralatan. Periksa Firebase Rules untuk equipment_checklists.\\n"+err.message)}
+ const id=String(Date.now());try{await equipmentRef.child(id).set({id,name,eventName,division:$("equipmentDivision").value,qty,pic:$("equipmentPIC").value.trim(),status:"unchecked",note:"",createdAt:firebase.database.ServerValue.TIMESTAMP,createdBy:currentUser.uid});$("equipmentName").value="";$("equipmentQty").value="1";}catch(err){alert("Gagal menambahkan peralatan. Periksa Firebase Rules untuk equipment_checklists.\\n"+err.message)}
 }
 function exportEquipment(){
  const rows=[["Acara",$("equipmentEvent").value.trim(),"","",""],["Nama peralatan","Divisi","Jumlah","Status","PIC","Catatan"],...equipmentItems.map(x=>[x.name,x.division,x.qty,equipmentStatusLabel(x.status),x.pic,x.note])];
@@ -658,6 +693,7 @@ async function initializeSharedData(){
   tasksRef.on("value",handler,error=>{setStatus("Gagal memuat data", "error");console.error(error);alert("Tidak dapat membaca checklist Firebase. Periksa Rules dan koneksi internet.\n"+error.message)});
   unsubscribeTasks=handler;
   watchEquipmentEvent();
+  watchEquipmentIndex();
   announcementsRef=dbRoot.child("announcements");
   if(unsubscribeAnnouncements) announcementsRef.off("value",unsubscribeAnnouncements);
   const announcementHandler=snapshot=>{announcements=Object.values(snapshot.val()||{}).filter(Boolean).sort((a,b)=>(Number(b.createdAt)||0)-(Number(a.createdAt)||0));renderAnnouncements()};
@@ -695,7 +731,13 @@ function showPage(page){
  window.scrollTo({top:0,behavior:"smooth"});
 }
 $("appNav").addEventListener("click",e=>{const btn=e.target.closest("[data-page]");if(btn)showPage(btn.dataset.page)});
-$("equipmentEvent")?.addEventListener("change",watchEquipmentEvent);
+$("equipmentEvent")?.addEventListener("change",()=>{watchEquipmentEvent();watchEquipmentIndex()});
+$("equipmentEventSelect")?.addEventListener("change",()=>{
+ const key=$("equipmentEventSelect").value;if(!key)return;
+ const items=Object.values(equipmentEventsIndex[key]||{}).filter(Boolean);
+ $("equipmentEvent").value=readableEventName(key,items);
+ watchEquipmentEvent();
+});
 $("equipmentEvent")?.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();watchEquipmentEvent()}});
 $("addEquipmentBtn")?.addEventListener("click",addEquipment);
 $("equipmentStatusFilter")?.addEventListener("change",renderEquipment);
