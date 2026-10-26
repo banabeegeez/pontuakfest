@@ -115,6 +115,11 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
       <div class="dashboard-stat"><small>Bermasalah</small><strong id="overviewEquipmentIssues">0</strong><span>Perlu tindak lanjut</span></div>
       <div class="dashboard-stat"><small>Belum dicek / tidak tersedia</small><strong id="overviewEquipmentPending">0</strong><span>Perlu perhatian</span></div>
     </div>
+    <div class="equipment-overview-card" id="overallEquipmentReadiness">
+      <div class="equipment-overview-top"><div><h3>Kesiapan keseluruhan</h3><div class="equipment-overview-meta" id="overallEquipmentText">Menghitung kesiapan semua acara…</div></div><strong id="overallEquipmentPercent">0%</strong></div>
+      <div class="progress-track"><div class="progress-fill" id="overallEquipmentBar" style="width:0%"></div></div>
+      <div class="equipment-overview-meta" id="equipmentAttentionText">Menunggu data checklist.</div>
+    </div>
     <div id="equipmentOverviewList" class="announcement-list"><div class="empty">Menunggu data checklist peralatan.</div></div>
   </section>
   <section class="note"><h3>☑ Koordinasi lapangan</h3><div class="note-row"><span class="dot"></span><span>Pastikan PIC tiap kebutuhan dan kontak koordinasinya diumumkan kepada crew.</span></div><div class="note-row"><span class="dot"></span><span>Konfirmasi sofa 3 unit dengan Undana dan tenda sarnafil untuk kebutuhan pijat.</span></div><div class="note-row"><span class="dot"></span><span>Periksa kebutuhan teknis tiap area sebelum gladi.</span></div></section>
@@ -378,7 +383,7 @@ function readableEventName(key, items){
 function renderEquipmentOverview(){
  const root=$("equipmentOverviewList");if(!root)return;
  const entries=Object.entries(equipmentEventsIndex||{}).filter(([,v])=>v&&typeof v==="object");
- let total=0,ready=0,issues=0,pending=0,missing=0;
+ let total=0,ready=0,issues=0,pending=0,missing=0,eventsWithAttention=0,eventsWithItems=0;
  const cards=entries.map(([key,val])=>{
    const items=Object.entries(val||{}).filter(([,v])=>v&&typeof v==="object").map(([id,v])=>({...v,id}));
    if(!items.length)return "";
@@ -389,6 +394,8 @@ function renderEquipmentOverview(){
    const u=items.filter(x=>!x.status||x.status==="unchecked").length;
    const pct=Math.round(r/items.length*100);
    total+=items.length;ready+=r;issues+=i;pending+=u+m;missing+=m;
+   eventsWithItems++;
+   if(i>0||m>0||u>0)eventsWithAttention++;
    const safeKey=esc(key);
    return `<article class="equipment-overview-card"><div class="equipment-overview-top"><div><h3>${esc(name)}</h3><div class="equipment-overview-meta">${items.length} item · ${r} siap · ${i} bermasalah · ${u} belum dicek · ${m} tidak tersedia</div></div><span class="pill ${i||m?"urgent":u?"tbc":""}">${pct}% siap</span></div><div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div><button class="btn" type="button" data-open-equipment-event="${safeKey}">Buka checklist acara →</button></article>`;
  }).filter(Boolean);
@@ -396,6 +403,11 @@ function renderEquipmentOverview(){
  $("overviewEquipmentReady").textContent=ready;
  $("overviewEquipmentIssues").textContent=issues;
  $("overviewEquipmentPending").textContent=pending;
+ const overallPct=total?Math.round(ready/total*100):0;
+ $("overallEquipmentPercent").textContent=overallPct+"%";
+ $("overallEquipmentText").textContent=ready+" dari "+total+" item berstatus siap";
+ $("overallEquipmentBar").style.width=overallPct+"%";
+ $("equipmentAttentionText").textContent=eventsWithAttention+" dari "+eventsWithItems+" acara memiliki item yang perlu diperiksa atau ditindaklanjuti.";
  $("equipmentOverviewCount").textContent=cards.length+" acara";
  root.innerHTML=cards.length?cards.join(""):'<div class="empty">Belum ada checklist peralatan pada acara mana pun.</div>';
  root.querySelectorAll("[data-open-equipment-event]").forEach(btn=>btn.addEventListener("click",()=>{
