@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#123A2A">
+<meta name="theme-color" content="#10110f">
 <title>PONTUAK FEST 2026 — Production Checklist</title>
 <style>
 :root{--bg:#0b0d0c;--panel:#141816;--panel2:#1a201c;--line:#2a342d;--text:#f4f5ef;--muted:#a1aaa2;--accent:#d6ff3f;--orange:#ff9d45;--red:#ff786e;--blue:#8ccfff;--radius:18px}
@@ -233,76 +233,6 @@ body{background:radial-gradient(ellipse at 90% 0%,#1b3827 0,transparent 38%),var
 .profile-form .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
 @media(max-width:600px){.profile-modal{padding:17px}.profile-modal h2{font-size:21px}.profile-form .modal-actions .btn{flex:1}}
 
-
-/* UNDANA-inspired theme: deep academic green + gold yellow */
-:root{
-  --bg:#0b120e;
-  --panel:#121d16;
-  --panel2:#1b2b20;
-  --line:#354c3b;
-  --text:#f6f5eb;
-  --muted:#b7c2b4;
-  --accent:#f4c542;
-  --orange:#e3b52f;
-  --red:#ff786e;
-  --blue:#8ccfff;
-}
-body{
-  background:radial-gradient(ellipse at 90% 0%,#254b32 0,transparent 38%),var(--bg);
-}
-.brand span,.eyebrow,.countdown-kicker,.countdown-unit strong,
-.countdown-message,.dashboard-link{color:var(--accent)}
-.btn.primary,.tab.active,.my-task-btn.active{
-  background:var(--accent);border-color:var(--accent);color:#172b1d;
-}
-.app-nav-btn.active{
-  background:#244a31;color:#f4c542;border-color:#426447;
-}
-.app-nav-btn.active b{background:#f4c542;color:#173b27}
-.task input:checked{background:var(--accent);border-color:var(--accent)}
-.task input:checked:after{color:#173b27}
-.progress-fill,.equipment-progress span,.crew-bar span{background:var(--accent)}
-.dashboard-stat span{color:var(--accent)}
-.dashboard-stat:hover{border-color:#d4ad35}
-.hero-main{
-  border-color:#526b3b;
-  background:linear-gradient(125deg,#1d3825,#111a14 68%);
-}
-.festival-countdown{
-  border-color:#50653a;
-  background:linear-gradient(120deg,#192e20 0%,#17241b 55%,#101710 100%);
-}
-.festival-countdown:after{background:#f4c54218}
-.countdown-unit{border-color:#52633b;background:#101b12c9}
-.countdown-unit strong{color:#f4c542}
-.hero-main .festival-countdown{
-  border-color:#526b3b;
-  background:linear-gradient(115deg,#14271be8,#0d160fee);
-}
-.hero-main .countdown-unit{background:#1b3020;border-color:#405d35}
-.app-nav{
-  background:#101a13ef;
-}
-@media(min-width:1000px){
-  .app-nav{background:#111c14f5}
-}
-@media(max-width:999px){
-  .app-nav{
-    border-color:#405a40;
-    background:rgba(16,26,19,.97);
-  }
-  .app-nav-btn.active{
-    background:#244a31;color:#f4c542;border-color:#527044;
-  }
-  .app-nav-btn.active b{background:#f4c542;color:#173b27}
-}
-.pill{background:#263b2b;color:#e2e9d8}
-.pill.tbc{background:#3b321c;color:#f7d77d}
-.my-task-btn{border-color:#526b3b;background:#1b3020;color:#f4c542}
-.connection-status[data-state="ok"]{color:#d7f0b9;border-color:#527044}
-.equipment-row,.equipment-overview-card{background:#142019}
-.deadline-item,.attention-item{border-color:#3b4d39;background:#17231a}
-
 </style>
 </head>
 <body>
@@ -431,6 +361,7 @@ body{
     <button class="tab" data-day="persiapan">Persiapan</button>
     <button class="tab" data-day="1">Hari pertama</button>
     <button class="tab" data-day="2">Hari kedua</button>
+    <button class="tab" data-day="3">Hari ketiga</button>
   </nav>
   <button class="my-task-btn" id="myTasksBtn" type="button">☷ &nbsp; Tugas Saya <span id="myTaskCount"></span><small style="display:block;font-weight:500;margin-top:3px;color:inherit;opacity:.8">Tugas yang ditujukan ke email akun yang sedang masuk</small></button>
   <div id="checklist"></div>
@@ -544,7 +475,7 @@ body{
   <form id="taskForm">
     <h2 id="dialogTitle">Tambah kebutuhan</h2>
     <label class="field" for="taskName">Nama kebutuhan *</label><input id="taskName" required placeholder="Contoh: Tambahan microphone">
-    <label class="field" for="taskDay">Agenda</label><select id="taskDay"><option value="persiapan">Persiapan produksi</option><option value="1">Hari pertama</option><option value="2">Hari kedua</option></select>
+    <label class="field" for="taskDay">Agenda</label><select id="taskDay"><option value="persiapan">Persiapan produksi</option><option value="1">Hari pertama</option><option value="2">Hari kedua</option><option value="3">Hari ketiga</option></select>
     <label class="field" for="taskGroup">Kategori / bagian</label><input id="taskGroup" required placeholder="Contoh: Talkshow Auditorium">
     <label class="field" for="taskPic">PIC / koordinator</label><input id="taskPic" placeholder="Nama PIC (opsional)">
     <label class="field" for="taskAssignedTo">Ditugaskan kepada (email akun crew)</label><input id="taskAssignedTo" type="email" placeholder="crew@email.com">
@@ -626,7 +557,13 @@ const initialTasks = [
  {id:30,day:"2",group:"Talkshow Auditorium",name:"Mimbar",status:"pending",pic:"",notes:"Koordinasikan penempatan di auditorium."},
  {id:31,day:"2",group:"Talkshow Auditorium",name:"3 sofa dari Undana",status:"pending",pic:"Undana",notes:"Konfirmasi ketersediaan, pengiriman, dan pengembalian."},
  {id:32,day:"2",group:"Guest Star",name:"Cepupus Band",status:"pending",pic:"",notes:"Konfirmasi rundown dan technical rider."},
- {id:33,day:"2",group:"Guest Star",name:"Mitha Idol",status:"pending",pic:"",notes:"Konfirmasi rundown dan technical rider."}
+ {id:33,day:"2",group:"Guest Star",name:"Mitha Idol",status:"pending",pic:"",notes:"Konfirmasi rundown dan technical rider."},
+ {id:34,day:"3",group:"Napak Tilas",name:"Bumper napak tilas",status:"tbc",pic:"MEDIA KITA / Panitia",notes:"Koordinasikan konsep, durasi, format file, dan waktu playback dengan panitia."},
+ {id:35,day:"3",group:"Fun Run & Perizinan",name:"Konfirmasi izin keramaian untuk Fun Run",status:"tbc",pic:"Panitia",notes:"Pastikan status izin, kebutuhan dokumen, dan penanggung jawab dari panitia."},
+ {id:36,day:"3",group:"Closing Ceremony",name:"Penampilan ANDMESH",status:"pending",pic:"Panitia / Stage Manager",notes:"Konfirmasi rundown, technical rider, cue panggung, dan kebutuhan artis."},
+ {id:37,day:"3",group:"Publikasi & Layout",name:"Update layout area dari MEDIA KITA",status:"pending",pic:"MEDIA KITA",notes:"Pastikan layout final siap untuk kebutuhan publikasi dan koordinasi lapangan."},
+ {id:38,day:"3",group:"Publikasi & Visual",name:"Siapkan materi promosi: logo, flyer, dan poster",status:"pending",pic:"MEDIA KITA / Panitia",notes:"Konfirmasi kebutuhan format, ukuran, kanal publikasi, dan persetujuan materi."},
+ {id:39,day:"3",group:"Closing Ceremony",name:"Koordinasi teknis penutupan hari ketiga",status:"tbc",pic:"Panitia / Stage Manager",notes:"Pastikan susunan acara, transisi, audio, visual, lighting, dokumentasi, dan PIC tiap bagian. Tanggung jawab final dikonfirmasi dengan panitia."}
 ];
 
 const $ = id => document.getElementById(id);
@@ -777,7 +714,7 @@ function setStatus(message, state="") { const el=$("connectionStatus"); el.textC
 function showAuthMessage(message="") { $("authMessage").textContent=message; }
 function showAuth() { document.body.classList.add("auth-required"); if (!$ ("authDialog").open) $("authDialog").showModal(); }
 function hideAuth() { document.body.classList.remove("auth-required"); if ($("authDialog").open) $("authDialog").close(); }
-function labelDay(d){return d==="persiapan"?"Persiapan produksi":d==="1"?"Hari pertama":"Hari kedua"}
+function labelDay(d){return d==="persiapan"?"Persiapan produksi":d==="1"?"Hari pertama":d==="2"?"Hari kedua":d==="3"?"Hari ketiga":"Agenda belum ditentukan"}
 function statusLabel(s){return s==="done"?"Selesai":s==="tbc"?"Perlu konfirmasi":"Belum selesai"}
 function toTaskArray(raw){return Object.values(raw || {}).filter(Boolean).map(t=>({...t,id:Number(t.id)})).sort((a,b)=>a.id-b.id)}
 function taskMap(list){const out={};list.forEach(t=>out[String(t.id)]=t);return out}
@@ -924,12 +861,12 @@ function render(){
  const total=tasks.length,done=tasks.filter(t=>t.status==="done").length,tbc=tasks.filter(t=>t.status==="tbc").length;
  $("totalMetric").textContent=total;$("doneMetric").textContent=(total?Math.round(done/total*100):0)+"%";$("doneSub").textContent=`${done} dari ${total} kebutuhan`;$("tbcMetric").textContent=tbc;$("pendingMetric").textContent=total-done;
  const groups=[];filtered.forEach(t=>{let g=groups.find(x=>x.day===t.day&&x.group===t.group);if(!g){g={day:t.day,group:t.group,items:[]};groups.push(g)}g.items.push(t)});
- const order={"persiapan":0,"1":1,"2":2};groups.sort((a,b)=>order[a.day]-order[b.day]);
+ const order={"persiapan":0,"1":1,"2":2,"3":3};groups.sort((a,b)=>(order[a.day]??99)-(order[b.day]??99));
  const root=$("checklist");
  if(!groups.length){root.innerHTML='<div class="empty">'+(dataReady?'Tidak ada kebutuhan yang cocok dengan filter.':'Memuat checklist dari Firebase…')+'</div>';return}
  let html="",lastDay="";
  for(const g of groups){
-  if(g.day!==lastDay){html+=`<div class="section-head"><div><h2>${esc(labelDay(g.day))}</h2><p>${g.day==="persiapan"?"Jadwal produksi dan kesiapan operasional":g.day==="1"?"Band, Fun Run, mural, pameran, dan opening ceremony":"Kompetisi, talkshow, dan hiburan utama"}</p></div></div>`;lastDay=g.day;html+='<div class="cards">';}
+  if(g.day!==lastDay){html+=`<div class="section-head"><div><h2>${esc(labelDay(g.day))}</h2><p>${g.day==="persiapan"?"Jadwal produksi dan kesiapan operasional":g.day==="1"?"Band, Fun Run, mural, pameran, dan opening ceremony":g.day==="2"?"Kompetisi, talkshow, dan hiburan utama":"Napak tilas, koordinasi publikasi, izin, dan penutupan festival"}</p></div></div>`;lastDay=g.day;html+='<div class="cards">';}
   const completed=g.items.filter(x=>x.status==="done").length;
   html+=`<section class="card"><div class="card-top"><div><h3>${esc(g.group)}</h3><div class="desc">${esc(labelDay(g.day))}</div></div><div class="count">${completed}/${g.items.length} selesai</div></div>`;
   for(const t of g.items){html+=`<div class="task ${t.status==="done"?"done":""}"><input type="checkbox" aria-label="Status: ${esc(t.name)}" data-check="${t.id}" ${t.status==="done"?"checked":""} ${canEdit()?"":"disabled"}><div class="task-body"><div class="task-title">${esc(t.name)}</div><div class="task-meta"><span class="pill ${t.status==="tbc"?"tbc":t.status==="pending"?"urgent":""}">${esc(statusLabel(t.status))}</span>${t.pic?`<span class="pill">PIC: ${esc(t.pic)}</span>`:""}${t.notes?`<span class="pill">${esc(t.notes)}</span>`:""}</div><div class="task-detail">${t.location?`<span>📍 <b>Lokasi:</b> ${esc(t.location)}</span>`:""}${t.assignedTo?`<span>👤 <b>Ditugaskan:</b> ${esc(t.assignedTo)}</span>`:""}${t.deadline?`<span class="${dueClass(t.deadline)}">⏱ <b>Deadline:</b> ${esc(fmtDate(t.deadline))}</span>`:""}</div></div><div class="task-actions"><button class="mini" type="button" title="Salin detail tugas" aria-label="Salin detail ${esc(t.name)}" data-copy-task="${t.id}">⧉</button>${canEdit()?`<button class="mini" title="Edit kebutuhan" aria-label="Edit ${esc(t.name)}" data-edit="${t.id}">✎</button>`:""}${canDelete()?`<button class="mini" title="Hapus kebutuhan" aria-label="Hapus ${esc(t.name)}" data-delete="${t.id}">×</button>`:""}</div></div>`;}
@@ -942,7 +879,7 @@ function render(){
 
  root.querySelectorAll("[data-copy-task]").forEach(el=>el.addEventListener("click",async()=>{
    const t=tasks.find(x=>String(x.id)===String(el.dataset.copyTask));if(!t)return;
-   const agenda=t.day==="persiapan"?"Persiapan produksi":t.day==="1"?"Hari pertama":t.day==="2"?"Hari kedua":(t.day||"Belum ditentukan");
+   const agenda=t.day==="persiapan"?"Persiapan produksi":t.day==="1"?"Hari pertama":t.day==="2"?"Hari kedua":t.day==="3"?"Hari ketiga":(t.day||"Belum ditentukan");
    const detail=[
      "📋 *PONTUAK FEST 2026 — DETAIL TUGAS*",
      "",
@@ -1062,7 +999,17 @@ async function initializeSharedData(){
   $("announcementForm").hidden=!canEdit();
   if(tasksRef && unsubscribeTasks) tasksRef.off("value", unsubscribeTasks);
   tasksRef=dbRoot.child("tasks");
-  const handler=snapshot=>{const val=snapshot.val();tasks=toTaskArray(val);dataReady=true;refreshReportTaskOptions();render();setStatus("Tersinkronisasi", "ok")};
+  let day3SeedInProgress=false;
+  const day3Defaults=initialTasks.filter(t=>t.day==="3").map((t,i)=>({...t,id:Date.now()+i,sourceDay3Id:"day3-"+(t.id-33),coordinationStatus:"perlu_dikonfirmasi"}));
+  const handler=snapshot=>{const val=snapshot.val();tasks=toTaskArray(val);dataReady=true;refreshReportTaskOptions();render();setStatus("Tersinkronisasi", "ok");
+    // Tambahkan kebutuhan Hari Ketiga hanya sekali, hanya oleh Admin, tanpa menyentuh tugas/data lama.
+    if(currentRole==="admin"&&tasksRef&&!day3SeedInProgress&&!tasks.some(t=>String(t.sourceDay3Id||"").startsWith("day3-"))){
+      day3SeedInProgress=true;
+      Promise.all(day3Defaults.map(t=>tasksRef.child(String(t.id)).set({...t,createdAt:firebase.database.ServerValue.TIMESTAMP,createdBy:currentUser.uid})))
+        .catch(err=>{console.warn("Seed Hari Ketiga belum berhasil:",err);setStatus("Hari Ketiga perlu disimpan Admin", "error")})
+        .finally(()=>{day3SeedInProgress=false});
+    }
+  };
   tasksRef.on("value",handler,error=>{setStatus("Gagal memuat data", "error");console.error(error);alert("Tidak dapat membaca checklist Firebase. Periksa Rules dan koneksi internet.\n"+error.message)});
   unsubscribeTasks=handler;
   watchEquipmentEvent();
