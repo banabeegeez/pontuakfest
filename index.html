@@ -158,6 +158,64 @@ body{background:radial-gradient(ellipse at 90% 0%,#1b3827 0,transparent 38%),var
   .top-actions .btn{font-size:11px;padding:8px}
 }
 
+
+/* Countdown event — green mobile-first */
+.festival-countdown{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 18px;
+  align-items:center;margin:0 0 22px;padding:20px;
+  border:1px solid #28563a;border-radius:18px;
+  background:linear-gradient(120deg,#14251a 0%,#17221b 55%,#101312 100%);
+  box-shadow:0 12px 30px #0002;position:relative;overflow:hidden
+}
+.festival-countdown:after{
+  content:"";position:absolute;width:170px;height:170px;border-radius:50%;
+  right:-70px;top:-95px;background:#22c55e18;pointer-events:none
+}
+.countdown-copy,.countdown-units,.countdown-message{position:relative;z-index:1}
+.countdown-kicker{font-size:11px;font-weight:800;letter-spacing:.15em;color:#86efac}
+.countdown-copy h2{margin:7px 0 5px;font-size:clamp(19px,2.5vw,27px);color:#f3f6f3}
+.countdown-copy p{margin:0;color:#b0bbb2;font-size:13px}
+.countdown-units{display:flex;gap:8px}
+.countdown-unit{min-width:62px;padding:10px 9px;text-align:center;border:1px solid #31523b;background:#0d1711b8;border-radius:12px}
+.countdown-unit strong{display:block;color:#86efac;font-size:clamp(23px,3vw,34px);font-variant-numeric:tabular-nums;line-height:1.15}
+.countdown-unit span{display:block;margin-top:4px;color:#c4d1c7;font-size:11px}
+.countdown-message{grid-column:1/-1;color:#86efac;font-size:12px;font-weight:700}
+@media(max-width:700px){
+ .festival-countdown{grid-template-columns:1fr;padding:16px;gap:13px;margin-bottom:16px}
+ .countdown-copy h2{font-size:21px}
+ .countdown-copy p{font-size:12px}
+ .countdown-units{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+ .countdown-unit{min-width:0;padding:10px 3px}
+ .countdown-unit strong{font-size:clamp(21px,7vw,29px)}
+ .countdown-unit span{font-size:10px}
+ .countdown-message{font-size:11px}
+}
+
+
+/* Countdown ditempatkan di area kosong pada panel hero dashboard */
+.hero-main .festival-countdown{
+  margin:34px 0 0;
+  width:100%;
+  grid-template-columns:minmax(0,1fr);
+  gap:14px;
+  padding:20px 22px;
+  border-color:#315a3d;
+  background:linear-gradient(115deg,#101a13e8,#0d120fee);
+  box-shadow:inset 0 1px 0 #ffffff08;
+}
+.hero-main .countdown-copy h2{font-size:clamp(18px,2vw,24px);margin:5px 0}
+.hero-main .countdown-units{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.hero-main .countdown-unit{min-width:0;padding:12px 8px;background:#16251b;border-color:#2b5036}
+.hero-main .countdown-unit strong{font-size:clamp(24px,3vw,34px)}
+.hero-main .countdown-message{grid-column:auto;padding-top:2px}
+@media(max-width:700px){
+  .hero-main .festival-countdown{margin-top:22px;padding:15px;gap:11px}
+  .hero-main .countdown-copy h2{font-size:19px}
+  .hero-main .countdown-units{gap:6px}
+  .hero-main .countdown-unit{padding:10px 3px}
+  .hero-main .countdown-unit strong{font-size:clamp(21px,7vw,29px)}
+}
+
 </style>
 </head>
 <body>
@@ -173,6 +231,8 @@ body{background:radial-gradient(ellipse at 90% 0%,#1b3827 0,transparent 38%),var
       <button class="btn primary" id="addBtn">＋ Tambah kebutuhan</button>
     </div>
   </header>
+
+
   <nav class="app-nav" id="appNav" aria-label="Menu utama">
     <button class="app-nav-btn active" type="button" data-page="dashboard">⌂ <span>Dashboard</span></button>
     <button class="app-nav-btn" type="button" data-page="tasks">☷ <span>Daftar Tugas</span></button>
@@ -187,6 +247,20 @@ body{background:radial-gradient(ellipse at 90% 0%,#1b3827 0,transparent 38%),var
       <div class="eyebrow">Production checklist · 2026</div>
       <h1>PONTUAK<br><em>FEST.</em></h1>
       <p>Dashboard kebutuhan produksi dan koordinasi crew. Pantau checklist setiap divisi, cari kebutuhan, dan tandai item yang sudah selesai.</p>
+      <section class="festival-countdown" aria-label="Hitung mundur PONTUAK FEST 2026">
+  <div class="countdown-copy">
+    <span class="countdown-kicker">MENUJU HARI ACARA</span>
+    <h2>PONTUAK FEST 2026</h2>
+    <p>5–7 November 2026 · Nusa Tenggara Timur</p>
+  </div>
+  <div class="countdown-units" role="timer" aria-live="polite">
+    <div class="countdown-unit"><strong id="pf-count-days">--</strong><span>Hari</span></div>
+    <div class="countdown-unit"><strong id="pf-count-hours">--</strong><span>Jam</span></div>
+    <div class="countdown-unit"><strong id="pf-count-minutes">--</strong><span>Menit</span></div>
+    <div class="countdown-unit"><strong id="pf-count-seconds">--</strong><span>Detik</span></div>
+  </div>
+  <div id="pf-countdown-message" class="countdown-message">Bersiap untuk festival!</div>
+</section>
     </div>
     <div class="hero-side">
       <div class="metric"><small>Total kebutuhan</small><strong id="totalMetric">0</strong><div class="sub">Semua agenda</div></div>
@@ -992,6 +1066,46 @@ try {
   await initializeSharedData();
  });
 } catch(err){setStatus("Konfigurasi Firebase gagal", "error");showAuthMessage("Firebase gagal diinisialisasi: "+err.message);showAuth()}
+</script>
+<script>
+
+(function(){
+  const start = new Date('2026-11-05T00:00:00+08:00').getTime();
+  const end = new Date('2026-11-08T00:00:00+08:00').getTime();
+  const $ = id => document.getElementById(id);
+  function updateFestivalCountdown(){
+    const now = Date.now();
+    const message = $('pf-countdown-message');
+    if(!message) return;
+    if(now < start){
+      let diff = start - now;
+      const days = Math.floor(diff / 86400000); diff %= 86400000;
+      const hours = Math.floor(diff / 3600000); diff %= 3600000;
+      const minutes = Math.floor(diff / 60000); diff %= 60000;
+      const seconds = Math.floor(diff / 1000);
+      $('pf-count-days').textContent = String(days).padStart(2,'0');
+      $('pf-count-hours').textContent = String(hours).padStart(2,'0');
+      $('pf-count-minutes').textContent = String(minutes).padStart(2,'0');
+      $('pf-count-seconds').textContent = String(seconds).padStart(2,'0');
+      message.textContent = 'Persiapan akhir! Pastikan tugas dan peralatan siap.';
+    } else if(now < end){
+      $('pf-count-days').textContent = '00';
+      $('pf-count-hours').textContent = '00';
+      $('pf-count-minutes').textContent = '00';
+      $('pf-count-seconds').textContent = '00';
+      message.textContent = 'PONTUAK FEST 2026 SEDANG BERLANGSUNG! Semangat, crew!';
+    } else {
+      $('pf-count-days').textContent = '00';
+      $('pf-count-hours').textContent = '00';
+      $('pf-count-minutes').textContent = '00';
+      $('pf-count-seconds').textContent = '00';
+      message.textContent = 'Terima kasih, crew! PONTUAK FEST 2026 telah selesai.';
+    }
+  }
+  updateFestivalCountdown();
+  setInterval(updateFestivalCountdown,1000);
+})();
+
 </script>
 </body>
 </html>
