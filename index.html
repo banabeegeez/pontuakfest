@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#10110f">
+<meta name="theme-color" content="#123A2A">
 <title>PONTUAK FEST 2026 — Production Checklist</title>
 <style>
 :root{--bg:#0b0d0c;--panel:#141816;--panel2:#1a201c;--line:#2a342d;--text:#f4f5ef;--muted:#a1aaa2;--accent:#d6ff3f;--orange:#ff9d45;--red:#ff786e;--blue:#8ccfff;--radius:18px}
@@ -232,6 +232,76 @@ body{background:radial-gradient(ellipse at 90% 0%,#1b3827 0,transparent 38%),var
 .profile-error:empty{display:none}
 .profile-form .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
 @media(max-width:600px){.profile-modal{padding:17px}.profile-modal h2{font-size:21px}.profile-form .modal-actions .btn{flex:1}}
+
+
+/* UNDANA-inspired theme: deep academic green + gold yellow */
+:root{
+  --bg:#0b120e;
+  --panel:#121d16;
+  --panel2:#1b2b20;
+  --line:#354c3b;
+  --text:#f6f5eb;
+  --muted:#b7c2b4;
+  --accent:#f4c542;
+  --orange:#e3b52f;
+  --red:#ff786e;
+  --blue:#8ccfff;
+}
+body{
+  background:radial-gradient(ellipse at 90% 0%,#254b32 0,transparent 38%),var(--bg);
+}
+.brand span,.eyebrow,.countdown-kicker,.countdown-unit strong,
+.countdown-message,.dashboard-link{color:var(--accent)}
+.btn.primary,.tab.active,.my-task-btn.active{
+  background:var(--accent);border-color:var(--accent);color:#172b1d;
+}
+.app-nav-btn.active{
+  background:#244a31;color:#f4c542;border-color:#426447;
+}
+.app-nav-btn.active b{background:#f4c542;color:#173b27}
+.task input:checked{background:var(--accent);border-color:var(--accent)}
+.task input:checked:after{color:#173b27}
+.progress-fill,.equipment-progress span,.crew-bar span{background:var(--accent)}
+.dashboard-stat span{color:var(--accent)}
+.dashboard-stat:hover{border-color:#d4ad35}
+.hero-main{
+  border-color:#526b3b;
+  background:linear-gradient(125deg,#1d3825,#111a14 68%);
+}
+.festival-countdown{
+  border-color:#50653a;
+  background:linear-gradient(120deg,#192e20 0%,#17241b 55%,#101710 100%);
+}
+.festival-countdown:after{background:#f4c54218}
+.countdown-unit{border-color:#52633b;background:#101b12c9}
+.countdown-unit strong{color:#f4c542}
+.hero-main .festival-countdown{
+  border-color:#526b3b;
+  background:linear-gradient(115deg,#14271be8,#0d160fee);
+}
+.hero-main .countdown-unit{background:#1b3020;border-color:#405d35}
+.app-nav{
+  background:#101a13ef;
+}
+@media(min-width:1000px){
+  .app-nav{background:#111c14f5}
+}
+@media(max-width:999px){
+  .app-nav{
+    border-color:#405a40;
+    background:rgba(16,26,19,.97);
+  }
+  .app-nav-btn.active{
+    background:#244a31;color:#f4c542;border-color:#527044;
+  }
+  .app-nav-btn.active b{background:#f4c542;color:#173b27}
+}
+.pill{background:#263b2b;color:#e2e9d8}
+.pill.tbc{background:#3b321c;color:#f7d77d}
+.my-task-btn{border-color:#526b3b;background:#1b3020;color:#f4c542}
+.connection-status[data-state="ok"]{color:#d7f0b9;border-color:#527044}
+.equipment-row,.equipment-overview-card{background:#142019}
+.deadline-item,.attention-item{border-color:#3b4d39;background:#17231a}
 
 </style>
 </head>
