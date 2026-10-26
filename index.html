@@ -27,7 +27,7 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
 
 @media(max-width:760px){.wrap{padding:15px}.hero{grid-template-columns:1fr}.hero-side{grid-template-columns:repeat(2,1fr)}.timeline{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.notes{grid-template-columns:1fr}.topbar{align-items:flex-start}.hero h1{font-size:48px}.section-head{align-items:flex-start;flex-direction:column}}
 @media print{body{background:white;color:#111}.wrap{max-width:none;padding:0}.topbar,.toolbar,.tabs,.top-actions,.task-actions,.btn,.notes{display:none!important}.hero-main,.metric,.phase,.card{background:white;color:#111;border:1px solid #bbb;break-inside:avoid}.hero p,.metric small,.metric .sub,.phase small,.card .desc,.count{color:#444}.cards{grid-template-columns:1fr 1fr}.task{border-color:#ddd}.task-title{color:#111!important}.pill{border:1px solid #aaa;background:white;color:#222}.hero h1 em,.eyebrow{color:#333}.section-head{margin-top:18px}}
-.equipment-overview-card{border:1px solid var(--line);border-radius:12px;padding:13px;margin:9px 0;background:#121713}.equipment-overview-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.equipment-overview-card h3{margin:0 0 6px;font-size:15px}.equipment-overview-meta{font-size:12px;color:var(--muted);line-height:1.7}.equipment-overview-card .progress-track{margin:10px 0 7px}
+.rundown-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}.rundown-form-grid .field{display:flex;flex-direction:column;gap:6px}.rundown-form-grid input,.rundown-form-grid textarea{width:100%;box-sizing:border-box}.rundown-upload{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:12px}.rundown-item{border:1px solid var(--line);border-radius:12px;padding:13px;margin:9px 0;background:#121713}.rundown-item-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.rundown-time{font-weight:700;color:var(--accent);white-space:nowrap}.rundown-item h3{margin:4px 0;font-size:15px}.rundown-meta{font-size:12px;color:var(--muted);line-height:1.7}.rundown-pdf-row{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line);border-radius:10px;padding:11px;margin:8px 0}.rundown-pdf-row strong{overflow-wrap:anywhere}.rundown-pdf-actions{display:flex;gap:6px;flex-wrap:wrap}.rundown-pdf-actions button{font-size:12px;padding:7px 10px}@media(max-width:640px){.rundown-form-grid{grid-template-columns:1fr}.rundown-pdf-row{align-items:flex-start;flex-direction:column}}\n.equipment-overview-card{border:1px solid var(--line);border-radius:12px;padding:13px;margin:9px 0;background:#121713}.equipment-overview-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.equipment-overview-card h3{margin:0 0 6px;font-size:15px}.equipment-overview-meta{font-size:12px;color:var(--muted);line-height:1.7}.equipment-overview-card .progress-track{margin:10px 0 7px}
 .equipment-row{border:1px solid var(--line);border-radius:12px;padding:13px;margin:9px 0;background:#121713}.equipment-row-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.equipment-row h3{margin:0 0 5px;font-size:16px}.equipment-meta{color:var(--muted);font-size:12px;line-height:1.6}.equipment-controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.equipment-controls select,.equipment-controls input{min-width:0;flex:1}.equipment-progress{height:7px;background:#283127;border-radius:9px;overflow:hidden;margin:10px 0}.equipment-progress span{display:block;height:100%;background:var(--accent);width:0}.equipment-controls .btn{padding:8px 11px;font-size:12px}
 .app-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 24px;position:sticky;top:8px;z-index:20;padding:7px;background:#101411eF;border:1px solid var(--line);border-radius:15px;backdrop-filter:blur(12px)}
 .app-nav-btn{display:flex;justify-content:center;align-items:center;gap:8px;min-width:0;border:1px solid transparent;border-radius:10px;padding:11px 10px;background:transparent;color:var(--muted);font-weight:800}.app-nav-btn b{font-size:10px;background:#283127;color:#d7e2d3;border-radius:6px;padding:2px 6px}.app-nav-btn.active{background:var(--accent);color:#11150b}.app-nav-btn.active b{background:#11150b;color:var(--accent)}.app-page{display:none;min-height:45vh}.app-page.active{display:block}.app-page[hidden]{display:none!important}.page-intro{margin:0 0 18px}.page-intro h2{margin:0;font-size:26px;letter-spacing:-.04em}.page-intro p{margin:5px 0 0;color:var(--muted);font-size:13px}
@@ -55,6 +55,7 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
     <button class="app-nav-btn active" type="button" data-page="dashboard">⌂ <span>Dashboard</span></button>
     <button class="app-nav-btn" type="button" data-page="tasks">☷ <span>Daftar Tugas</span></button>
     <button class="app-nav-btn" type="button" data-page="equipment">🧰 <span>Checklist Peralatan</span></button>
+    <button class="app-nav-btn" type="button" data-page="rundown">🗓️ <span>Rundown Acara</span></button>
     <button class="app-nav-btn" type="button" data-page="announcements">📣 <span>Pengumuman</span><b id="navAnnouncementCount">0</b></button>
     <button class="app-nav-btn" type="button" data-page="reports">📝 <span>Laporan</span><b id="navReportCount">0</b></button>
     <button class="app-nav-btn" type="button" data-page="crew">👥 <span>Rekap Crew</span></button>
@@ -114,6 +115,9 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
       <div class="dashboard-stat"><small>Siap</small><strong id="overviewEquipmentReady">0</strong><span>Sudah diperiksa</span></div>
       <div class="dashboard-stat"><small>Bermasalah</small><strong id="overviewEquipmentIssues">0</strong><span>Perlu tindak lanjut</span></div>
       <div class="dashboard-stat"><small>Belum dicek / tidak tersedia</small><strong id="overviewEquipmentPending">0</strong><span>Perlu perhatian</span></div>
+    </div>
+    <div class="toolbar" style="margin:10px 0">
+      <button class="btn" type="button" id="exportEquipmentOverviewBtn">Ekspor Rekap Semua Acara (CSV)</button>
     </div>
     <div class="equipment-overview-card" id="overallEquipmentReadiness">
       <div class="equipment-overview-top"><div><h3>Kesiapan keseluruhan</h3><div class="equipment-overview-meta" id="overallEquipmentText">Menghitung kesiapan semua acara…</div></div><strong id="overallEquipmentPercent">0%</strong></div>
@@ -178,7 +182,42 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
       <p class="coord-copy" id="equipmentAccessNote">Crew dapat melihat checklist. Admin/PIC dapat menambah dan memperbarui data peralatan.</p>
     </section>
   </main>
-  <main id="page-announcements" class="app-page">
+  <main id="page-rundown" class="app-page">
+  <div class="page-intro"><h2>Rundown Acara</h2><p>Lihat jadwal acara per agenda, tambahkan susunan waktu, dan unggah PDF rundown agar bisa dibaca seluruh tim.</p></div>
+  <section class="coord-panel">
+    <div class="coord-head"><h2>🗓️ Rundown per Acara</h2><span class="pill" id="rundownCount">0 agenda</span></div>
+    <label class="field" for="rundownEventName">Nama acara *</label>
+    <input id="rundownEventName" maxlength="120" placeholder="Contoh: PONTUAK FEST — Hari Pertama">
+    <label class="field" for="rundownEventSelect">Pilih rundown yang sudah tersedia</label>
+    <select class="filter" id="rundownEventSelect"><option value="">Memuat daftar rundown…</option></select>
+    <div id="rundownEditorControls">
+      <div class="rundown-form-grid">
+        <label class="field">Waktu mulai<input id="rundownStart" type="time"></label>
+        <label class="field">Waktu selesai<input id="rundownEnd" type="time"></label>
+        <label class="field">Nama agenda<input id="rundownActivity" maxlength="180" placeholder="Contoh: Pembukaan resmi"></label>
+        <label class="field">Lokasi<input id="rundownLocation" maxlength="120" placeholder="Contoh: Panggung utama"></label>
+        <label class="field">PIC / penanggung jawab<input id="rundownPIC" maxlength="120" placeholder="Nama PIC"></label>
+        <label class="field">Catatan<textarea id="rundownNotes" rows="2" maxlength="600" placeholder="Kebutuhan teknis atau arahan singkat"></textarea></label>
+      </div>
+      <button class="btn primary" id="addRundownItemBtn" type="button">＋ Tambah agenda</button>
+      <div class="rundown-upload">
+        <label class="field" for="rundownPdfFile">Unggah PDF rundown (maks. 15 MB)</label>
+        <input id="rundownPdfFile" type="file" accept="application/pdf,.pdf">
+        <button class="btn" id="uploadRundownPdfBtn" type="button">Unggah PDF</button>
+        <p class="coord-copy">PDF akan disimpan di Firebase Storage agar bisa dibuka oleh crew yang login.</p>
+      </div>
+    </div>
+    <div class="coord-head" style="margin-top:16px"><h3>Susunan Acara</h3><span class="pill" id="rundownLiveStatus">Menunggu data…</span></div>
+    <div id="rundownItemsList" class="announcement-list"><div class="empty">Pilih atau masukkan nama acara untuk melihat rundown.</div></div>
+    <div class="coord-head" style="margin-top:16px"><h3>Dokumen PDF</h3></div>
+    <div id="rundownPdfList" class="announcement-list"><div class="empty">Belum ada PDF rundown.</div></div>
+    <div id="rundownPdfViewerWrap" hidden style="margin-top:12px">
+      <div class="coord-head"><h3 id="rundownPdfTitle">Pratinjau PDF</h3><button type="button" class="btn" id="closeRundownPdfBtn">Tutup PDF</button></div>
+      <iframe id="rundownPdfViewer" title="Pratinjau PDF rundown" style="width:100%;height:70vh;border:1px solid var(--line);border-radius:12px;background:#fff" loading="lazy"></iframe>
+    </div>
+  </section>
+</main>
+<main id="page-announcements" class="app-page">
   <div class="page-intro"><h2>Pengumuman Tim</h2><p>Informasi operasional dan arahan terbaru dari Admin/PIC.</p></div>
   <section class="coord-panel" id="announcementPanel">
     <div class="coord-head"><h2>📣 Pengumuman tim</h2><span class="pill" id="announcementCount">0 pengumuman</span></div>
@@ -272,6 +311,7 @@ dialog{background:#171d19;color:var(--text);border:1px solid #39443b;border-radi
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 <script>
 /* Diagnostik aman: tampilkan pesan bila ada error JavaScript atau Firebase gagal dimuat. */
 (function () {
@@ -347,8 +387,83 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",
 let tasks = [], activeDay = "all", editId = null, dbRoot = null, tasksRef = null, announcementsRef = null, currentUser = null, currentRole = null, dataReady = false, myTasksOnly = false;
 let unsubscribeTasks = null, unsubscribeAnnouncements = null, unsubscribeReports = null, announcements = [], reports = [], reportsRef = null, reportsQueryRef = null;
 
+let rundownRef=null,rundownListener=null,rundownPdfRef=null,rundownPdfListener=null,rundownItems=[],rundownPdfs={},rundownEventKey="",rundownStorage=null;
 let equipmentRef = null, equipmentListener = null, equipmentItems = [], equipmentEventKey = "";
 let equipmentIndexRef = null, equipmentIndexListener = null, equipmentEventsIndex = {};
+function rundownKey(name){return String(name||"").trim().toLowerCase().replace(/[.#$\[\]\/]/g,"_").replace(/\s+/g,"_").slice(0,120)}
+function rundownCanManage(){return !!currentUser&&canEdit()}
+function watchRundownIndex(){
+ const sel=$("rundownEventSelect");if(!sel||!dbRoot||!currentUser)return;
+ if(rundownRef&&rundownListener)rundownRef.off("value",rundownListener);
+ const idxRef=dbRoot.child("rundowns");
+ idxRef.once("value").then(snap=>{
+   const data=snap.val()||{};
+   const names=Object.entries(data).filter(([,v])=>v&&typeof v==="object").map(([key,v])=>{
+     const firstItem=Object.values(v.items||{}).find(x=>x&&x.eventName);
+     const firstPdf=Object.values(v.pdfs||{}).find(x=>x&&x.eventName);
+     return {key,name:v.eventName||(firstItem&&firstItem.eventName)||(firstPdf&&firstPdf.eventName)||key.replace(/_/g," ")};
+   });
+   sel.innerHTML='<option value="">Pilih rundown…</option>'+names.map(x=>`<option value="${esc(x.key)}">${esc(x.name)}</option>`).join("");
+ }).catch(err=>{sel.innerHTML='<option value="">Daftar rundown belum dapat dimuat</option>';console.warn(err)});
+}
+function renderRundown(){
+ const list=$("rundownItemsList"),pdfList=$("rundownPdfList");if(!list||!pdfList)return;
+ const manager=rundownCanManage();
+ $("rundownEditorControls").hidden=!manager;
+ const eventName=$("rundownEventName").value.trim();
+ if(!eventName){list.innerHTML='<div class="empty">Pilih atau masukkan nama acara untuk melihat rundown.</div>';pdfList.innerHTML='<div class="empty">Pilih acara untuk melihat PDF rundown.</div>';$("rundownCount").textContent="0 agenda";return}
+ const sorted=[...rundownItems].sort((a,b)=>String(a.start||"").localeCompare(String(b.start||"")));
+ $("rundownCount").textContent=sorted.length+" agenda";
+ $("rundownLiveStatus").textContent="Data tersinkronisasi";
+ list.innerHTML=sorted.length?sorted.map(x=>`<article class="rundown-item"><div class="rundown-item-top"><span class="rundown-time">${esc(x.start||"--:--")}${x.end?" – "+esc(x.end):""}</span>${manager?`<button class="btn" type="button" data-rundown-delete="${esc(x.id)}">Hapus</button>`:""}</div><h3>${esc(x.activity||"Agenda")}</h3><div class="rundown-meta">📍 ${esc(x.location||"Lokasi belum ditentukan")} · 👤 PIC: ${esc(x.pic||"Belum ditentukan")}${x.notes?"<br>📝 "+esc(x.notes):""}</div></article>`).join(""):'<div class="empty">Belum ada susunan acara untuk nama ini.</div>';
+ list.querySelectorAll("[data-rundown-delete]").forEach(btn=>btn.addEventListener("click",async()=>{if(!rundownCanManage()||!rundownRef)return;if(confirm("Hapus agenda ini?"))try{await rundownRef.child(btn.dataset.rundownDelete).remove()}catch(err){alert("Gagal menghapus agenda: "+err.message)}}));
+ const pdfs=Object.entries(rundownPdfs||{}).map(([id,v])=>({...v,id})).filter(x=>x.url);
+ pdfList.innerHTML=pdfs.length?pdfs.map(x=>`<div class="rundown-pdf-row"><div><strong>📄 ${esc(x.name||"Rundown.pdf")}</strong><div class="rundown-meta">${esc(x.uploadedByName||"Tim PONTUAK FEST")}${x.uploadedAt?" · "+esc(new Date(x.uploadedAt).toLocaleString("id-ID",{dateStyle:"medium",timeStyle:"short"})):""}</div></div><div class="rundown-pdf-actions"><button class="btn" type="button" data-rundown-view="${esc(x.id)}">Baca PDF</button><a class="btn" href="${esc(x.url)}" target="_blank" rel="noopener">Buka / Unduh</a>${manager?`<button class="btn" type="button" data-rundown-pdf-delete="${esc(x.id)}">Hapus</button>`:""}</div></div>`).join(""):'<div class="empty">Belum ada PDF rundown untuk acara ini.</div>';
+ pdfList.querySelectorAll("[data-rundown-view]").forEach(btn=>btn.addEventListener("click",()=>{const pdf=pdfs.find(x=>x.id===btn.dataset.rundownView);if(!pdf)return;$("rundownPdfTitle").textContent=pdf.name||"Pratinjau PDF";$("rundownPdfViewer").src=pdf.url;$("rundownPdfViewerWrap").hidden=false;$("rundownPdfViewerWrap").scrollIntoView({behavior:"smooth",block:"start"})}));
+ pdfList.querySelectorAll("[data-rundown-pdf-delete]").forEach(btn=>btn.addEventListener("click",async()=>{const pdf=pdfs.find(x=>x.id===btn.dataset.rundownPdfDelete);if(!pdf||!rundownCanManage()||!rundownPdfRef)return;if(!confirm("Hapus dokumen PDF rundown ini dari daftar? File di Storage juga akan dihapus jika izin tersedia."))return;try{await rundownPdfRef.child(pdf.id).remove();if(pdf.storagePath&&rundownStorage)try{await rundownStorage.ref(pdf.storagePath).delete()}catch(e){console.warn("Metadata terhapus, file Storage belum terhapus",e)}}catch(err){alert("Gagal menghapus PDF: "+err.message)}}));
+}
+function watchRundownEvent(name){
+ if(rundownRef&&rundownListener)rundownRef.off("value",rundownListener);
+ if(rundownPdfRef&&rundownPdfListener)rundownPdfRef.off("value",rundownPdfListener);
+ rundownItems=[];rundownPdfs={};rundownRef=null;rundownListener=null;rundownPdfRef=null;rundownPdfListener=null;
+ const eventName=String(name||"").trim();rundownEventKey=rundownKey(eventName);
+ if(!eventName||!dbRoot||!currentUser){renderRundown();return}
+ rundownRef=dbRoot.child("rundowns").child(rundownEventKey).child("items");
+ rundownListener=snap=>{rundownItems=Object.entries(snap.val()||{}).filter(([,v])=>v).map(([id,v])=>({...v,id}));renderRundown()};
+ rundownRef.on("value",rundownListener,err=>{$("rundownLiveStatus").textContent="Gagal memuat";console.warn(err)});
+ rundownPdfRef=dbRoot.child("rundowns").child(rundownEventKey).child("pdfs");
+ rundownPdfListener=snap=>{rundownPdfs=snap.val()||{};renderRundown()};
+ rundownPdfRef.on("value",rundownPdfListener,err=>console.warn(err));
+}
+async function addRundownItem(){
+ if(!rundownCanManage()){alert("Hanya Admin/PIC yang dapat menambah agenda rundown.");return}
+ const eventName=$("rundownEventName").value.trim(),activity=$("rundownActivity").value.trim();
+ if(!eventName||!activity){alert("Isi nama acara dan nama agenda terlebih dahulu.");return}
+ if(!rundownRef||rundownEventKey!==rundownKey(eventName))watchRundownEvent(eventName);
+ if(!rundownRef)return;
+ try{await rundownRef.push({eventName,start:$("rundownStart").value,end:$("rundownEnd").value,activity,location:$("rundownLocation").value.trim(),pic:$("rundownPIC").value.trim(),notes:$("rundownNotes").value.trim(),createdAt:firebase.database.ServerValue.TIMESTAMP,createdBy:currentUser.uid});["rundownStart","rundownEnd","rundownActivity","rundownLocation","rundownPIC","rundownNotes"].forEach(id=>$(id).value="")}catch(err){alert("Gagal menyimpan agenda. Periksa Firebase Rules untuk rundowns.\\n"+err.message)}
+}
+async function uploadRundownPdf(){
+ if(!rundownCanManage()){alert("Hanya Admin/PIC yang dapat mengunggah PDF rundown.");return}
+ const eventName=$("rundownEventName").value.trim(),file=$("rundownPdfFile").files?.[0];
+ if(!eventName||!file){alert("Isi nama acara dan pilih file PDF terlebih dahulu.");return}
+ if(!/\.pdf$/i.test(file.name)||file.type&&file.type!=="application/pdf"){alert("Pilih file PDF yang valid.");return}
+ if(file.size>15*1024*1024){alert("Ukuran PDF maksimal 15 MB.");return}
+ if(!firebase.storage||!rundownStorage){alert("Firebase Storage belum tersedia. Pastikan Storage diaktifkan pada proyek Firebase.");return}
+ if(!rundownPdfRef||rundownEventKey!==rundownKey(eventName))watchRundownEvent(eventName);
+ const btn=$("uploadRundownPdfBtn");btn.disabled=true;btn.textContent="Mengunggah…";
+ try{
+   const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+   const storagePath="pontuak_fest_2026/rundowns/"+rundownEventKey+"/"+Date.now()+"_"+safeName;
+   const ref=rundownStorage.ref(storagePath);
+   await ref.put(file,{contentType:"application/pdf"});
+   const url=await ref.getDownloadURL();
+   await rundownPdfRef.push({name:file.name,eventName,url,storagePath,size:file.size,uploadedAt:firebase.database.ServerValue.TIMESTAMP,uploadedBy:currentUser.uid,uploadedByName:currentUser.displayName||currentUser.email||"Admin/PIC"});
+   $("rundownPdfFile").value="";
+   alert("PDF rundown berhasil diunggah.");
+ }catch(err){alert("Gagal mengunggah PDF. Periksa Firebase Storage Rules dan Realtime Database Rules.\\n"+err.message)}
+ finally{btn.disabled=false;btn.textContent="Unggah PDF"}
+}
 function equipmentKey(name){return String(name||"").trim().toLowerCase().replace(/[.#$\[\]\/]/g,"_").replace(/\s+/g,"_").slice(0,120)}
 function equipmentStatusLabel(s){return s==="ready"?"Siap":s==="issue"?"Bermasalah":s==="missing"?"Tidak tersedia":"Belum dicek"}
 function renderEquipment(){
@@ -379,6 +494,29 @@ function readableEventName(key, items){
  const found=(items||[]).find(x=>x&&x.eventName);
  if(found)return found.eventName;
  return String(key||"").replace(/_/g," ").replace(/\\b\\w/g,c=>c.toUpperCase());
+}
+function exportEquipmentOverview(){
+ const entries=Object.entries(equipmentEventsIndex||{}).filter(([,v])=>v&&typeof v==="object");
+ const rows=[["Nama Acara","Total Item","Siap","Bermasalah","Belum Dicek","Tidak Tersedia","Kesiapan (%)"]];
+ entries.forEach(([key,val])=>{
+   const items=Object.values(val||{}).filter(v=>v&&typeof v==="object");
+   if(!items.length)return;
+   const ready=items.filter(x=>x.status==="ready").length;
+   const issue=items.filter(x=>x.status==="issue").length;
+   const missing=items.filter(x=>x.status==="missing").length;
+   const unchecked=items.filter(x=>!x.status||x.status==="unchecked").length;
+   rows.push([readableEventName(key,items),items.length,ready,issue,unchecked,missing,Math.round(ready/items.length*100)]);
+ });
+ const all=entries.flatMap(([,val])=>Object.values(val||{}).filter(v=>v&&typeof v==="object"));
+ if(all.length){
+   const ready=all.filter(x=>x.status==="ready").length;
+   rows.push(["TOTAL SEMUA ACARA",all.length,ready,all.filter(x=>x.status==="issue").length,all.filter(x=>!x.status||x.status==="unchecked").length,all.filter(x=>x.status==="missing").length,Math.round(ready/all.length*100)]);
+ }
+ const csv=rows.map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
+ const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="PONTUAK_FEST_REKAP_KESIAPAN_TEKNIS.csv";
+ document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 function renderEquipmentOverview(){
  const root=$("equipmentOverviewList");if(!root)return;
@@ -757,6 +895,7 @@ async function initializeSharedData(){
   unsubscribeTasks=handler;
   watchEquipmentEvent();
   watchEquipmentIndex();
+  watchRundownIndex();
   announcementsRef=dbRoot.child("announcements");
   if(unsubscribeAnnouncements) announcementsRef.off("value",unsubscribeAnnouncements);
   const announcementHandler=snapshot=>{announcements=Object.values(snapshot.val()||{}).filter(Boolean).sort((a,b)=>(Number(b.createdAt)||0)-(Number(a.createdAt)||0));renderAnnouncements()};
@@ -805,6 +944,20 @@ $("equipmentEvent")?.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preven
 $("addEquipmentBtn")?.addEventListener("click",addEquipment);
 $("equipmentStatusFilter")?.addEventListener("change",renderEquipment);
 $("exportEquipmentBtn")?.addEventListener("click",exportEquipment);
+$("exportEquipmentOverviewBtn")?.addEventListener("click",exportEquipmentOverview);
+$("addRundownItemBtn")?.addEventListener("click",addRundownItem);
+$("uploadRundownPdfBtn")?.addEventListener("click",uploadRundownPdf);
+$("rundownEventName")?.addEventListener("change",()=>{watchRundownEvent($("rundownEventName").value);watchRundownIndex()});
+$("rundownEventName")?.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();watchRundownEvent($("rundownEventName").value);watchRundownIndex()}});
+$("rundownEventSelect")?.addEventListener("change",()=>{
+ const key=$("rundownEventSelect").value;if(!key)return;
+ $("rundownEventName").value=key.replace(/_/g," ");
+ const snapName=($("rundownEventSelect").selectedOptions[0]?.textContent||"").trim();
+ if(snapName)$("rundownEventName").value=snapName;
+ watchRundownEvent($("rundownEventName").value);
+});
+$("closeRundownPdfBtn")?.addEventListener("click",()=>{$("rundownPdfViewer").src="";$("rundownPdfViewerWrap").hidden=true});
+
 
 
 $("taskNoticeList")?.addEventListener("click",e=>{
@@ -836,6 +989,7 @@ try {
  }
  firebase.initializeApp(firebaseConfig);
  dbRoot=firebase.database().ref("pontuak_fest_2026");
+ rundownStorage=firebase.storage?firebase.storage():null;
  firebase.auth().onAuthStateChanged(async user=>{
   currentUser=user;
   if(!user){currentRole=null;if(tasksRef && unsubscribeTasks) tasksRef.off("value", unsubscribeTasks);if(announcementsRef&&unsubscribeAnnouncements)announcementsRef.off("value",unsubscribeAnnouncements);if(reportsQueryRef&&unsubscribeReports)reportsQueryRef.off("value",unsubscribeReports);reportsRef=null;reportsQueryRef=null;unsubscribeReports=null;reports=[];renderReports();announcementsRef=null;unsubscribeAnnouncements=null;announcements=[];renderAnnouncements();myTasksOnly=false;tasksRef=null;unsubscribeTasks=null;dataReady=false;tasks=[];render();$("userLabel").hidden=true;$("signOutBtn").hidden=true;$("addBtn").disabled=true;setStatus("Login diperlukan");showAuth();return}
