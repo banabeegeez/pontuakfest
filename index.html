@@ -216,6 +216,23 @@ body{background:radial-gradient(ellipse at 90% 0%,#1b3827 0,transparent 38%),var
   .hero-main .countdown-unit strong{font-size:clamp(21px,7vw,29px)}
 }
 
+
+.profile-modal{width:min(520px,calc(100vw - 28px));max-height:calc(100dvh - 28px);overflow:auto;background:#151c17;border:1px solid #34483a;border-radius:20px;padding:22px;color:#f3f6f3;box-shadow:0 24px 80px #0009}
+.modal-backdrop{position:fixed;inset:0;z-index:2000;background:#030604c9;display:flex;align-items:center;justify-content:center;padding:14px}
+.modal-backdrop[hidden]{display:none!important}
+.profile-modal .modal-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:20px}
+.profile-modal h2{margin:5px 0;font-size:24px}
+.profile-modal p{margin:5px 0}
+.profile-form{display:grid;gap:10px}
+.profile-form label{font-weight:800;font-size:13px}
+.profile-form input{width:100%;padding:13px 14px;background:#0d120f;color:#f3f6f3;border:1px solid #405246;border-radius:12px;outline:none}
+.profile-form input:focus{border-color:#22c55e;box-shadow:0 0 0 3px #22c55e22}
+.profile-account{font-size:12px;color:#b0bbb2;overflow-wrap:anywhere;padding:10px 12px;background:#101612;border-radius:10px}
+.profile-error{font-size:12px;color:#fca5a5;min-height:0}
+.profile-error:empty{display:none}
+.profile-form .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+@media(max-width:600px){.profile-modal{padding:17px}.profile-modal h2{font-size:21px}.profile-form .modal-actions .btn{flex:1}}
+
 </style>
 </head>
 <body>
@@ -225,6 +242,7 @@ body{background:radial-gradient(ellipse at 90% 0%,#1b3827 0,transparent 38%),var
     <div class="top-actions">
       <span id="connectionStatus" class="connection-status" role="status">Menghubungkan…</span>
       <span id="userLabel" class="user-label" hidden></span>
+      <button class="btn" id="profileBtn" hidden>Profil Saya</button>
       <button class="btn" id="signOutBtn" hidden>Keluar</button>
       <button class="btn" id="exportBtn">Export CSV</button>
       <button class="btn" id="printBtn">Cetak / PDF</button>
@@ -969,7 +987,7 @@ async function initializeSharedData(){
   // Default role: every authenticated account is a read-only crew unless explicitly promoted.
   const savedRole=roleSnap.val();
   currentRole=["admin","pic"].includes(savedRole)?savedRole:"crew";
-  $("userLabel").textContent=(currentUser.displayName||currentUser.email||"Pengguna")+" · "+currentRole.toUpperCase();
+  refreshAliasLabel();
   $("addBtn").hidden=!canEdit();
   $("announcementForm").hidden=!canEdit();
   if(tasksRef && unsubscribeTasks) tasksRef.off("value", unsubscribeTasks);
@@ -1059,9 +1077,73 @@ try {
  }
  firebase.initializeApp(firebaseConfig);
  dbRoot=firebase.database().ref("pontuak_fest_2026");
+
+ // Profil alias: disimpan per UID. Rules Firebase perlu ditambahkan setelah ditinjau; belum ada perubahan di Firebase.
+ const profileRefFor = uid => firebase.database().ref("pontuak_fest_2026_profiles/" + uid);
+ let activeAlias = "";
+ function cleanAlias(value){return String(value||"").trim().replace(/\s+/g," ")}
+ function displayAlias(user){
+   const email=String(user?.email||"").trim().toLowerCase();
+   return activeAlias || user?.displayName || (email?email.split("@")[0]:"Pengguna");
+ }
+ function refreshAliasLabel(){
+   if(!currentUser)return;
+   const roleText=currentRole?(" · "+String(currentRole).toUpperCase()):"";
+   $("userLabel").textContent=displayAlias(currentUser)+roleText;
+   $("userLabel").title=currentUser.email||"";
+ }
+ async function loadUserAlias(user){
+   activeAlias="";
+   try{
+     const snap=await profileRefFor(user.uid).once("value");
+     const val=snap.val();
+     activeAlias=val&&typeof val.alias==="string"?cleanAlias(val.alias):"";
+   }catch(err){
+     console.warn("Profil alias belum dapat dibaca. Periksa Firebase Rules.",err);
+     activeAlias="";
+   }
+   refreshAliasLabel();
+   $("profileBtn").hidden=false;
+   if(!activeAlias) openProfileModal(true);
+ }
+ function openProfileModal(required){
+   if(!currentUser)return;
+   $("profileError").textContent="";
+   $("profileAlias").value=activeAlias;
+   $("profileAccount").textContent=(currentUser.email||"Akun Google")+(currentRole?" · "+currentRole.toUpperCase():"");
+   $("cancelProfileBtn").hidden=!!required;
+   $("closeProfileBtn").hidden=!!required;
+   $("profileModal").hidden=false;
+   $("profileAlias").focus();
+ }
+ function closeProfileModal(){
+   if(!currentUser)return;
+   if(!activeAlias)return;
+   $("profileModal").hidden=true;
+ }
+ $("profileBtn")?.addEventListener("click",()=>openProfileModal(false));
+ $("closeProfileBtn")?.addEventListener("click",closeProfileModal);
+ $("cancelProfileBtn")?.addEventListener("click",closeProfileModal);
+ $("profileForm")?.addEventListener("submit",async ev=>{
+   ev.preventDefault();
+   const alias=cleanAlias($("profileAlias").value);
+   const error=$("profileError"),save=$("saveProfileBtn");
+   if(alias.length<2||alias.length>24){error.textContent="Alias harus terdiri dari 2–24 karakter.";return}
+   if(!currentUser){error.textContent="Silakan login kembali.";return}
+   save.disabled=true;error.textContent="Menyimpan alias…";
+   try{
+     await profileRefFor(currentUser.uid).update({alias:alias,updatedAt:Date.now()});
+     activeAlias=alias;refreshAliasLabel();$("profileModal").hidden=true;
+     setStatus("Alias tersimpan","ok");
+   }catch(err){
+     error.textContent="Alias belum tersimpan. Firebase Rules perlu mengizinkan pengguna mengubah profil UID miliknya sendiri.";
+     console.error("Gagal menyimpan alias:",err);
+   }finally{save.disabled=false}
+ });
+
  firebase.auth().onAuthStateChanged(async user=>{
   currentUser=user;
-  if(!user){currentRole=null;if(tasksRef && unsubscribeTasks) tasksRef.off("value", unsubscribeTasks);if(announcementsRef&&unsubscribeAnnouncements)announcementsRef.off("value",unsubscribeAnnouncements);if(reportsQueryRef&&unsubscribeReports)reportsQueryRef.off("value",unsubscribeReports);reportsRef=null;reportsQueryRef=null;unsubscribeReports=null;reports=[];renderReports();announcementsRef=null;unsubscribeAnnouncements=null;announcements=[];renderAnnouncements();myTasksOnly=false;tasksRef=null;unsubscribeTasks=null;dataReady=false;tasks=[];render();$("userLabel").hidden=true;$("signOutBtn").hidden=true;$("addBtn").disabled=true;setStatus("Login diperlukan");showAuth();return}
+  if(!user){currentRole=null;if(tasksRef && unsubscribeTasks) tasksRef.off("value", unsubscribeTasks);if(announcementsRef&&unsubscribeAnnouncements)announcementsRef.off("value",unsubscribeAnnouncements);if(reportsQueryRef&&unsubscribeReports)reportsQueryRef.off("value",unsubscribeReports);reportsRef=null;reportsQueryRef=null;unsubscribeReports=null;reports=[];renderReports();announcementsRef=null;unsubscribeAnnouncements=null;announcements=[];renderAnnouncements();myTasksOnly=false;tasksRef=null;unsubscribeTasks=null;dataReady=false;tasks=[];render();$("userLabel").hidden=true;$("signOutBtn").hidden=true;$("profileBtn").hidden=true;$("profileModal").hidden=true;$("addBtn").disabled=true;setStatus("Login diperlukan");showAuth();return}
   hideAuth();$("userLabel").textContent=user.displayName||user.email||"Pengguna";$("userLabel").hidden=false;$("signOutBtn").hidden=false;setStatus("Memeriksa peran…");
   await initializeSharedData();
  });
@@ -1107,5 +1189,30 @@ try {
 })();
 
 </script>
+
+<div class="modal-backdrop" id="profileModal" hidden>
+  <section class="modal profile-modal" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
+    <div class="modal-head">
+      <div>
+        <div class="eyebrow">PENGATURAN AKUN</div>
+        <h2 id="profileTitle">Profil Saya</h2>
+        <p class="muted">Nama panggilan yang tampil di aplikasi PONTUAK FEST 2026.</p>
+      </div>
+      <button type="button" class="btn" id="closeProfileBtn" aria-label="Tutup">✕</button>
+    </div>
+    <form id="profileForm" class="profile-form">
+      <label for="profileAlias">Nama panggilan / alias</label>
+      <input id="profileAlias" name="alias" type="text" minlength="2" maxlength="24" autocomplete="nickname" placeholder="Contoh: Bana Bee" required>
+      <small class="muted">2–24 karakter. Alias bisa diubah kapan saja.</small>
+      <div class="profile-account" id="profileAccount"></div>
+      <div class="profile-error" id="profileError" role="status"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn" id="cancelProfileBtn">Batal</button>
+        <button type="submit" class="btn primary" id="saveProfileBtn">Simpan alias</button>
+      </div>
+    </form>
+  </section>
+</div>
+
 </body>
 </html>
